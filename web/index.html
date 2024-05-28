@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preload" href="/fonts/SourceSansPro-SemiBold.ttf" as="font">
+    <title>Main</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                const response = await fetch('http://localhost:81/check_session.php');
+                const result = await response.json();
+                console.log(result);
+                if (result.logged_in) {
+                    console.log('ezzz');
+                    document.getElementById('welcome-message').textContent = `Добро пожаловать, ${result.username}!`;
+                    document.getElementById('protected-content').style.display = 'flex';
+                }
+                // else {
+                //     window.location.href = 'auth.html';
+                // }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                window.location.href = 'auth.html';
+            }
+        });
+    </script>
+</head>
+<body>
+<div class="l-wrapper">
+    <h2 id="welcome-message"></h2>
+    <div id="protected-content" class="sidebar">
+        <div class="sidebar-wrapper">
+            <div class="sidebar-icon" onclick="burger()">
+<!--                <img class="icon" src="/img/menu-outline.svg" alt="">-->
+                <span></span>
+            </div>
+            <button class="sidebar-card" onclick="openTab(event, 'tab1')">
+                <img class="icon" src="/img/home.svg" alt=""    >
+                <span>Гаражи</span>
+            </button>
+            <button class="sidebar-card" onclick="openTab(event, 'tab2')">
+                <img class="icon" src="/img/analytics-outline.svg" alt="">
+                <span>Транспортные средства</span>
+            </button>
+            <button class="sidebar-card" onclick="openTab(event, 'tab3')">
+                <img class="icon" src="/img/trending-up-outline.svg" alt="">
+                <span>Показатели транспорта</span>
+            </button>
+            <button class="sidebar-card" onclick="openTab(event, 'tab4')">
+                <img class="icon" src="/img/folders.svg" alt="">
+                <span>Показатели эффективности</span>
+            </button>
+            <button class="sidebar-card" onclick="openTab(event, 'tab5')">
+                <img class="icon" src="/img/bookmark-outline.svg" alt="">
+                <span>Избранное</span>
+            </button>
+            <button class="sidebar-card" onclick="openTab(event, 'tab6')">
+                <img class="icon" src="/img/book-outline.svg" alt="">
+                <span>Справочник</span>
+            </button>
+        </div>
+    </div>
+    <div class="main">
+        <div class="main-header">
+            <div class="header-buttons">
+                <a href="/auth.html"><img src="/img/user-thumb.svg" alt="user"></a>
+                <img src="/img/button.svg" alt="">
+            </div>
+        </div>
+        <div id="tab1" class="tabcontent">
+            <div class="table-header">
+                <div class="table-tabs">
+                    <div class="table-butts"><a href="adding.html">Добавить</a></div>
+                    <div class="table-butts"><a href="#">Изменить</a></div>
+                    <div class="table-butts"><a href="#">Удалить</a></div>
+                </div>
+                <div class="table-find">
+                </div>
+            </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th><input type="checkbox" name="name1" />&nbsp;</th>
+                    <th>Гараж</th>
+                    <th>Адрес</th>
+                    <th>Номер части</th>
+                    <th>Количество техники</th>
+                    <th>Площадь, м2</th>
+                </tr>
+                </thead>
+                <tbody class="vehicleBody">
+                <tr>
+                    <td><input type="checkbox" name="name1" />&nbsp;</td>
+                    <td id="garage">001</td>
+                    <td id="address">г. Владивосток</td>
+                    <td id="number">37 431</td>
+                    <td id="howmany">33</td>
+                    <td id="square">20100</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="name1" />&nbsp;</td>
+                    <td>001</td>
+                    <td>г. Владивосток</td>
+                    <td>37 431</td>
+                    <td>33</td>
+                    <td>20100</td>
+                <tr>
+                    <td><input type="checkbox" name="name1" />&nbsp;</td>
+                    <td>001</td>
+                    <td>г. Владивосток</td>
+                    <td>37 431</td>
+                    <td>33</td>
+                    <td>20100</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="tab2" class="tabcontent">
+            <div class="table-header">
+                <div class="table-tabs">
+                    <div class="table-butts"><a href="adding.html">Добавить</a></div>
+                    <div class="table-butts"><a href="#">Изменить</a></div>
+                    <div class="table-butts"><a href="#">Удалить</a></div>
+                </div>
+                <div class="table-find">
+                </div>
+            </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th><input type="checkbox" name="name1" />&nbsp;</th>
+                    <th>Транспорт</th>
+                    <th>Рег. Номер</th>
+                    <th>Масса, кг</th>
+                    <th>Размеры, м</th>
+                    <th>Грузоподъемность, кг</th>
+                </tr>
+                </thead>
+                <tbody class="vehicleBody">
+                <tr>
+                    <td><input type="checkbox" name="name1" />&nbsp;</td>
+                    <td>Боинг 737</td>
+                    <td>1111 2313</td>
+                    <td>37 431</td>
+                    <td>33 * 34</td>
+                    <td>20 100</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="name1" />&nbsp;</td>
+                    <td>Боинг 737</td>
+                    <td>1111 2313</td>
+                    <td>37 431</td>
+                    <td>33 * 34</td>
+                    <td>20 100</td>
+                <tr>
+                    <td><input type="checkbox" name="name1" />&nbsp;</td>
+                    <td>Боинг 737</td>
+                    <td>1111 2313</td>
+                    <td>37 431</td>
+                    <td>33 * 34</td>
+                    <td>20 100</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="tab3" class="tabcontent">
+            <div class="table-header">
+                <div class="table-tabs">
+                    <div class="table-butts"><a href="adding.html">Добавить</a></div>
+                    <div class="table-butts"><a href="#">Изменить</a></div>
+                    <div class="table-butts"><a href="#">Удалить</a></div>
+                </div>
+                <div class="table-find">
+                </div>
+            </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th><input type="checkbox" name="name1" />&nbsp;</th>
+                    <th>Гараж</th>
+                    <th>Показатель</th>
+                    <th>Единица измерения</th>
+                    <th>Значение</th>
+                    <th>Дата фиксации</th>
+                    <th>Время фиксации</th>
+                </tr>
+                </thead>
+                <tbody class="vehicleBody">
+                <tr>
+                    <td><input type="checkbox" name="name1" />&nbsp;</td>
+                    <td>Ангар №1</td>
+                    <td>Перевезено груза</td>
+                    <td>кг</td>
+                    <td>14 123</td>
+                    <td>20.01.2022</td>
+                    <td>10:30</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="name1" />&nbsp;</td>
+                    <td>Ангар №1</td>
+                    <td>Перевезено груза</td>
+                    <td>кг</td>
+                    <td>14 123</td>
+                    <td>20.01.2022</td>
+                    <td>10:30</td>
+                <tr>
+                    <td><input type="checkbox" name="name1" />&nbsp;</td>
+                    <td>Ангар №1</td>
+                    <td>Перевезено груза</td>
+                    <td>кг</td>
+                    <td>14 123</td>
+                    <td>20.01.2022</td>
+                    <td>10:30</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="tab4" class="tabcontent">
+            <div class="table-header">
+                <div class="table-tabs">
+                    <div class="table-butts"><a href="adding.html">Добавить</a></div>
+                    <div class="table-butts"><a href="#">Изменить</a></div>
+                    <div class="table-butts"><a href="#">Удалить</a></div>
+                </div>
+                <div class="table-find">
+                </div>
+            </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th><input type="checkbox" name="name1" />&nbsp;</th>
+                    <th>Гараж</th>
+                    <th>Показатель</th>
+                    <th>Единица измерения</th>
+                    <th>Значение</th>
+                    <th>Дата фиксации</th>
+                    <th>Время фиксации</th>
+                </tr>
+                </thead>
+                <tbody class="vehicleBody">
+                <tr>
+                    <td><input type="checkbox" name="name1" />&nbsp;</td>
+                    <td>Ангар №1</td>
+                    <td>Перевезено груза</td>
+                    <td>кг</td>
+                    <td>14 123</td>
+                    <td>20.01.2022</td>
+                    <td>10:30</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="name1" />&nbsp;</td>
+                    <td>Ангар №1</td>
+                    <td>Перевезено груза</td>
+                    <td>кг</td>
+                    <td>14 123</td>
+                    <td>20.01.2022</td>
+                    <td>10:30</td>
+                <tr>
+                    <td><input type="checkbox" name="name1" />&nbsp;</td>
+                    <td>Ангар №1</td>
+                    <td>Перевезено груза</td>
+                    <td>кг</td>
+                    <td>14 123</td>
+                    <td>20.01.2022</td>
+                    <td>10:30</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="tab5" class="tabcontent">
+        </div>
+        <div id="tab6" class="tabcontent">
+        </div>
+    </div>
+</div>
+<script src="js/script.js"></script>
+</body>
+</html>

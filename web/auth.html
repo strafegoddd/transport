@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/auth.css">
+    <link rel="preload" href="/fonts/SourceSansPro-SemiBold.ttf" as="font">
+    <title>Authorization</title>
+</head>
+<body>
+    <div class="l-wrapper">
+        <div class="text-section">Вход</div>
+        <form class="l-form" id="loginForm">
+            <span>Login</span>
+            <input id="login" name="login" type="text" placeholder="Login">
+            <span>Пароль</span>
+            <input id="password" name="password" type="text" placeholder="Пароль">
+            <div class="l-check"></div>
+            <input class="submit" type="submit" value="Войти">
+        </form>
+
+        <script>
+            document.getElementById('loginForm').addEventListener('submit', async function(event) {
+                event.preventDefault();
+
+                const formData = new FormData(this);
+                const response = await fetch('http://localhost:81/auth.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                //console.log(result);
+                if (result.status === 'success') {
+                    window.location.href = 'index.html';
+                }
+            });
+        </script>
+
+        <div class="l-links"></div>
+        <div class="l-line"><a href="/registration.html">У вас нет аккаунта? Регестрируйтесь</a></div>
+        <div class="l-reg-link"></div>
+    </div>
+</body>
+</html>

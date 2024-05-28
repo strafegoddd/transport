@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/auth.css">
+    <link rel="preload" href="/fonts/SourceSansPro-SemiBold.ttf" as="font">
+    <title>Authorization</title>
+</head>
+<body>
+    <div class="l-wrapper">
+        <div class="text-section">Регистрация</div>
+				<form id="registerForm" class="l-form">
+                    <label for="login">Логин</label>
+                    <input type="text" id="login" name="login" placeholder="Логин" required>
+                    <label for="password">Пароль</label>
+                    <input type="text" id="password" name="password" placeholder="Пароль" required>
+                    <label for="post">Должность</label>
+                    <select name="post" id="post">
+                        <option value="Сотрудник">Сотрудник</option>
+                        <option value="Пользователь">Пользователь</option>
+                    </select>
+                    <input class="submit" type="submit" value="Регистрироваться">
+				</form>
+        <script>
+            document.getElementById('registerForm').addEventListener('submit', async function(event) {
+                event.preventDefault();
+
+                const formData = new FormData(this);
+                console.log(formData);
+                const response = await fetch('http://localhost:81/register.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                if (result.status === 'success') {
+                    console.log('esss');
+                    window.location.href = 'auth.html';
+                }
+                else{
+                    console.log(result.message)
+                }
+            });
+        </script>
+        <div class="l-links"></div>
+        <div class="l-line"><a href="/auth.html">У вас уже имеется аккаунт?</a></div>
+        <div class="l-reg-link"></div>
+    </div>
+</body>
+</html>
