@@ -33,4 +33,4 @@ try {
     echo json_encode(['status' => 'error', 'message' => 'Ошибка: ' . $e->getMessage()]);
 }
 
-$conn = null;
+$pdo = null;

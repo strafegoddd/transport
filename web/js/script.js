@@ -25,52 +25,29 @@ function burger(){
     //document.querySelector('.nav').classList.toggle('open');
 }
 
-function sendData(){
-    let family = document.getElementById("family").value;
-    let dependent = document.getElementById("dependent").value;
-    let education = document.getElementById("education").value;
-    let employment = document.getElementById("employment").value;
-    let applicantIncome = document.getElementById("applicantIncome").value;
-    let coapplicantIncome = document.getElementById("coapplicantIncome").value;
-    let loanAmount = document.getElementById("loanAmount").value;
-    let term = document.getElementById("term").value;
-    let creditHistory = document.getElementById("creditHistory").value;
-    let area = document.getElementById("area").value;
-
-    let xhr = new XMLHttpRequest();
-    xhr.open("POST", "conf.php", true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            document.getElementById("result").innerHTML = xhr.responseText;
-        }
-    };
-    xhr.send("family=" + family + "&dependent=" + dependent + "&education=" +
-        education + "&employment=" + employment + "&applicantIncome=" +
-        applicantIncome + "&coapplicantIncome=" + coapplicantIncome + "&loanAmount=" +
-        loanAmount + "&term=" + term + "&creditHistory=" + creditHistory + "&area=" + area);
-}
-
-function working(){
-    fetch("http://localhost:81/credits.php")
-        .then(res => res.json())
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('http://localhost:81/garageData.php')
+        .then(response => response.json())
         .then(data => {
-            // let brak = document.getElementById('brak');
-            // let ijd = document.getElementById('ijd');
-            // let obr = document.getElementById('obr');
-            // let work = document.getElementById('work');
-            // let money1 = document.getElementById('money1');
-            // let money2 = document.getElementById('money2');
-            // let creditMoney = document.getElementById('creditMoney');
-            // let brak = document.getElementById('brak');
-            let elements = document.getElementsByClassName('creditBody');
-            for (let i = 0; i < elements.length; i++) {
-                 //elements[i].innerHTML = JSON.stringify(data[i].dish_name);
-                elements[i].innerHTML = JSON.stringify(data[i].dish_name);
+
+            const tbody = document.getElementById('garage-data');
+            for (let i = 0; i < data.length; i++) {
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                            <td><input type="checkbox" name="name1" /></td>
+                            <td>${data[i].garage_name}</td>
+                            <td>${data[i].garage_address}</td>
+                            <td>111</td>
+                            <td>22</td>
+                            <td>24 302</td>
+                        `;
+
+                tbody.appendChild(row);
             }
         })
-}
-
+        .catch(error => console.error('Error fetching data:', error));
+});
 
 
 
