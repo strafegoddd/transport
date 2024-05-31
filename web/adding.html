@@ -8,11 +8,11 @@
 <body>
     <div class="l-wrapper">
         <div class="text-section">Добавить гараж</div>
-        <form class="l-form" id="loginForm">
+        <form class="l-form" id="addingForm">
             <div class="couple">
                 <div class="label-couple">
                     <label>Название гаража</label>
-                    <input id="login" name="login" type="text" placeholder="Гараж №1">
+                    <input id="garage_name" name="garage_name" type="text" placeholder="Гараж №1">
                 </div>
                 <div class="label-couple">
                     <label>Адрес</label>
@@ -42,6 +42,22 @@
             <div class="l-check"></div>
             <input class="submit" type="submit" value="Добавить">
         </form>
+        <script>
+            document.getElementById('addingForm').addEventListener('submit', async function(event) {
+                event.preventDefault();
+
+                const formData = new FormData(this);
+                const response = await fetch('http://localhost:81/adding.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    window.location.href = 'index.html';
+                }
+            });
+        </script>
     </div>
 </body>
 </html>

@@ -57,6 +57,12 @@ label{
         background-color: white;
         border: 1px solid black;
         border-radius: 10px;
+        &:hover{
+            background-color: grey;
+        }
+        &:focus{
+            background-color: grey;
+        }
     }
 }
 
