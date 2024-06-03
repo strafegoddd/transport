@@ -246,12 +246,34 @@ body{
     background: var(--white);
 }
 
-.table-find span{
+#myInput{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: row;
+    gap: 8px;
+    padding: 12px 20px 12px 40px;
+    border: 1px solid var(--coolgray-30);
+    width: 148px;
+    height: 24px;
+    background: var(--white);
+
+    background-image: url("../img/loop.svg"); /* Добавить значок поиска для ввода */
+    background-position: 10px 12px; /* Расположите значок поиска */
+    background-repeat: no-repeat; /* Не повторяйте изображение значка */
+    
     font-family: var(--font-family);
     font-weight: 400;
     font-size: 14px;
     line-height: 140%;
     color: var(--coolgray-60);
+
+    &:hover{
+        border: 1px solid var(--coolgray-90);
+    }
+    &:focus{
+        border: 1px solid var(--coolgray-90);
+    }
 }
 
 .table-butts{
@@ -260,6 +282,7 @@ body{
     padding: 16px 5px;
     width: 85px;
     height: 50px;
+    border: none;
 
     text-decoration: none;
     font-family: var(--font-family);
@@ -280,6 +303,8 @@ body{
         background-color: cornflowerblue;
     }
 }
+
+
 
 /*.tabs{*/
 /*    display: flex;*/
@@ -343,6 +368,7 @@ a{
 }
 
 .table th{
+    cursor: pointer;
     height: 48px;
 }
 
