@@ -49,6 +49,14 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => console.error('Error fetching data:', error));
 });
 
+document.getElementById('add-garage').addEventListener("click", function (){
+    document.getElementById('garage-add-modal').classList.add('open')
+})
+
+document.getElementById('close-modal-btn').addEventListener("click", function (){
+    document.getElementById('garage-add-modal').classList.remove('open')
+})
+
 
 
 
