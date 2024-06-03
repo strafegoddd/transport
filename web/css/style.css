@@ -368,6 +368,7 @@ a{
 }
 
 .table th{
+    cursor: pointer;
     height: 48px;
 }
 
