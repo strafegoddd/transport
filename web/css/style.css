@@ -299,6 +299,10 @@ body{
     gap: 8px;
     background: var(--coolgray-10);
 
+    &:disabled{
+        background-color:#444a4e;
+    }
+
     &:hover{
         background-color: cornflowerblue;
     }

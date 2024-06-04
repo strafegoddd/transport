@@ -25,28 +25,33 @@ function burger(){
     //document.querySelector('.nav').classList.toggle('open');
 }
 
+function fetchGarageData() {
+  fetch('http://localhost:81/garageData.php')
+  .then(response => response.json())
+  .then(data => {
+
+      const tbody = document.getElementById('garage-data');
+      tbody.innerHTML = '';
+      for (let i = 0; i < data.length; i++) {
+          const row = document.createElement('tr');
+          row.dataset.id = data[i].garage_id;
+          row.innerHTML = `
+                      <td><input type="checkbox" name="select-item" class="select-item" /></td>
+                      <td>${data[i].garage_name}</td>
+                      <td>${data[i].garage_address}</td>
+                      <td>111</td>
+                      <td>22</td>
+                      <td>24 302</td>
+                  `;
+
+          tbody.appendChild(row);
+      }
+  })
+  .catch(error => console.error('Error fetching data:', error));
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-    fetch('http://localhost:81/garageData.php')
-        .then(response => response.json())
-        .then(data => {
-
-            const tbody = document.getElementById('garage-data');
-            for (let i = 0; i < data.length; i++) {
-                const row = document.createElement('tr');
-
-                row.innerHTML = `
-                            <td><input type="checkbox" name="name1" /></td>
-                            <td>${data[i].garage_name}</td>
-                            <td>${data[i].garage_address}</td>
-                            <td>111</td>
-                            <td>22</td>
-                            <td>24 302</td>
-                        `;
-
-                tbody.appendChild(row);
-            }
-        })
-        .catch(error => console.error('Error fetching data:', error));
+   fetchGarageData();
 });
 
 document.getElementById('add-garage').addEventListener("click", function (){
@@ -158,3 +163,53 @@ function searchFunction() {
     else tr.style.display = 'none';
   });
 }  
+
+const delGarageButton = document.getElementById('del-garage');
+const editGarageButton = document.getElementById('edit-garage');
+
+document.getElementById('select-all').addEventListener('change', function(event) {
+  const checkboxes = document.querySelectorAll('.select-item');
+  checkboxes.forEach(checkbox => {
+      checkbox.checked = event.target.checked;
+  });
+  toggleButtons();
+});
+
+document.getElementById('garage-data').addEventListener('change', function(event) {
+  if (event.target.classList.contains('select-item')) {
+      toggleButtons();
+  }
+});
+
+const toggleButtons = () => {
+  const selectedCheckboxes = document.querySelectorAll('.select-item:checked');
+  delGarageButton.disabled = selectedCheckboxes.length === 0;
+  editGarageButton.disabled = selectedCheckboxes.length !== 1;
+};
+
+document.addEventListener('DOMContentLoaded', function(){
+  toggleButtons();
+})
+
+delGarageButton.addEventListener('click', function() {
+  const selectedCheckboxes = document.querySelectorAll('.select-item:checked');
+  const idsToDelete = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
+
+  fetch('http://localhost:81/deleting.php', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ ids: idsToDelete })
+  })
+  .then(response => response.json())
+  .then(data => {
+      if (data.success) {
+          fetchGarageData();
+      } else {
+          console.error('Error deleting data:', data.error);
+      }
+      // console.log(data);
+  })
+  .catch(error => console.error('Error deleting data:', error));
+});

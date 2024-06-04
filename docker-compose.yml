@@ -25,11 +25,13 @@ services:
       MYSQL_ROOT_PASSWORD: tartar2002
       MYSQL_DATABASE: transport_db
     volumes:
-      - ./db:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
   adminer:
     image: adminer
     ports:
       - '8889:8080'
     depends_on:
       - my_db
+volumes:
+  mysql_data:
 

@@ -4,28 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="preload" href="/fonts/SourceSansPro-SemiBold.ttf" as="font">
     <title>Main</title>
-<!--     <script>
-        document.addEventListener('DOMContentLoaded', async function() {
-            try {
-                const response = await fetch('http://localhost:81/check_session.php');
-                const result = await response.json();
-                console.log(result);
-                if (result.logged_in) {
-                    console.log('ezzz');
-                    document.getElementById('welcome-message').textContent = `Добро пожаловать, ${result.username}!`;
-                    document.getElementById('protected-content').style.display = 'flex';
-                }
-                // else {
-                //     window.location.href = 'auth.html';
-                // }
-            } catch (error) {
-                console.error('Ошибка:', error);
-                window.location.href = 'auth.html';
-            }
-        });
-    </script> -->
 </head>
 <body>
 
@@ -139,7 +118,7 @@
             <table class="table" id="garage-table">
                 <thead>
                 <tr>
-                    <th><input type="checkbox" name="name1" />&nbsp;</th>
+                    <th><input type="checkbox" name="select-all" id="select-all" />&nbsp;</th>
                     <th>Гараж</th>
                     <th>Адрес</th>
                     <th>Номер части</th>
