@@ -39,9 +39,9 @@ function fetchGarageData() {
                       <td><input type="checkbox" name="select-item" class="select-item" /></td>
                       <td>${data[i].garage_name}</td>
                       <td>${data[i].garage_address}</td>
-                      <td>111</td>
-                      <td>22</td>
-                      <td>24 302</td>
+                      <td>${data[i].garage_part_number}</td>
+                      <td>${data[i].garage_space}</td>
+                      <td>${data[i].garage_square}</td>
                   `;
 
           tbody.appendChild(row);
@@ -54,12 +54,22 @@ document.addEventListener('DOMContentLoaded', function() {
    fetchGarageData();
 });
 
+//adding button
 document.getElementById('add-garage').addEventListener("click", function (){
     document.getElementById('garage-add-modal').classList.add('open')
 })
 
-document.getElementById('close-modal-btn').addEventListener("click", function (){
+document.getElementById('close-modal-add').addEventListener("click", function (){
     document.getElementById('garage-add-modal').classList.remove('open')
+})
+
+//editing button
+document.getElementById('edit-garage').addEventListener("click", function (){
+  document.getElementById('garage-edit-modal').classList.add('open')
+})
+
+document.getElementById('close-modal-edit').addEventListener("click", function (){
+  document.getElementById('garage-edit-modal').classList.remove('open')
 })
 
 //сортировка таблицы #1
@@ -166,6 +176,8 @@ function searchFunction() {
 
 const delGarageButton = document.getElementById('del-garage');
 const editGarageButton = document.getElementById('edit-garage');
+const addingForm = document.getElementById('addingForm');
+const editingForm = document.getElementById('editing-form');
 
 document.getElementById('select-all').addEventListener('change', function(event) {
   const checkboxes = document.querySelectorAll('.select-item');
@@ -191,6 +203,48 @@ document.addEventListener('DOMContentLoaded', function(){
   toggleButtons();
 })
 
+addingForm.addEventListener('submit', async function(event) {
+  event.preventDefault();
+
+  const formData = new FormData(addingForm);
+  const response = await fetch('http://localhost:81/adding.php', {
+      method: 'POST',
+      body: formData
+  });
+
+  const result = await response.json();
+  if (result.success) {
+      window.location.href = 'index.html';
+  }
+});
+
+editingForm.addEventListener('submit', async function(event) {
+  event.preventDefault();
+  
+  const formData = new FormData(this);
+  const editData = {};
+  formData.forEach((value, key) => {
+    editData[key] = value;
+  });
+
+  const selectedCheckbox = document.querySelector('.select-item:checked');
+  const idToEdit = parseInt(selectedCheckbox.closest('tr').dataset.id, 10);
+
+  const response = await fetch('http://localhost:81/editing.php', {
+      method: 'POST',
+      headers: {
+      'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ id: idToEdit, editData: editData})
+  });
+
+  const result = await response.json();
+  if (result.success) {
+      window.location.href = 'index.html';
+  }
+  //console.log(result);
+});
+
 delGarageButton.addEventListener('click', function() {
   const selectedCheckboxes = document.querySelectorAll('.select-item:checked');
   const idsToDelete = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
@@ -212,4 +266,16 @@ delGarageButton.addEventListener('click', function() {
       // console.log(data);
   })
   .catch(error => console.error('Error deleting data:', error));
+});
+
+editGarageButton.addEventListener('click', function() {
+  const selectedCheckbox = document.querySelector('.select-item:checked');
+  const rowToEdit = selectedCheckbox.closest('tr');
+  
+  document.getElementById('garage-name-edit').value = rowToEdit.cells[1].innerText;
+  document.getElementById('address-edit').value = rowToEdit.cells[2].innerText;
+  document.getElementById('number-edit').value = rowToEdit.cells[3].innerText;
+  document.getElementById('square-edit').value = rowToEdit.cells[5].innerText;
+  //document.getElementById('owner-edit').value = rowToEdit.cells[5].innerText;
+ // document.getElementById('phone-edit').value = rowToEdit.cells[6].innerText;
 });

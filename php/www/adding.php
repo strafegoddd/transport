@@ -6,18 +6,18 @@ $database = new Database();
 $pdo = $database->getConnection();
 
 try{
-    $garage_name = $_POST['garage_name'];
+    $garage_name = $_POST['garage-name'];
     $address = $_POST['address'];
-    $stmt = $pdo->prepare("INSERT INTO garage (garage_name, garage_address) VALUES (:garage_name, :address)");
+    $number = $_POST['number'];
+    $square = $_POST['square'];
+    $stmt = $pdo->prepare("INSERT INTO garage (garage_name, garage_address, garage_part_number, garage_square) VALUES (:garage_name, :address, :garage_part_number, :garage_square)");
     $stmt->bindParam(':garage_name', $garage_name);
     $stmt->bindParam(':address', $address);
+    $stmt->bindParam(':garage_part_number', $number);
+    $stmt->bindParam(':garage_square', $square);
     $stmt->execute();
     echo json_encode([
-        'success' => true,
-        'data' => [
-            'garage_name' => $garage_name,
-            'address' => $address
-        ]
+        'success' => true
     ]);
 }
 catch(PDOException $e) {

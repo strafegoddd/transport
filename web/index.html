@@ -57,7 +57,7 @@
                 </div>
                 <div class="modal" id="garage-add-modal">
                     <div class="modal-window">
-                        <button class="modal-close" id="close-modal-btn">
+                        <button class="modal-close" id="close-modal-add">
                             <img src="img/close.svg" alt="close-modal">
                         </button>
                         <div class="text-section">Добавить гараж</div>
@@ -65,7 +65,7 @@
                             <div class="couple">
                                 <div class="label-couple">
                                     <label>Название гаража</label>
-                                    <input id="garage_name" name="garage_name" type="text" placeholder="Гараж №1">
+                                    <input id="garage_name" name="garage-name" type="text" placeholder="Гараж №1">
                                 </div>
                                 <div class="label-couple">
                                     <label>Адрес</label>
@@ -92,25 +92,50 @@
                                     <input id="phone" name="phone" type="text" placeholder="+7 (924) 000 00 00">
                                 </div>
                             </div>
-                            <div class="l-check"></div>
                             <input class="submit" type="submit" value="Добавить">
                         </form>
-                        <script>
-                            document.getElementById('addingForm').addEventListener('submit', async function(event) {
-                                event.preventDefault();
-
-                                const formData = new FormData(this);
-                                const response = await fetch('http://localhost:81/adding.php', {
-                                    method: 'POST',
-                                    body: formData
-                                });
-
-                                const result = await response.json();
-                                if (result.success) {
-                                    window.location.href = 'index.html';
-                                }
-                            });
-                        </script>
+                    </div>
+                </div>
+                <div class="modal" id="garage-edit-modal">
+                    <div class="modal-window">
+                        <button class="modal-close" id="close-modal-edit">
+                            <img src="img/close.svg" alt="close-modal">
+                        </button>
+                        <div class="text-section">Изменить данные гаража</div>
+                        <form class="l-form" id="editing-form">
+                            <div class="couple">
+                                <div class="label-couple">
+                                    <label>Название гаража</label>
+                                    <input id="garage-name-edit" name="garage-name-edit" type="text" placeholder="Гараж №1" required>
+                                </div>
+                                <div class="label-couple">
+                                    <label>Адрес</label>
+                                    <input id="address-edit" name="address-edit" type="text" placeholder="г. Владивосток, ул. Адмирал..." required>
+                                </div>
+                            </div>
+                            <div class="couple">
+                                <div class="label-couple">
+                                    <label>Номер части</label>
+                                    <input id="number-edit" name="number-edit" type="text" placeholder="0001" required>
+                                </div>
+                                <div class="label-couple">
+                                    <label>Площадь, кв. м.</label>
+                                    <input id="square-edit" name="square-edit" type="text" placeholder="200" required>
+                                </div>
+                            </div>
+                            <div class="couple">
+                                <div class="label-couple">
+                                    <label>Владелец</label>
+                                    <input id="owner-edit" name="owner-edit" type="text" placeholder="ВС РФ">
+                                </div>
+                                <div class="label-couple">
+                                    <label>Рабочий телефон</label>
+                                    <input id="phone-edit" name="phone-edit" type="text" placeholder="+7 (924) 000 00 00">
+                                </div>
+                            </div>
+                            <div class="l-check"></div>
+                            <input class="submit" type="submit" value="Изменить">
+                        </form>
                     </div>
                 </div>
                 <input type="text" id="myInput" onkeyup="searchFunction()" placeholder="Поиск"></input>
