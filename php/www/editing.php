@@ -25,19 +25,25 @@ try {
         $garageAddress = $editData['address-edit'];
         $garagePartNumber = $editData['number-edit'];
         $garageSquare = $editData['square-edit'];
+        $garageOwner = $editData['owner-edit'];
+        $garagePhone = $editData['phone-edit'];
 
         // Обновление данных в таблице garage
         $stmt = $pdo->prepare("UPDATE garage SET 
             garage_name = :garage_name,
             garage_address = :garage_address,
             garage_part_number = :garage_part_number,
-            garage_square = :garage_square
+            garage_square = :garage_square,
+            garage_owner = :garage_owner,
+            garage_phone = :garage_phone
             WHERE garage_id = :id");
 
         $stmt->bindParam(':garage_name', $garageName);
         $stmt->bindParam(':garage_address', $garageAddress);
         $stmt->bindParam(':garage_part_number', $garagePartNumber);
         $stmt->bindParam(':garage_square', $garageSquare);
+        $stmt->bindParam(':garage_owner', $garageOwner);
+        $stmt->bindParam(':garage_phone', $garagePhone);
         $stmt->bindParam(':id', $id);
 
         if ($stmt->execute()) {

@@ -10,11 +10,15 @@ try{
     $address = $_POST['address'];
     $number = $_POST['number'];
     $square = $_POST['square'];
-    $stmt = $pdo->prepare("INSERT INTO garage (garage_name, garage_address, garage_part_number, garage_square) VALUES (:garage_name, :address, :garage_part_number, :garage_square)");
+    $owner = $_POST['owner'];
+    $phone = $_POST['phone'];
+    $stmt = $pdo->prepare("INSERT INTO garage (garage_name, garage_address, garage_part_number, garage_square, garage_owner, garage_phone) VALUES (:garage_name, :address, :garage_part_number, :garage_square, :garage_owner, :garage_phone)");
     $stmt->bindParam(':garage_name', $garage_name);
     $stmt->bindParam(':address', $address);
     $stmt->bindParam(':garage_part_number', $number);
     $stmt->bindParam(':garage_square', $square);
+    $stmt->bindParam(':garage_owner', $owner);
+    $stmt->bindParam(':garage_phone', $phone);
     $stmt->execute();
     echo json_encode([
         'success' => true

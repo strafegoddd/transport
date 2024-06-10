@@ -1,3 +1,10 @@
+let memData = {
+  garageId: '',
+  vehicleId: ''
+}
+
+//Tabs and interface
+
 function openTab(evt, tabName){
     let i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
@@ -25,6 +32,8 @@ function burger(){
     //document.querySelector('.nav').classList.toggle('open');
 }
 
+//Table
+
 function fetchGarageData() {
   fetch('http://localhost:81/garageData.php')
   .then(response => response.json())
@@ -42,6 +51,35 @@ function fetchGarageData() {
                       <td>${data[i].garage_part_number}</td>
                       <td>${data[i].garage_space}</td>
                       <td>${data[i].garage_square}</td>
+                      <td>${data[i].garage_owner}</td>
+                      <td>${data[i].garage_phone}</td>
+                  `;
+
+          tbody.appendChild(row);
+      }
+  })
+  .catch(error => console.error('Error fetching data:', error));
+}
+
+function fetchAllVehicleData() {
+  fetch('http://localhost:81/allVehicleData.php')
+  .then(response => response.json())
+  .then(data => {
+
+      const tbody = document.getElementById('vehicle-data');
+      tbody.innerHTML = '';
+      for (let i = 0; i < data.length; i++) {
+          const row = document.createElement('tr');
+          row.dataset.id = data[i].garage_id;
+          row.innerHTML = `
+                      <td><input type="checkbox" name="select-item" class="select-item" /></td>
+                      <td>${data[i].garage_name}</td>
+                      <td>${data[i].garage_address}</td>
+                      <td>${data[i].garage_part_number}</td>
+                      <td>${data[i].garage_space}</td>
+                      <td>${data[i].garage_square}</td>
+                      <td>${data[i].garage_owner}</td>
+                      <td>${data[i].garage_phone}</td>
                   `;
 
           tbody.appendChild(row);
@@ -51,26 +89,9 @@ function fetchGarageData() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-   fetchGarageData();
+  fetchGarageData();
+  //fetchAllVehicleData();
 });
-
-//adding button
-document.getElementById('add-garage').addEventListener("click", function (){
-    document.getElementById('garage-add-modal').classList.add('open')
-})
-
-document.getElementById('close-modal-add').addEventListener("click", function (){
-    document.getElementById('garage-add-modal').classList.remove('open')
-})
-
-//editing button
-document.getElementById('edit-garage').addEventListener("click", function (){
-  document.getElementById('garage-edit-modal').classList.add('open')
-})
-
-document.getElementById('close-modal-edit').addEventListener("click", function (){
-  document.getElementById('garage-edit-modal').classList.remove('open')
-})
 
 //сортировка таблицы #1
 /* const table = document.querySelector('table'); //get the table to be sorted
@@ -174,10 +195,45 @@ function searchFunction() {
   });
 }  
 
+//Buttons
+
+//Garage
+const addGarageButton = document.getElementById('add-garage');
 const delGarageButton = document.getElementById('del-garage');
 const editGarageButton = document.getElementById('edit-garage');
-const addingForm = document.getElementById('addingForm');
-const editingForm = document.getElementById('editing-form');
+const chooseGarageButton = document.getElementById('choose-garage');
+
+//Vehicle
+const addVehicleButton = document.getElementById('add-vehicle');
+const delVehicleButton = document.getElementById('del-vehicle');
+const editVehicleButton = document.getElementById('edit-vehicle');
+const chooseVehicleButton = document.getElementById('choose-vehicle');
+
+//adding button
+addGarageButton.addEventListener("click", function (){
+  document.getElementById('garage-add-modal').classList.add('open')
+})
+
+document.getElementById('close-modal-add').addEventListener("click", function (){
+  document.getElementById('garage-add-modal').classList.remove('open')
+})
+
+addVehicleButton.addEventListener("click", function (){
+  document.getElementById('vehicle-add-modal').classList.add('open')
+})
+
+document.getElementById('vehicle-close-modal-add').addEventListener("click", function (){
+  document.getElementById('vehicle-add-modal').classList.remove('open')
+})
+
+//editing button
+editGarageButton.addEventListener("click", function (){
+document.getElementById('garage-edit-modal').classList.add('open')
+})
+
+document.getElementById('close-modal-edit').addEventListener("click", function (){
+document.getElementById('garage-edit-modal').classList.remove('open')
+})
 
 document.getElementById('select-all').addEventListener('change', function(event) {
   const checkboxes = document.querySelectorAll('.select-item');
@@ -197,11 +253,17 @@ const toggleButtons = () => {
   const selectedCheckboxes = document.querySelectorAll('.select-item:checked');
   delGarageButton.disabled = selectedCheckboxes.length === 0;
   editGarageButton.disabled = selectedCheckboxes.length !== 1;
+  chooseGarageButton.disabled = selectedCheckboxes.length !== 1;
 };
 
 document.addEventListener('DOMContentLoaded', function(){
   toggleButtons();
 })
+
+//Forms and button onclicks (fetches)
+const editingForm = document.getElementById('editing-form');
+const addingForm = document.getElementById('adding-form');
+const vehicleAddingForm = document.getElementById('vehicle-adding-form');
 
 addingForm.addEventListener('submit', async function(event) {
   event.preventDefault();
@@ -216,6 +278,32 @@ addingForm.addEventListener('submit', async function(event) {
   if (result.success) {
       window.location.href = 'index.html';
   }
+});
+
+vehicleAddingForm.addEventListener('submit', async function(event){
+  event.preventDefault();
+
+  const formData = new FormData(vehicleAddingForm);
+  const vehicleData = {
+    vehicleName: formData.get('vehicle-name'),
+    vehicleType: formData.get('vehicle-type'),
+    garageId: memData.garageId[0]
+};
+
+  const response = await fetch('http://localhost:81/addingVehicle.php', {
+    method: 'POST',
+    headers: {
+    'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(vehicleData)
+  });
+
+  const result = await response.json();
+  if (result.success) {
+    document.getElementById('vehicle-add-modal').classList.remove('open');
+    fetchVehicleData();
+  }
+  // console.log(result);
 });
 
 editingForm.addEventListener('submit', async function(event) {
@@ -268,6 +356,29 @@ delGarageButton.addEventListener('click', function() {
   .catch(error => console.error('Error deleting data:', error));
 });
 
+delVehicleButton.addEventListener('click', function(){
+  const selectedCheckboxes = document.querySelectorAll('.select-item:checked');
+  const idsToDelete = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
+  
+  fetch('http://localhost:81/deletingVehicle.php', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ ids: idsToDelete })
+  })
+  .then(response => response.json())
+  .then(data => {
+      if (data.success) {
+          fetchVehicleData();
+      } else {
+          console.error('Error deleting data:', data.error);
+      }
+      // console.log(data);
+  })
+  .catch(error => console.error('Error deleting data:', error));
+})
+
 editGarageButton.addEventListener('click', function() {
   const selectedCheckbox = document.querySelector('.select-item:checked');
   const rowToEdit = selectedCheckbox.closest('tr');
@@ -276,6 +387,50 @@ editGarageButton.addEventListener('click', function() {
   document.getElementById('address-edit').value = rowToEdit.cells[2].innerText;
   document.getElementById('number-edit').value = rowToEdit.cells[3].innerText;
   document.getElementById('square-edit').value = rowToEdit.cells[5].innerText;
-  //document.getElementById('owner-edit').value = rowToEdit.cells[5].innerText;
- // document.getElementById('phone-edit').value = rowToEdit.cells[6].innerText;
+  document.getElementById('owner-edit').value = rowToEdit.cells[6].innerText;
+ document.getElementById('phone-edit').value = rowToEdit.cells[7].innerText;
 });
+
+chooseGarageButton.addEventListener('click', function() {
+  openTab(event, 'tab2');
+  document.getElementsByClassName("sidebar-card")[1].className += " active";
+
+  fetchVehicleData();
+
+  const checkboxes = document.querySelectorAll('.select-item:checked');
+  checkboxes.forEach(checkbox => {
+    checkbox.checked = false;
+  });
+});
+
+function fetchVehicleData(){
+  const selectedCheckboxes = document.querySelectorAll('.select-item:checked');
+  const idToChoose = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
+
+  fetch('http://localhost:81/choose.php', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ id: idToChoose })
+})
+.then(response => response.json())
+.then(data => {
+  memData.garageId = idToChoose;
+  const tbody = document.getElementById('vehicle-data');
+  tbody.innerHTML = '';
+  for (let i = 0; i < data.length; i++) {
+    const row = document.createElement('tr');
+      row.dataset.id = data[i].vehicle_id;
+      row.innerHTML = `
+                  <td><input type="checkbox" name="select-item" class="select-item" /></td>
+                  <td>${data[i].vehicle_name}</td>
+                  <td>${data[i].vehicle_id}</td>
+                  <td>${data[i].type_name}</td>
+              `;
+
+      tbody.appendChild(row);
+  }
+})
+.catch(error => console.error('Error deleting data:', error));
+}

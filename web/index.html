@@ -51,6 +51,7 @@
         <div id="tab1" class="tabcontent">
             <div class="table-header">
                 <div class="table-tabs">
+                    <button id="choose-garage" class="table-butts">Выбрать</button>
                     <button id="add-garage" class="table-butts">Добавить</button>
                     <button id="edit-garage" class="table-butts">Изменить</button>
                     <button id="del-garage" class="table-butts">Удалить</button>
@@ -61,7 +62,7 @@
                             <img src="img/close.svg" alt="close-modal">
                         </button>
                         <div class="text-section">Добавить гараж</div>
-                        <form class="l-form" id="addingForm">
+                        <form class="l-form" id="adding-form">
                             <div class="couple">
                                 <div class="label-couple">
                                     <label>Название гаража</label>
@@ -149,6 +150,8 @@
                     <th>Номер части</th>
                     <th>Количество техники</th>
                     <th>Площадь, м2</th>
+                    <th>Владелец</th>
+                    <th>Рабочий телефон</th>
                 </tr>
                 </thead>
                 <tbody class="vehicleBody" id="garage-data">
@@ -181,47 +184,66 @@
         <div id="tab2" class="tabcontent">
             <div class="table-header">
                 <div class="table-tabs">
-                    <button class="table-butts"><a href="adding.html">Добавить</a></button>
-                    <button class="table-butts"><a href="#">Изменить</a></button>
-                    <button class="table-butts"><a href="#">Удалить</a></button>
+                    <button id="choose-vehicle" class="table-butts">Выбрать</button>
+                    <button id="add-vehicle" class="table-butts">Добавить</button>
+                    <button id="edit-vehicle" class="table-butts">Изменить</button>
+                    <button id="del-vehicle" class="table-butts">Удалить</button>
+                </div>
+                <div class="modal" id="vehicle-add-modal">
+                    <div class="modal-window">
+                        <button class="modal-close" id="vehicle-close-modal-add">
+                            <img src="img/close.svg" alt="close-modal">
+                        </button>
+                        <div class="text-section">Добавить транспорт</div>
+                        <form class="l-form" id="vehicle-adding-form">
+                            <div class="couple">
+                                <div class="label-couple">
+                                    <label>Название транспорта</label>
+                                    <input id="vehicle-name" name="vehicle-name" type="text" placeholder="Боинг 773">
+                                </div>
+                                <div class="label-couple">
+                                    <label>Тип транспорта</label>
+                                    <input id="vehicle-type" name="vehicle-type" type="text" placeholder="Наземный">
+                                </div>
+                            </div>
+                            <!-- <div class="couple">
+                                <div class="label-couple">
+                                    <label>Номер части</label>
+                                    <input id="number" name="number" type="text" placeholder="0001">
+                                </div>
+                                <div class="label-couple">
+                                    <label>Площадь, кв. м.</label>
+                                    <input id="square" name="square" type="text" placeholder="200">
+                                </div>
+                            </div>
+                            <div class="couple">
+                                <div class="label-couple">
+                                    <label>Владелец</label>
+                                    <input id="owner" name="owner" type="text" placeholder="ВС РФ">
+                                </div>
+                                <div class="label-couple">
+                                    <label>Рабочий телефон</label>
+                                    <input id="phone" name="phone" type="text" placeholder="+7 (924) 000 00 00">
+                                </div>
+                            </div> -->
+                            <input class="submit" type="submit" value="Добавить">
+                        </form>
+                    </div>
                 </div>
                 <input type="text" id="myInput" onkeyup="searchFunction()" placeholder="Поиск"></input>
             </div>
-            <table class="table">
+            <table class="table" id="vehicle-table">
                 <thead>
                 <tr>
-                    <th><input type="checkbox" name="name1" />&nbsp;</th>
+                    <th><input type="checkbox" name="select-all" id="select-all" />&nbsp;</th>
                     <th>Транспорт</th>
                     <th>Рег. Номер</th>
-                    <th>Масса, кг</th>
-                    <th>Размеры, м</th>
-                    <th>Грузоподъемность, кг</th>
+                    <th>Тип</th>
+                    <!-- <th>Масса, кг</th> -->
+                    <!-- <th>Грузоподъемность, кг</th> -->
                 </tr>
                 </thead>
-                <tbody class="vehicleBody">
-                <tr>
-                    <td><input type="checkbox" name="name1" />&nbsp;</td>
-                    <td>Боинг 737</td>
-                    <td>1111 2313</td>
-                    <td>37 431</td>
-                    <td>33 * 34</td>
-                    <td>20 100</td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" name="name1" />&nbsp;</td>
-                    <td>Боинг 737</td>
-                    <td>1111 2313</td>
-                    <td>37 431</td>
-                    <td>33 * 34</td>
-                    <td>20 100</td>
-                <tr>
-                    <td><input type="checkbox" name="name1" />&nbsp;</td>
-                    <td>Боинг 737</td>
-                    <td>1111 2313</td>
-                    <td>37 431</td>
-                    <td>33 * 34</td>
-                    <td>20 100</td>
-                </tr>
+                <tbody class="vehicleBody" id="vehicle-data">
                 </tbody>
             </table>
         </div>
