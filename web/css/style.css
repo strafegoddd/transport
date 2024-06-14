@@ -300,7 +300,9 @@ body{
     background: var(--coolgray-10);
 
     &:disabled{
-        background-color:#444a4e;
+        color: var(--coolgray-50);
+        cursor: none;
+        pointer-events: none;
     }
 
     &:hover{
