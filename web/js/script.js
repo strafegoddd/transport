@@ -96,7 +96,7 @@ function fetchGarageData() {
   delGarageButton.disabled=1;
   editGarageButton.disabled=1;
   chooseGarageButton.disabled=1;
-  fetch('http://localhost:81/garageData.php')
+  fetch('http://185.187.90.199:81/garageData.php')
   .then(response => response.json())
   .then(data => {
 
@@ -123,7 +123,7 @@ function fetchGarageData() {
 }
 
 function fetchAllVehicleData() {
-  fetch('http://localhost:81/allVehicleData.php')
+  fetch('http://185.187.90.199:81/allVehicleData.php')
   .then(response => response.json())
   .then(data => {
       const tbody = document.getElementById('vehicle-data');
@@ -145,7 +145,7 @@ function fetchAllVehicleData() {
 }
 
 function fetchAllUserData() {
-  fetch('http://localhost:81/allUserData.php')
+  fetch('http://185.187.90.199:81/allUserData.php')
   .then(response => response.json())
   .then(data => {
 
@@ -360,7 +360,7 @@ addingForm.addEventListener('submit', async function(event) {
   event.preventDefault();
 
   const formData = new FormData(addingForm);
-  const response = await fetch('http://localhost:81/adding.php', {
+  const response = await fetch('http://185.187.90.199:81/adding.php', {
       method: 'POST',
       body: formData
   });
@@ -383,7 +383,7 @@ editingForm.addEventListener('submit', async function(event) {
   const selectedCheckbox = document.querySelector('.select-garage:checked');
   const idToEdit = parseInt(selectedCheckbox.closest('tr').dataset.id, 10);
 
-  const response = await fetch('http://localhost:81/editing.php', {
+  const response = await fetch('http://185.187.90.199:81/editing.php', {
       method: 'POST',
       headers: {
       'Content-Type': 'application/json'
@@ -402,7 +402,7 @@ delGarageButton.addEventListener('click', function() {
   const selectedCheckboxes = document.querySelectorAll('.select-garage:checked');
   const idsToDelete = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
 
-  fetch('http://localhost:81/deleting.php', {
+  fetch('http://185.187.90.199:81/deleting.php', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
@@ -518,7 +518,7 @@ vehicleAddingForm.addEventListener('submit', async function(event){
     garageId: memData.garageId[0]
 };
 
-  const response = await fetch('http://localhost:81/addingVehicle.php', {
+  const response = await fetch('http://185.187.90.199:81/addingVehicle.php', {
     method: 'POST',
     headers: {
     'Content-Type': 'application/json'
@@ -546,7 +546,7 @@ vehicleEditingForm.addEventListener('submit', async function(event) {
   const selectedCheckbox = document.querySelector('.select-vehicle:checked');
   const idToEdit = parseInt(selectedCheckbox.closest('tr').dataset.id, 10);
 
-  const response = await fetch('http://localhost:81/editingVehicle.php', {
+  const response = await fetch('http://185.187.90.199:81/editingVehicle.php', {
       method: 'POST',
       headers: {
       'Content-Type': 'application/json'
@@ -567,7 +567,7 @@ delVehicleButton.addEventListener('click', function(){
   const idsToDelete = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
 
   
-  fetch('http://localhost:81/deletingVehicle.php', {
+  fetch('http://185.187.90.199:81/deletingVehicle.php', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
@@ -602,7 +602,7 @@ function fetchVehicleData(){
   const selectedCheckboxes = document.querySelectorAll('.select-garage:checked');
   const idToChoose = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
 
-  fetch('http://localhost:81/choose.php', {
+  fetch('http://185.187.90.199:81/choose.php', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -634,7 +634,7 @@ function chooseIndicatorData(){
   const selectedCheckboxes = document.querySelectorAll('.select-vehicle:checked');
   const idToChoose = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
 
-  fetch('http://localhost:81/chooseIndicator.php', {
+  fetch('http://185.187.90.199:81/chooseIndicator.php', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -667,7 +667,7 @@ function chooseIndicatorData(){
 function updateVehicleData(){
   const idToChoose = memData.garageId;
 
-  fetch('http://localhost:81/choose.php', {
+  fetch('http://185.187.90.199:81/choose.php', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
