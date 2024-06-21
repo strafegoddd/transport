@@ -12,12 +12,12 @@ $pdo = $database->getConnection();
 
 try{
     $stmt = $pdo->prepare("SELECT 
-        v.vehicle_id, 
-        v.vehicle_name, 
-        vt.type_name
-    FROM vehicle v
-    JOIN vehicle_in_garage vig ON v.vehicle_id = vig.vig_vehicle_id
-    JOIN vehicle_type vt ON v.vehicle_type = vt.type_id");
+            u.user_id, 
+            u.user_login, 
+            u.user_password, 
+            u.user_role,
+            u.user_name
+        FROM users u");
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     echo json_encode($data);

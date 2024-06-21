@@ -16,7 +16,7 @@ $pdo = $database->getConnection();
 $data = json_decode(file_get_contents('php://input'), true);
 
 if (isset($data['id'])) {
-    $garageId = intval($data['id']);
+    $garageId = $data['id'][0];
     $query = "SELECT 
         v.vehicle_id, 
         v.vehicle_name, 

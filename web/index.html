@@ -15,27 +15,39 @@
                 <!-- <img class="icon" src="/img/menu-outline.svg" alt=""> -->
                 <span></span>
             </div>
+            <button class="sidebar-card" id="admin-butt" onclick="openTab(event, 'tab-admin')">
+                <img class="icon" src="./img/person-outline.svg" alt=""    >
+                <span>Пользователи</span>
+            </button>
             <button class="sidebar-card" onclick="openTab(event, 'tab1')">
                 <img class="icon" src="./img/home.svg" alt=""    >
                 <span>Гаражи</span>
             </button>
+            <button class="sidebar-card" onclick="openTab(event, 'tab-garage-char')">
+                <img class="icon" src="./img/chart-bar.svg" alt=""    >
+                <span>Показатели гаража</span>
+            </button>
             <button class="sidebar-card" onclick="openTab(event, 'tab2')">
-                <img class="icon" src="./img/analytics-outline.svg" alt="">
+                <img class="icon" src="./img/car-outline.svg" alt="">
                 <span>Транспортные средства</span>
             </button>
+            <button class="sidebar-card" onclick="openTab(event, 'tab-vehicle-ind')">
+                <img class="icon" src="./img/ruler.svg" alt="">
+                <span>Характеристики транспорта</span>
+            </button>
             <button class="sidebar-card" onclick="openTab(event, 'tab3')">
-                <img class="icon" src="./img/trending-up-outline.svg" alt="">
+                <img class="icon" src="./img/analytics-outline.svg" alt="">
                 <span>Показатели транспорта</span>
             </button>
             <button class="sidebar-card" onclick="openTab(event, 'tab4')">
-                <img class="icon" src="./img/folders.svg" alt="">
+                <img class="icon" src="./img/trending-up-outline.svg" alt="">
                 <span>Показатели эффективности</span>
             </button>
-            <button class="sidebar-card" onclick="openTab(event, 'tab5')">
+            <button class="sidebar-card" id="favorites-butt" onclick="openTab(event, 'tab5')">
                 <img class="icon" src="./img/bookmark-outline.svg" alt="">
                 <span>Избранное</span>
             </button>
-            <button class="sidebar-card" onclick="openTab(event, 'tab6')">
+            <button class="sidebar-card" id="handbook-butt" onclick="openTab(event, 'tab6')">
                 <img class="icon" src="./img/book-outline.svg" alt="">
                 <span>Справочник</span>
             </button>
@@ -47,6 +59,92 @@
                 <a href="./auth.html"><img src="./img/user-thumb.svg" alt="user"></a>
                 <img src="./img/button.svg" alt="">
             </div>
+        </div>
+        <div id ="tab-admin" class="tabcontent">
+            <div class="table-header">
+                <div class="table-tabs">
+                    <button id="add-user" class="table-butts">Добавить</button>
+                    <button id="edit-user" class="table-butts">Изменить</button>
+                    <button id="del-user" class="table-butts">Удалить</button>
+                </div>
+                <div class="modal" id="user-add-modal">
+                    <div class="modal-window">
+                        <button class="modal-close" id="user-close-modal-add">
+                            <img src="img/close.svg" alt="close-modal">
+                        </button>
+                        <div class="text-section">Добавить гараж</div>
+                        <form class="l-form" id="user-adding-form">
+                            <div class="couple">
+                                <div class="label-couple">
+                                    <label>ФИ пользователя</label>
+                                    <input id="user-name" name="user-name" type="text">
+                                </div>
+                                <div class="label-couple">
+                                    <label>Должность</label>
+                                    <input id="address" name="address" type="text">
+                                </div>
+                            </div>
+                            <div class="couple">
+                                <div class="label-couple">
+                                    <label>Логин</label>
+                                    <input id="number" name="number" type="text">
+                                </div>
+                                <div class="label-couple">
+                                    <label>Пароль</label>
+                                    <input id="square" name="square" type="text">
+                                </div>
+                            </div>
+                            <input class="submit" type="submit" value="Добавить">
+                        </form>
+                    </div>
+                </div>
+                <div class="modal" id="user-edit-modal">
+                    <div class="modal-window">
+                        <button class="modal-close" id="user-close-modal-edit">
+                            <img src="img/close.svg" alt="close-modal">
+                        </button>
+                        <div class="text-section">Изменить данные гаража</div>
+                        <form class="l-form" id="user-editing-form">
+                            <div class="couple">
+                                <div class="label-couple">
+                                    <label>ФИ пользователя</label>
+                                    <input id="user-name" name="user-name" type="text">
+                                </div>
+                                <div class="label-couple">
+                                    <label>Должность</label>
+                                    <input id="address" name="address" type="text">
+                                </div>
+                            </div>
+                            <div class="couple">
+                                <div class="label-couple">
+                                    <label>Логин</label>
+                                    <input id="number" name="number" type="text">
+                                </div>
+                                <div class="label-couple">
+                                    <label>Пароль</label>
+                                    <input id="square" name="square" type="text">
+                                </div>
+                            </div>
+                            <input class="submit" type="submit" value="Добавить">
+                        </form>
+                    </div>
+                </div>
+                <input type="text" id="myInput" onkeyup="searchFunction()" placeholder="Поиск"></input>
+            </div>
+            <table class="table" id="user-table">
+                <thead>
+                <tr>
+                    <th><input type="checkbox" name="select-all" id="select-all" />&nbsp;</th>
+                    <th>Пользователь</th>
+                    <th>Дата добавления</th>
+                    <th>Права</th>
+                    <th>Логин</th>
+                    <th>Пароль</th>
+                </tr>
+                </thead>
+                <tbody class="userBody" id="user-data">
+                </tbody>
+            </table>
         </div>
         <div id="tab1" class="tabcontent">
             <div class="table-header">
@@ -144,7 +242,7 @@
             <table class="table" id="garage-table">
                 <thead>
                 <tr>
-                    <th><input type="checkbox" name="select-all" id="select-all" />&nbsp;</th>
+                    <th><input type="checkbox" name="select-all-garages" id="select-all-garages" />&nbsp;</th>
                     <th>Гараж</th>
                     <th>Адрес</th>
                     <th>Номер части</th>
@@ -155,29 +253,6 @@
                 </tr>
                 </thead>
                 <tbody class="vehicleBody" id="garage-data">
-<!--                <tr>-->
-<!--                    <td><input type="checkbox" name="name1" />&nbsp;</td>-->
-<!--                    <td id="garage">001</td>-->
-<!--                    <td id="address">г. Владивосток</td>-->
-<!--                    <td id="number">37 431</td>-->
-<!--                    <td id="howmany">33</td>-->
-<!--                    <td id="square">20100</td>-->
-<!--                </tr>-->
-<!--                <tr>-->
-<!--                    <td><input type="checkbox" name="name1" />&nbsp;</td>-->
-<!--                    <td>001</td>-->
-<!--                    <td>г. Владивосток</td>-->
-<!--                    <td>37 431</td>-->
-<!--                    <td>33</td>-->
-<!--                    <td>20100</td>-->
-<!--                <tr>-->
-<!--                    <td><input type="checkbox" name="name1" />&nbsp;</td>-->
-<!--                    <td>001</td>-->
-<!--                    <td>г. Владивосток</td>-->
-<!--                    <td>37 431</td>-->
-<!--                    <td>33</td>-->
-<!--                    <td>20100</td>-->
-<!--                </tr>-->
                 </tbody>
             </table>
         </div>
@@ -206,27 +281,28 @@
                                     <input id="vehicle-type" name="vehicle-type" type="text" placeholder="Наземный">
                                 </div>
                             </div>
-                            <!-- <div class="couple">
-                                <div class="label-couple">
-                                    <label>Номер части</label>
-                                    <input id="number" name="number" type="text" placeholder="0001">
-                                </div>
-                                <div class="label-couple">
-                                    <label>Площадь, кв. м.</label>
-                                    <input id="square" name="square" type="text" placeholder="200">
-                                </div>
-                            </div>
+                            <input class="submit" type="submit" value="Добавить">
+                        </form>
+                    </div>
+                </div>
+                <div class="modal" id="vehicle-edit-modal">
+                    <div class="modal-window">
+                        <button class="modal-close" id="vehicle-close-modal-edit">
+                            <img src="img/close.svg" alt="close-modal">
+                        </button>
+                        <div class="text-section">Изменить данные гаража</div>
+                        <form class="l-form" id="vehicle-editing-form">
                             <div class="couple">
                                 <div class="label-couple">
-                                    <label>Владелец</label>
-                                    <input id="owner" name="owner" type="text" placeholder="ВС РФ">
+                                    <label>Название транспорта</label>
+                                    <input id="vehicle-name-edit" name="vehicle-name-edit" type="text">
                                 </div>
                                 <div class="label-couple">
-                                    <label>Рабочий телефон</label>
-                                    <input id="phone" name="phone" type="text" placeholder="+7 (924) 000 00 00">
+                                    <label>Тип транспорта</label>
+                                    <input id="vehicle-type-edit" name="vehicle-type-edit" type="text">
                                 </div>
-                            </div> -->
-                            <input class="submit" type="submit" value="Добавить">
+                            </div>
+                            <input class="submit" type="submit" value="Изменить">
                         </form>
                     </div>
                 </div>
@@ -235,7 +311,7 @@
             <table class="table" id="vehicle-table">
                 <thead>
                 <tr>
-                    <th><input type="checkbox" name="select-all" id="select-all" />&nbsp;</th>
+                    <th><input type="checkbox" name="select-all-vehicles" id="select-all-vehicles" />&nbsp;</th>
                     <th>Транспорт</th>
                     <th>Рег. Номер</th>
                     <th>Тип</th>
@@ -250,51 +326,68 @@
         <div id="tab3" class="tabcontent">
             <div class="table-header">
                 <div class="table-tabs">
-                    <button class="table-butts"><a href="adding.html">Добавить</a></button>
-                    <button class="table-butts"><a href="#">Изменить</a></button>
-                    <button class="table-butts"><a href="#">Удалить</a></button>
+                    <button id="choose-indicator" class="table-butts">Выбрать</button>
+                    <button id="add-indicator" class="table-butts">Добавить</button>
+                    <button id="edit-indicator" class="table-butts">Изменить</button>
+                    <button id="del-indicator" class="table-butts">Удалить</button>
+                </div>
+                <div class="modal" id="indicator-add-modal">
+                    <div class="modal-window">
+                        <button class="modal-close" id="indicator-close-modal-add">
+                            <img src="img/close.svg" alt="close-modal">
+                        </button>
+                        <div class="text-section">Добавить транспорт</div>
+                        <form class="l-form" id="indicator-adding-form">
+                            <div class="couple">
+                                <div class="label-couple">
+                                    <label>Название транспорта</label>
+                                    <input id="vehicle-name" name="vehicle-name" type="text" placeholder="Боинг 773">
+                                </div>
+                                <div class="label-couple">
+                                    <label>Тип транспорта</label>
+                                    <input id="vehicle-type" name="vehicle-type" type="text" placeholder="Наземный">
+                                </div>
+                            </div>
+                            <input class="submit" type="submit" value="Добавить">
+                        </form>
+                    </div>
+                </div>
+                <div class="modal" id="indicator-edit-modal">
+                    <div class="modal-window">
+                        <button class="modal-close" id="indicator-close-modal-edit">
+                            <img src="img/close.svg" alt="close-modal">
+                        </button>
+                        <div class="text-section">Изменить данные гаража</div>
+                        <form class="l-form" id="indicator-editing-form">
+                            <div class="couple">
+                                <div class="label-couple">
+                                    <label>Название транспорта</label>
+                                    <input id="vehicle-name-edit" name="vehicle-name-edit" type="text">
+                                </div>
+                                <div class="label-couple">
+                                    <label>Тип транспорта</label>
+                                    <input id="vehicle-type-edit" name="vehicle-type-edit" type="text">
+                                </div>
+                            </div>
+                            <input class="submit" type="submit" value="Изменить">
+                        </form>
+                    </div>
                 </div>
                 <input type="text" id="myInput" onkeyup="searchFunction()" placeholder="Поиск"></input>
             </div>
-            <table class="table" >
+            <table class="table" id="indicator-table">
                 <thead>
                 <tr>
-                    <th><input type="checkbox" name="name1" />&nbsp;</th>
+                    <th><input type="checkbox" name="select-all-indicators" id="select-all-indicators" />&nbsp;</th>
                     <th>Гараж</th>
                     <th>Показатель</th>
                     <th>Единица измерения</th>
                     <th>Значение</th>
-                    <th>Дата фиксации</th>
+                    <!-- <th>Дата фиксации</th> -->
                     <th>Время фиксации</th>
                 </tr>
                 </thead>
-                <tbody class="vehicleBody">
-                <tr>
-                    <td><input type="checkbox" name="name1" />&nbsp;</td>
-                    <td>Ангар №1</td>
-                    <td>Перевезено груза</td>
-                    <td>кг</td>
-                    <td>14 123</td>
-                    <td>20.01.2022</td>
-                    <td>10:30</td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" name="name1" />&nbsp;</td>
-                    <td>Ангар №1</td>
-                    <td>Перевезено груза</td>
-                    <td>кг</td>
-                    <td>14 123</td>
-                    <td>20.01.2022</td>
-                    <td>10:30</td>
-                <tr>
-                    <td><input type="checkbox" name="name1" />&nbsp;</td>
-                    <td>Ангар №1</td>
-                    <td>Перевезено груза</td>
-                    <td>кг</td>
-                    <td>14 123</td>
-                    <td>20.01.2022</td>
-                    <td>10:30</td>
-                </tr>
+                <tbody class="indicatorBody" id="indicator-data">
                 </tbody>
             </table>
         </div>
@@ -307,10 +400,10 @@
                 </div>
                 <input type="text" id="myInput" onkeyup="searchFunction()" placeholder="Поиск"></input>
             </div>
-            <table class="table">
+            <table class="table" >
                 <thead>
                 <tr>
-                    <th><input type="checkbox" name="name1" />&nbsp;</th>
+                    <th><input type="checkbox" />&nbsp;</th>
                     <th>Гараж</th>
                     <th>Показатель</th>
                     <th>Единица измерения</th>

@@ -32,6 +32,12 @@ services:
       - '8889:8080'
     depends_on:
       - my_db
+  front:
+    container_name: front
+    build: ./web
+    ports:
+      - '3000:8080'
+
 volumes:
   mysql_data:
 

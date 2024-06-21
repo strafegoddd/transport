@@ -20,7 +20,7 @@ try {
     if (!empty($ids)) {
         // SQL-запрос для удаления данных
         $in  = str_repeat('?,', count($ids) - 1) . '?';
-        $stmt = $pdo->prepare("DELETE FROM vehicle WHERE garage_id IN ($in)");
+        $stmt = $pdo->prepare("DELETE FROM vehicle WHERE vehicle_id IN ($in)");
         $stmt->execute($ids);
     }
 
