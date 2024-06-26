@@ -30,7 +30,7 @@
                 password: formData.get('password')
             };
             
-            const response = await fetch('http://185.187.90.199:81/auth.php', {
+            const response = await fetch('http://localhost:81/auth.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -44,6 +44,7 @@
             if (data.success) {
                 sessionStorage.setItem('login', loginData.username);
                 sessionStorage.setItem('role', data.user_role);
+                sessionStorage.setItem('part_number', data.part_number);
                 messageDiv.textContent = 'Авторизация успешна!';
                 console.log('Права:', data.user_role);
                 window.location.href = 'index.html';
@@ -54,8 +55,6 @@
         </script>
 
         <div class="l-links"></div>
-        <div class="l-line"><a href="/registration.html">У вас нет аккаунта? Регестрируйтесь</a></div>
-        <div class="l-reg-link"></div>
     </div>
 </body>
 </html>

@@ -15,7 +15,7 @@ try{
             g.garage_id, 
             g.garage_name, 
             g.garage_address, 
-            g.garage_part_number, 
+            (SELECT pn.part_number_value FROM part_number pn WHERE pn.part_number_id = g.garage_part_number) AS garage_pn, 
             g.garage_square,
             g.garage_owner,
             g.garage_phone, 

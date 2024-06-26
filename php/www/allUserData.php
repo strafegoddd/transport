@@ -16,7 +16,8 @@ try{
             u.user_login, 
             u.user_password, 
             u.user_role,
-            u.user_name
+            u.user_name,
+            (SELECT pn.part_number_value FROM part_number pn WHERE pn.part_number_id = u.part_number_id) AS user_pn
         FROM users u");
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);

@@ -46,6 +46,9 @@ document.addEventListener('DOMContentLoaded', function() {
 function openTab(evt, tabName){
     let i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
+    if(tabName == 'tab1'){
+      fetchGarageData();
+    }
     if(tabName == 'tab2'){
       fetchAllVehicleData()
     }
@@ -96,20 +99,21 @@ function fetchGarageData() {
   delGarageButton.disabled=1;
   editGarageButton.disabled=1;
   chooseGarageButton.disabled=1;
-  fetch('http://185.187.90.199:81/garageData.php')
+  fetch('http://localhost:81/garageData.php')
   .then(response => response.json())
   .then(data => {
-
+    //console.log(data);
       const tbody = document.getElementById('garage-data');
       tbody.innerHTML = '';
       for (let i = 0; i < data.length; i++) {
+        if (data[i].garage_pn === sessionStorage.getItem('part_number')){
           const row = document.createElement('tr');
           row.dataset.id = data[i].garage_id;
           row.innerHTML = `
                       <td><input type="checkbox" name="select-garage" class="select-garage" /></td>
                       <td>${data[i].garage_name}</td>
                       <td>${data[i].garage_address}</td>
-                      <td>${data[i].garage_part_number}</td>
+                      <td>${data[i].garage_pn}</td>
                       <td>${data[i].garage_space}</td>
                       <td>${data[i].garage_square}</td>
                       <td>${data[i].garage_owner}</td>
@@ -117,25 +121,27 @@ function fetchGarageData() {
                   `;
 
           tbody.appendChild(row);
+        }
       }
   })
   .catch(error => console.error('Error fetching data:', error));
 }
 
 function fetchAllVehicleData() {
-  fetch('http://185.187.90.199:81/allVehicleData.php')
+  fetch('http://localhost:81/allVehicleData.php')
   .then(response => response.json())
   .then(data => {
       const tbody = document.getElementById('vehicle-data');
       tbody.innerHTML = '';
       for (let i = 0; i < data.length; i++) {
           const row = document.createElement('tr');
-          row.dataset.vehicle_id = data[i].vehicle_id;
+          row.dataset.id = data[i].vehicle_id;
           row.innerHTML = `
-                      <td><input type="checkbox" name="select-item" class="select-item" /></td>
+                      <td><input type="checkbox" name="select-vehicle" class="select-vehicle" /></td>
                       <td>${data[i].vehicle_name}</td>
-                      <td>${data[i].vehicle_id}</td>
                       <td>${data[i].type_name}</td>
+                      <td>${data[i].vehicle_subtype}</td>
+                      <td>${data[i].vehicle_serial_number}</td>
                   `;
 
           tbody.appendChild(row);
@@ -144,8 +150,24 @@ function fetchAllVehicleData() {
   .catch(error => console.error('Error fetching data:', error));
 }
 
+function vehAddTap(){
+  fetch('http://localhost:81/allVehicleData.php')
+  .then(response => response.json())
+  .then(data => {
+      const selVeh = document.getElementById('vehicle-name');
+      selVeh.innerHTML = '';
+      for (let i = 0; i < data.length; i++) {
+          const optVehName = document.createElement('option');
+          optVehName.value = data[i].vehicle_name;
+          optVehName.textContent = data[i].vehicle_name;
+          selVeh.appendChild(optVehName);
+      }
+  })
+  .catch(error => console.error('Error fetching data:', error));
+}
+
 function fetchAllUserData() {
-  fetch('http://185.187.90.199:81/allUserData.php')
+  fetch('http://localhost:81/allUserData.php')
   .then(response => response.json())
   .then(data => {
 
@@ -153,11 +175,11 @@ function fetchAllUserData() {
       tbody.innerHTML = '';
       for (let i = 0; i < data.length; i++) {
           const row = document.createElement('tr');
-          row.dataset.user_id = data[i].user_id;
+          row.dataset.id = data[i].user_id;
           row.innerHTML = `
-                      <td><input type="checkbox" name="select-item" class="select-item" /></td>
+                      <td><input type="checkbox" name="select-user" class="select-user" /></td>
                       <td>${data[i].user_name}</td>
-                      <td>X</td>
+                      <td>${data[i].user_pn}</td>
                       <td>${data[i].user_role}</td>
                       <td>${data[i].user_login}</td>
                       <td>${data[i].user_password}</td>
@@ -303,6 +325,88 @@ document.getElementById('user-close-modal-edit').addEventListener("click", funct
   document.getElementById('user-edit-modal').classList.remove('open')
   })
 
+document.getElementById('select-all-users').addEventListener('change', function(event) {
+  const checkboxes = document.querySelectorAll('.select-user');
+  checkboxes.forEach(checkbox => {
+      checkbox.checked = event.target.checked;
+  });
+  toggleButtonsUser();
+});
+
+document.getElementById('user-data').addEventListener('change', function(event) {
+  if (event.target.classList.contains('select-user')) {
+      toggleButtonsUser();
+  }
+});
+
+const toggleButtonsUser = () => {
+  const selectedCheckboxes = document.querySelectorAll('.select-user:checked');
+  delUserButton.disabled = selectedCheckboxes.length === 0;
+  editUserButton.disabled = selectedCheckboxes.length !== 1;
+};
+
+document.addEventListener('DOMContentLoaded', function(){
+  toggleButtonsUser();
+})
+
+//Forms
+const userEditingForm = document.getElementById('user-editing-form');
+const userAddingForm = document.getElementById('user-adding-form');
+
+userAddingForm.addEventListener('submit', async function(event){
+  event.preventDefault();
+
+  const formData = new FormData(userAddingForm);
+  const response = await fetch('http://localhost:81/addingUser.php', {
+      method: 'POST',
+      body: formData
+  });
+
+  const result = await response.json();
+  if (result.success) {
+      window.location.href = 'index.html';
+  }
+});
+
+userEditingForm.addEventListener('submit', async function(event) {
+  event.preventDefault();
+  
+  const formData = new FormData(this);
+  const editData = {};
+  formData.forEach((value, key) => {
+    editData[key] = value;
+  });
+
+  const selectedCheckbox = document.querySelector('.select-user:checked');
+  const idToEdit = parseInt(selectedCheckbox.closest('tr').dataset.id, 10);
+
+  const response = await fetch('http://localhost:81/userEditing.php', {
+      method: 'POST',
+      headers: {
+      'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ id: idToEdit, editData: editData})
+  });
+
+  const result = await response.json();
+  //console.log(result);
+  if (result.success) {
+      window.location.href = 'index.html';
+  }
+  console.log(result);
+});
+
+editUserButton.addEventListener('click', function() {
+  const selectedCheckbox = document.querySelector('.select-user:checked');
+  const rowToEdit = selectedCheckbox.closest('tr');
+  
+  document.getElementById('edit-user-name').value = rowToEdit.cells[1].innerText;
+  document.getElementById('edit-user-role').value = rowToEdit.cells[3].innerText;
+  document.getElementById('edit-user-login').value = rowToEdit.cells[4].innerText;
+  document.getElementById('edit-user-password').value = rowToEdit.cells[5].innerText;
+  document.getElementById('edit-user-part').value = rowToEdit.cells[2].innerText;
+});
+
 //Garage
 const addGarageButton = document.getElementById('add-garage');
 const delGarageButton = document.getElementById('del-garage');
@@ -360,7 +464,7 @@ addingForm.addEventListener('submit', async function(event) {
   event.preventDefault();
 
   const formData = new FormData(addingForm);
-  const response = await fetch('http://185.187.90.199:81/adding.php', {
+  const response = await fetch('http://localhost:81/adding.php', {
       method: 'POST',
       body: formData
   });
@@ -383,7 +487,7 @@ editingForm.addEventListener('submit', async function(event) {
   const selectedCheckbox = document.querySelector('.select-garage:checked');
   const idToEdit = parseInt(selectedCheckbox.closest('tr').dataset.id, 10);
 
-  const response = await fetch('http://185.187.90.199:81/editing.php', {
+  const response = await fetch('http://localhost:81/editing.php', {
       method: 'POST',
       headers: {
       'Content-Type': 'application/json'
@@ -402,7 +506,7 @@ delGarageButton.addEventListener('click', function() {
   const selectedCheckboxes = document.querySelectorAll('.select-garage:checked');
   const idsToDelete = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
 
-  fetch('http://185.187.90.199:81/deleting.php', {
+  fetch('http://localhost:81/deleting.php', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
@@ -452,10 +556,12 @@ const addVehicleButton = document.getElementById('add-vehicle');
 const delVehicleButton = document.getElementById('del-vehicle');
 const editVehicleButton = document.getElementById('edit-vehicle');
 const chooseVehicleButton = document.getElementById('choose-vehicle');
+const chooseVehCharButton = document.getElementById('choose-vehicle-char');
 
 //adding button
 addVehicleButton.addEventListener("click", function (){
-  document.getElementById('vehicle-add-modal').classList.add('open')
+  document.getElementById('vehicle-add-modal').classList.add('open');
+  vehAddTap();
 })
 
 document.getElementById('vehicle-close-modal-add').addEventListener("click", function (){
@@ -490,6 +596,7 @@ const toggleButtonsVeh = () => {
   delVehicleButton.disabled = selectedCheckboxes.length === 0;
   editVehicleButton.disabled = selectedCheckboxes.length !== 1;
   chooseVehicleButton.disabled = selectedCheckboxes.length !== 1;
+  chooseVehCharButton.disabled = selectedCheckboxes.length !== 1;
 };
 
 document.addEventListener('DOMContentLoaded', function(){
@@ -518,7 +625,7 @@ vehicleAddingForm.addEventListener('submit', async function(event){
     garageId: memData.garageId[0]
 };
 
-  const response = await fetch('http://185.187.90.199:81/addingVehicle.php', {
+  const response = await fetch('http://localhost:81/addingVehicle.php', {
     method: 'POST',
     headers: {
     'Content-Type': 'application/json'
@@ -546,7 +653,7 @@ vehicleEditingForm.addEventListener('submit', async function(event) {
   const selectedCheckbox = document.querySelector('.select-vehicle:checked');
   const idToEdit = parseInt(selectedCheckbox.closest('tr').dataset.id, 10);
 
-  const response = await fetch('http://185.187.90.199:81/editingVehicle.php', {
+  const response = await fetch('http://localhost:81/editingVehicle.php', {
       method: 'POST',
       headers: {
       'Content-Type': 'application/json'
@@ -567,7 +674,7 @@ delVehicleButton.addEventListener('click', function(){
   const idsToDelete = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
 
   
-  fetch('http://185.187.90.199:81/deletingVehicle.php', {
+  fetch('http://localhost:81/deletingVehicle.php', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
@@ -598,11 +705,23 @@ chooseVehicleButton.addEventListener('click', function() {
   });
 });
 
+chooseVehCharButton.addEventListener('click', function() {
+  openTabChoose(event, 'tab-vehicle-char');
+  document.getElementsByClassName("sidebar-card")[4].className += " active";
+
+  chooseCharacterData();
+
+  const checkboxes = document.querySelectorAll('.select-vehicle:checked');
+  checkboxes.forEach(checkbox => {
+    checkbox.checked = false;
+  });
+});
+
 function fetchVehicleData(){
   const selectedCheckboxes = document.querySelectorAll('.select-garage:checked');
   const idToChoose = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
 
-  fetch('http://185.187.90.199:81/choose.php', {
+  fetch('http://localhost:81/choose.php', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -620,8 +739,9 @@ function fetchVehicleData(){
       row.innerHTML = `
                   <td><input type="checkbox" name="select-vehicle" class="select-vehicle" /></td>
                   <td>${data[i].vehicle_name}</td>
-                  <td>${data[i].vehicle_id}</td>
                   <td>${data[i].type_name}</td>
+                  <td>${data[i].vehicle_subtype}</td>
+                  <td>${data[i].vehicle_serial_number}</td>
               `;
 
       tbody.appendChild(row);
@@ -634,7 +754,7 @@ function chooseIndicatorData(){
   const selectedCheckboxes = document.querySelectorAll('.select-vehicle:checked');
   const idToChoose = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
 
-  fetch('http://185.187.90.199:81/chooseIndicator.php', {
+  fetch('http://localhost:81/chooseIndicator.php', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -647,7 +767,8 @@ function chooseIndicatorData(){
   const tbody = document.getElementById('indicator-data');
   tbody.innerHTML = '';
   for (let i = 0; i < data.length; i++) {
-    const row = document.createElement('tr');
+    if (data[i].indicator_type === 'Показатель'){
+      const row = document.createElement('tr');
       row.dataset.id = data[i].indicator_id;
       row.innerHTML = `
                   <td><input type="checkbox" name="select-indicator" class="select-indicator" /></td>
@@ -655,10 +776,46 @@ function chooseIndicatorData(){
                   <td>${data[i].indicator_name}</td>
                   <td>${data[i].indicator_unit}</td>
                   <td>${data[i].viv_value}</td>
-                  <td>${data[i].viv_time}</td>
+                  <td>${data[i].viv_date}</td>
               `;
 
       tbody.appendChild(row);
+    }
+  }
+})
+.catch(error => console.error('Error choosing data:', error));
+}
+
+function chooseCharacterData(){
+  const selectedCheckboxes = document.querySelectorAll('.select-vehicle:checked');
+  const idToChoose = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
+
+  fetch('http://localhost:81/chooseIndicator.php', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ id: idToChoose })
+})
+.then(response => response.json())
+.then(data => {
+  memData.vehicleId = idToChoose;
+  const tbody = document.getElementById('char-data');
+  tbody.innerHTML = '';
+  for (let i = 0; i < data.length; i++) {
+    if (data[i].indicator_type === 'Характеристика'){
+      const row = document.createElement('tr');
+      row.dataset.id = data[i].indicator_id;
+      row.innerHTML = `
+                  <td><input type="checkbox" name="select-char" class="select-char" /></td>
+                  <td>${data[i].indicator_name}</td>
+                  <td>${data[i].indicator_unit}</td>
+                  <td>${data[i].viv_value}</td>
+                  <td>${data[i].viv_date}</td>
+              `;
+
+      tbody.appendChild(row);
+    }
   }
 })
 .catch(error => console.error('Error choosing data:', error));
@@ -667,7 +824,7 @@ function chooseIndicatorData(){
 function updateVehicleData(){
   const idToChoose = memData.garageId;
 
-  fetch('http://185.187.90.199:81/choose.php', {
+  fetch('http://localhost:81/choose.php', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -685,8 +842,9 @@ function updateVehicleData(){
       row.innerHTML = `
                   <td><input type="checkbox" name="select-vehicle" class="select-vehicle" /></td>
                   <td>${data[i].vehicle_name}</td>
-                  <td>${data[i].vehicle_id}</td>
                   <td>${data[i].type_name}</td>
+                  <td>${data[i].vehicle_subtype}</td>
+                  <td>${data[i].vehicle_serial_number}</td>
               `;
 
       tbody.appendChild(row);

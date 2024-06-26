@@ -23,7 +23,7 @@
                 <img class="icon" src="./img/home.svg" alt=""    >
                 <span>Гаражи</span>
             </button>
-            <button class="sidebar-card" onclick="openTab(event, 'tab-garage-char')">
+            <button class="sidebar-card" onclick="openTab(event, 'tab-garage-ind')">
                 <img class="icon" src="./img/chart-bar.svg" alt=""    >
                 <span>Показатели гаража</span>
             </button>
@@ -31,7 +31,7 @@
                 <img class="icon" src="./img/car-outline.svg" alt="">
                 <span>Транспортные средства</span>
             </button>
-            <button class="sidebar-card" onclick="openTab(event, 'tab-vehicle-ind')">
+            <button class="sidebar-card" onclick="openTab(event, 'tab-vehicle-char')">
                 <img class="icon" src="./img/ruler.svg" alt="">
                 <span>Характеристики транспорта</span>
             </button>
@@ -81,17 +81,26 @@
                                 </div>
                                 <div class="label-couple">
                                     <label>Должность</label>
-                                    <input id="address" name="address" type="text">
+                                    <select id="user-role" name="user-role" type="text">
+                                        <option value="Админ">Админ</option>
+                                        <option value="Пользователь">Пользователь</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="couple">
                                 <div class="label-couple">
                                     <label>Логин</label>
-                                    <input id="number" name="number" type="text">
+                                    <input id="user-login" name="user-login" type="text">
                                 </div>
                                 <div class="label-couple">
                                     <label>Пароль</label>
-                                    <input id="square" name="square" type="text">
+                                    <input id="user-password" name="user-password" type="text">
+                                </div>
+                            </div>
+                            <div class="couple">
+                                <div class="label-couple">
+                                    <label for="user-part">Номер части</label>
+                                    <input type="text" id="user-part" name="user-part">
                                 </div>
                             </div>
                             <input class="submit" type="submit" value="Добавить">
@@ -108,21 +117,30 @@
                             <div class="couple">
                                 <div class="label-couple">
                                     <label>ФИ пользователя</label>
-                                    <input id="user-name" name="user-name" type="text">
+                                    <input id="edit-user-name" name="edit-user-name" type="text">
                                 </div>
                                 <div class="label-couple">
                                     <label>Должность</label>
-                                    <input id="address" name="address" type="text">
+                                    <select id="edit-user-role" name="edit-user-role" type="text">
+                                        <option value="Админ">Админ</option>
+                                        <option value="Пользователь">Пользователь</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="couple">
                                 <div class="label-couple">
                                     <label>Логин</label>
-                                    <input id="number" name="number" type="text">
+                                    <input id="edit-user-login" name="edit-user-login" type="text">
                                 </div>
                                 <div class="label-couple">
                                     <label>Пароль</label>
-                                    <input id="square" name="square" type="text">
+                                    <input id="edit-user-password" name="edit-user-password" type="text">
+                                </div>
+                            </div>
+                            <div class="couple">
+                                <div class="label-couple">
+                                    <label for="edit-user-part">Номер части</label>
+                                    <input type="text" id="edit-user-part" name="edit-user-part">
                                 </div>
                             </div>
                             <input class="submit" type="submit" value="Добавить">
@@ -134,9 +152,9 @@
             <table class="table" id="user-table">
                 <thead>
                 <tr>
-                    <th><input type="checkbox" name="select-all" id="select-all" />&nbsp;</th>
+                    <th><input type="checkbox" name="select-all-users" id="select-all-users" />&nbsp;</th>
                     <th>Пользователь</th>
-                    <th>Дата добавления</th>
+                    <th>Номер части</th>
                     <th>Права</th>
                     <th>Логин</th>
                     <th>Пароль</th>
@@ -252,14 +270,18 @@
                     <th>Рабочий телефон</th>
                 </tr>
                 </thead>
-                <tbody class="vehicleBody" id="garage-data">
+                <tbody class="garageBody" id="garage-data">
                 </tbody>
             </table>
+        </div>  
+        <div id="tab-garage-ind" class="tabcontent">
+            Показатели гаража
         </div>
         <div id="tab2" class="tabcontent">
             <div class="table-header">
                 <div class="table-tabs">
-                    <button id="choose-vehicle" class="table-butts">Выбрать</button>
+                    <button id="choose-vehicle" class="table-butts">Выбрать показатели</button>
+                    <button id="choose-vehicle-char" class="table-butts">Выбрать характеристики</button>
                     <button id="add-vehicle" class="table-butts">Добавить</button>
                     <button id="edit-vehicle" class="table-butts">Изменить</button>
                     <button id="del-vehicle" class="table-butts">Удалить</button>
@@ -274,14 +296,34 @@
                             <div class="couple">
                                 <div class="label-couple">
                                     <label>Название транспорта</label>
-                                    <input id="vehicle-name" name="vehicle-name" type="text" placeholder="Боинг 773">
+                                    <select id="vehicle-name" name="vehicle-name">
+                                    </select>
                                 </div>
                                 <div class="label-couple">
                                     <label>Тип транспорта</label>
-                                    <input id="vehicle-type" name="vehicle-type" type="text" placeholder="Наземный">
+                                    <select id="vehicle-type" name="vehicle-type">
+                                        <option value="Наземный">Наземный</option>
+                                        <option value="Водный">Водный</option>
+                                        <option value="Воздушный">Воздушный</option>
+                                    </select>
+                                </div>
+                            </div>  
+                            <div class="couple">
+                                <div class="label-couple">
+                                    <label>Подтип</label>
+                                    <select id="vehicle-subtype" name="vehicle-subtype">
+                                        <option value="Грузовик">Грузовик</option>
+                                    </select>
+                                </div>
+                                <div class="label-couple">
+                                    <label>Серийный номер</label>
+                                    <input type="text" name="serial-number" id="serial-number">
                                 </div>
                             </div>
-                            <input class="submit" type="submit" value="Добавить">
+                            <div class="couple">
+                                <button class="submit">Ввести характеристики</button>
+                                <input class="submit" type="submit" value="Добавить">
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -313,13 +355,77 @@
                 <tr>
                     <th><input type="checkbox" name="select-all-vehicles" id="select-all-vehicles" />&nbsp;</th>
                     <th>Транспорт</th>
-                    <th>Рег. Номер</th>
                     <th>Тип</th>
-                    <!-- <th>Масса, кг</th> -->
-                    <!-- <th>Грузоподъемность, кг</th> -->
+                    <th>Подтип</th>
+                    <th>Серийный номер</th>
                 </tr>
                 </thead>
                 <tbody class="vehicleBody" id="vehicle-data">
+                </tbody>
+            </table>
+        </div>
+        <div id="tab-vehicle-char" class="tabcontent">
+            <div class="table-header">
+                <div class="table-tabs">
+                    <button id="add-char" class="table-butts">Добавить</button>
+                    <button id="edit-char" class="table-butts">Изменить</button>
+                    <button id="del-char" class="table-butts">Удалить</button>
+                </div>
+                <div class="modal" id="char-add-modal">
+                    <div class="modal-window">
+                        <button class="modal-close" id="char-close-modal-add">
+                            <img src="img/close.svg" alt="close-modal">
+                        </button>
+                        <div class="text-section">Добавить транспорт</div>
+                        <form class="l-form" id="char-adding-form">
+                            <div class="couple">
+                                <div class="label-couple">
+                                    <label>Название транспорта</label>
+                                    <input id="vehicle-name" name="vehicle-name" type="text" placeholder="Боинг 773">
+                                </div>
+                                <div class="label-couple">
+                                    <label>Тип транспорта</label>
+                                    <input id="vehicle-type" name="vehicle-type" type="text" placeholder="Наземный">
+                                </div>
+                            </div>
+                            <input class="submit" type="submit" value="Добавить">
+                        </form>
+                    </div>
+                </div>
+                <div class="modal" id="char-edit-modal">
+                    <div class="modal-window">
+                        <button class="modal-close" id="char-close-modal-edit">
+                            <img src="img/close.svg" alt="close-modal">
+                        </button>
+                        <div class="text-section">Изменить данные гаража</div>
+                        <form class="l-form" id="char-editing-form">
+                            <div class="couple">
+                                <div class="label-couple">
+                                    <label>Название транспорта</label>
+                                    <input id="vehicle-name-edit" name="vehicle-name-edit" type="text">
+                                </div>
+                                <div class="label-couple">
+                                    <label>Тип транспорта</label>
+                                    <input id="vehicle-type-edit" name="vehicle-type-edit" type="text">
+                                </div>
+                            </div>
+                            <input class="submit" type="submit" value="Изменить">
+                        </form>
+                    </div>
+                </div>
+                <input type="text" id="myInput" onkeyup="searchFunction()" placeholder="Поиск"></input>
+            </div>
+            <table class="table" id="char-table">
+                <thead>
+                <tr>
+                    <th><input type="checkbox" name="select-all-chars" id="select-all-chars" />&nbsp;</th>
+                    <th>Характеристика</th>
+                    <th>Единица измерения</th>
+                    <th>Значение</th>
+                    <th>Дата фиксации</th>
+                </tr>
+                </thead>
+                <tbody class="indicatorBody" id="char-data">
                 </tbody>
             </table>
         </div>

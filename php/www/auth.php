@@ -21,7 +21,7 @@ $username = $data['username'];
 $password = $data['password'];
 
 try {
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE user_login = :username");
+    $stmt = $pdo->prepare("SELECT u.user_id, u.user_login, u.user_password, u.user_role, u.user_name, (SELECT pn.part_number_value FROM part_number pn WHERE pn.part_number_id = u.part_number_id) AS user_pn FROM users u WHERE user_login = :username");
     $stmt->bindParam(':username', $username, PDO::PARAM_STR);
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -32,7 +32,8 @@ try {
         $_SESSION['user_role'] = $user['user_role'];
         echo json_encode([
             'success' => true,
-            'user_role' => $user['user_role']
+            'user_role' => $user['user_role'],
+            'part_number' => $user['user_pn']
         ]);
     } else {
         echo json_encode([

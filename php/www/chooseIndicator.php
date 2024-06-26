@@ -24,9 +24,9 @@ if (isset($data['id'])) {
                 i.indicator_id,
                 i.indicator_name,
                 i.indicator_unit,
-                i.indicator_type_id,
+                i.indicator_type,
                 viv.viv_value,
-                viv.viv_time,
+                viv.viv_date,
                 g.garage_name
             FROM
                 vehicle_indicator_value viv

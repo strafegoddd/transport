@@ -14,6 +14,8 @@ try{
     $stmt = $pdo->prepare("SELECT 
         v.vehicle_id, 
         v.vehicle_name, 
+        v.vehicle_subtype,
+        v.vehicle_serial_number,
         vt.type_name
     FROM vehicle v
     JOIN vehicle_in_garage vig ON v.vehicle_id = vig.vig_vehicle_id
