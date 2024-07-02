@@ -376,18 +376,22 @@
                         <button class="modal-close" id="char-close-modal-add">
                             <img src="img/close.svg" alt="close-modal">
                         </button>
-                        <div class="text-section">Добавить транспорт</div>
+                        <div class="text-section">Добавить характеристики</div>
                         <form class="l-form" id="char-adding-form">
-                            <div class="couple">
-                                <div class="label-couple">
-                                    <label>Название транспорта</label>
-                                    <input id="vehicle-name" name="vehicle-name" type="text" placeholder="Боинг 773">
-                                </div>
-                                <div class="label-couple">
-                                    <label>Тип транспорта</label>
-                                    <input id="vehicle-type" name="vehicle-type" type="text" placeholder="Наземный">
+                            <div id="chars-container">
+                                <div class="couple">
+                                    <div class="label-couple">
+                                        <label>Характеристика</label>
+                                        <select class="char-name" name="char-name">
+                                        </select>
+                                    </div>
+                                    <div class="label-couple">
+                                        <label>Значение</label>
+                                        <input class="char-value" name="char-value" type="text" placeholder="0">
+                                    </div>
                                 </div>
                             </div>
+                            <button type="button" id="add-more-char">+</button>
                             <input class="submit" type="submit" value="Добавить">
                         </form>
                     </div>

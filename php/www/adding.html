@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Adding</title>
+    <link rel="stylesheet" href="css/adding.css">
+</head>
+<body>
+    <div class="l-wrapper">
+        <div class="text-section">Добавить гараж</div>
+        <form class="l-form" id="addingForm">
+            <div class="couple">
+                <div class="label-couple">
+                    <label>Название гаража</label>
+                    <input id="garage_name" name="garage_name" type="text" placeholder="Гараж №1">
+                </div>
+                <div class="label-couple">
+                    <label>Адрес</label>
+                    <input id="address" name="address" type="text" placeholder="г. Владивосток, ул. Адмирал...">
+                </div>
+            </div>
+            <div class="couple">
+                <div class="label-couple">
+                    <label>Номер части</label>
+                    <input id="number" name="number" type="text" placeholder="0001">
+                </div>
+                <div class="label-couple">
+                    <label>Площадь, кв. м.</label>
+                    <input id="square" name="square" type="text" placeholder="200">
+                </div>
+            </div>
+            <div class="couple">
+                <div class="label-couple">
+                    <label>Владелец</label>
+                    <input id="owner" name="owner" type="text" placeholder="ВС РФ">
+                </div>
+                <div class="label-couple">
+                    <label>Рабочий телефон</label>
+                    <input id="phone" name="phone" type="text" placeholder="+7 (924) 000 00 00">
+                </div>
+            </div>
+            <div class="l-check"></div>
+            <input class="submit" type="submit" value="Добавить">
+        </form>
+        <script>
+            document.getElementById('addingForm').addEventListener('submit', async function(event) {
+                event.preventDefault();
+
+                const formData = new FormData(this);
+                const response = await fetch('http://localhost:81/adding.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    window.location.href = 'index.html';
+                }
+            });
+        </script>
+    </div>
+</body>
+</html>

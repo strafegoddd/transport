@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/auth.css">
+    <title>Authorization</title>
+</head>
+<body>
+    <div class="l-wrapper">
+        <div class="text-section">Вход</div>
+        <form class="l-form" id="loginForm">
+            <span>Login</span>
+            <input id="login" name="login" type="text" placeholder="Login">
+            <span>Пароль</span>
+            <input id="password" name="password" type="password" placeholder="Пароль">
+            <div class="l-check"></div>
+            <input class="submit" type="submit" value="Войти">
+        </form>
+
+        <div id="message"></div>
+
+        <script>
+            document.getElementById('loginForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(this);
+            const loginData = {
+                username: formData.get('login'),
+                password: formData.get('password')
+            };
+            
+            const response = await fetch('http://localhost:81/auth.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(loginData)
+            });
+            
+            const data = await response.json();
+            const messageDiv = document.getElementById('message');
+            //console.log(data);
+            if (data.success) {
+                sessionStorage.setItem('login', loginData.username);
+                sessionStorage.setItem('role', data.user_role);
+                sessionStorage.setItem('part_number', data.part_number);
+                messageDiv.textContent = 'Авторизация успешна!';
+                console.log('Права:', data.user_role);
+                window.location.href = 'index.html';
+            } else {
+                messageDiv.textContent = 'Ошибка авторизации: ' + data.error;
+            }
+        });
+        </script>
+
+        <div class="l-links"></div>
+    </div>
+</body>
+</html>

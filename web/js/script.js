@@ -166,6 +166,24 @@ function vehAddTap(){
   .catch(error => console.error('Error fetching data:', error));
 }
 
+function charAddTap(selectElem){
+  fetch('http://localhost:81/allIndicatorData.php')
+  .then(response => response.json())
+  .then(data => {
+      selectElem.innerHTML = '';
+      for (let i = 0; i < data.length; i++) {
+          if (data[i].indicator_type === 'Характеристика'){
+            const optCharName = document.createElement('option');
+            optCharName.value = data[i].indicator_name;
+            optCharName.textContent = data[i].indicator_name;
+            selectElem.appendChild(optCharName);
+          }
+      }
+      // console.log(data);
+  })
+  .catch(error => console.error('Error fetching data:', error));
+}
+
 function fetchAllUserData() {
   fetch('http://localhost:81/allUserData.php')
   .then(response => response.json())
@@ -852,3 +870,171 @@ function updateVehicleData(){
 })
 .catch(error => console.error('Error deleting data:', error));
 }
+
+//Buttons
+
+//Characters
+const addCharButton = document.getElementById('add-char');
+const delCharButton = document.getElementById('del-char');
+const editCharButton = document.getElementById('edit-char');
+
+//addmin butt
+addCharButton.addEventListener("click", function (){
+  document.getElementById('char-add-modal').classList.add('open');
+  resetCharForm();
+  const initialSelect = document.querySelector('.char-name');
+  charAddTap(initialSelect);
+})
+
+document.getElementById('char-close-modal-add').addEventListener("click", function (){
+  document.getElementById('char-add-modal').classList.remove('open')
+})
+
+//editing butt
+editCharButton.addEventListener("click", function (){
+  document.getElementById('char-edit-modal').classList.add('open')
+  })
+  
+document.getElementById('char-close-modal-edit').addEventListener("click", function (){
+  document.getElementById('char-edit-modal').classList.remove('open')
+  })
+
+document.getElementById('select-all-chars').addEventListener('change', function(event) {
+  const checkboxes = document.querySelectorAll('.select-char');
+  checkboxes.forEach(checkbox => {
+      checkbox.checked = event.target.checked;
+  });
+  toggleButtonsChar();
+});
+
+document.getElementById('char-data').addEventListener('change', function(event) {
+  if (event.target.classList.contains('select-char')) {
+      toggleButtonsChar();
+  }
+});
+
+const toggleButtonsChar = () => {
+  const selectedCheckboxes = document.querySelectorAll('.select-char:checked');
+  delCharButton.disabled = selectedCheckboxes.length === 0;
+  editCharButton.disabled = selectedCheckboxes.length !== 1;
+};
+
+document.addEventListener('DOMContentLoaded', function(){
+  toggleButtonsChar();
+}) 
+
+//Forms
+const charEditingForm = document.getElementById('char-editing-form');
+const charAddingForm = document.getElementById('char-adding-form');
+
+charAddingForm.addEventListener('submit', async function(event){
+  event.preventDefault();
+
+  const charNames = document.querySelectorAll('.char-name');
+  const charValues = document.querySelectorAll('.char-value');
+  const data = [];
+
+  for (let i = 0; i < charNames.length; i++) {
+    data.push({
+        name: charNames[i].value,
+        value: charValues[i].value,
+        vehId: memData.vehicleId[0]
+    });
+  }
+  //console.log(data);
+  fetch('http://localhost:81/addingChar.php', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'  
+    },
+    body: JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(data => {
+    // if (data.success) {
+    //     console.log('all ok');
+    // } else {
+    //     alert('Произошла ошибка');
+    // }
+    console.log(data);
+  })
+  .catch(error => console.error('Error:', error));
+});
+
+function resetCharForm() {
+  const charsContainer = document.getElementById('chars-container');
+  charsContainer.innerHTML = `
+      <div class="couple">
+          <div class="label-couple">
+              <label>Характеристика</label>
+              <select class="char-name" name="char-name">
+              </select>
+          </div>
+          <div class="label-couple">
+              <label>Значение</label>
+              <input class="char-value" name="char-value" type="text" placeholder="0">
+          </div>
+      </div>
+  `;
+}
+
+document.getElementById('add-more-char').addEventListener('click', function() {
+  // Создание новых полей
+  const newFields = document.createElement('div');
+  newFields.classList.add('couple');
+  newFields.innerHTML = `
+      <div class="label-couple">
+          <label>Характеристика</label>
+          <select class="char-name" name="char-name">
+          </select>
+      </div>
+      <div class="label-couple">
+          <label>Значение</label>
+          <input class="char-value" name="char-value" type="text" placeholder="0">
+      </div>
+  `;
+
+  // Добавление новых полей в контейнер
+  document.getElementById('chars-container').appendChild(newFields);
+  const newSelect = newFields.querySelector('.char-name');
+  charAddTap(newSelect); // Загрузка характеристик в новый select
+});
+
+// charEditingForm.addEventListener('submit', async function(event) {
+//   event.preventDefault();
+  
+//   const formData = new FormData(this);
+//   const editData = {};
+//   formData.forEach((value, key) => {
+//     editData[key] = value;
+//   });
+
+//   const selectedCheckbox = document.querySelector('.select-char:checked');
+//   const idToEdit = parseInt(selectedCheckbox.closest('tr').dataset.id, 10);
+
+//   const response = await fetch('http://localhost:81/charEditing.php', {
+//       method: 'POST',
+//       headers: {
+//       'Content-Type': 'application/json'
+//       },
+//       body: JSON.stringify({ id: idToEdit, editData: editData})
+//   });
+
+//   const result = await response.json();
+//   //console.log(result);
+//   if (result.success) {
+//       window.location.href = 'index.html';
+//   }
+//   console.log(result);
+// });
+
+// editcharButton.addEventListener('click', function() {
+//   const selectedCheckbox = document.querySelector('.select-char:checked');
+//   const rowToEdit = selectedCheckbox.closest('tr');
+  
+//   document.getElementById('edit-char-name').value = rowToEdit.cells[1].innerText;
+//   document.getElementById('edit-char-role').value = rowToEdit.cells[3].innerText;
+//   document.getElementById('edit-char-login').value = rowToEdit.cells[4].innerText;
+//   document.getElementById('edit-char-password').value = rowToEdit.cells[5].innerText;
+//   document.getElementById('edit-char-part').value = rowToEdit.cells[2].innerText;
+// });

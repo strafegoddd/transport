@@ -1,12 +1,12 @@
 <?php
 
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    header("Access-Control-Allow-Origin: *");
-    header("Access-Control-Allow-Headers: Content-Type");
-   exit();
-}
+// if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+//     header("Access-Control-Allow-Origin: *");
+//     header("Access-Control-Allow-Headers: Content-Type");
+//    exit();
+// }
 
-header("Access-Control-Allow-Origin: *");
+// header("Access-Control-Allow-Origin: *");
 include_once 'conf.php';
 
 $database = new Database();
