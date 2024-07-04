@@ -25,6 +25,7 @@ if (isset($data['id'])) {
                 i.indicator_name,
                 i.indicator_unit,
                 i.indicator_type,
+                viv.viv_id,
                 viv.viv_value,
                 viv.viv_date,
                 g.garage_name

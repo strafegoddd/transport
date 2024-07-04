@@ -45,6 +45,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function openTab(evt, tabName){
     let i, tabcontent, tablinks;
+    if (evt.currentTarget.classList.contains("disabled")) {
+      return;
+  }
     tabcontent = document.getElementsByClassName("tabcontent");
     if(tabName == 'tab1'){
       fetchGarageData();
@@ -91,6 +94,12 @@ function burger(){
     }
     burger.classList.toggle('active');
     //document.querySelector('.nav').classList.toggle('open');
+}
+
+function activateTabs(tabIds) {
+  tabIds.forEach(function(tabId) {
+      document.getElementById(tabId).classList.remove("disabled");
+  });
 }
 
 //Table
@@ -173,6 +182,24 @@ function charAddTap(selectElem){
       selectElem.innerHTML = '';
       for (let i = 0; i < data.length; i++) {
           if (data[i].indicator_type === 'Характеристика'){
+            const optCharName = document.createElement('option');
+            optCharName.value = data[i].indicator_name;
+            optCharName.textContent = data[i].indicator_name;
+            selectElem.appendChild(optCharName);
+          }
+      }
+      // console.log(data);
+  })
+  .catch(error => console.error('Error fetching data:', error));
+}
+
+function indAddTap(selectElem){
+  fetch('http://185.187.90.199:81/allIndicatorData.php')
+  .then(response => response.json())
+  .then(data => {
+      selectElem.innerHTML = '';
+      for (let i = 0; i < data.length; i++) {
+          if (data[i].indicator_type === 'Показатель'){
             const optCharName = document.createElement('option');
             optCharName.value = data[i].indicator_name;
             optCharName.textContent = data[i].indicator_name;
@@ -558,7 +585,7 @@ editGarageButton.addEventListener('click', function() {
 chooseGarageButton.addEventListener('click', function() {
   openTabChoose(event, 'tab2');
   document.getElementsByClassName("sidebar-card")[3].className += " active";
-
+  activateTabs(['veh-butt', 'garage-ind-butt']);
   fetchVehicleData();
 
   const checkboxes = document.querySelectorAll('.select-garage:checked');
@@ -714,7 +741,7 @@ delVehicleButton.addEventListener('click', function(){
 chooseVehicleButton.addEventListener('click', function() {
   openTabChoose(event, 'tab3');
   document.getElementsByClassName("sidebar-card")[5].className += " active";
-
+  activateTabs(['char-butt', 'ind-butt', 'ei-butt']);
   chooseIndicatorData();
 
   const checkboxes = document.querySelectorAll('.select-vehicle:checked');
@@ -725,6 +752,7 @@ chooseVehicleButton.addEventListener('click', function() {
 
 chooseVehCharButton.addEventListener('click', function() {
   openTabChoose(event, 'tab-vehicle-char');
+  activateTabs(['char-butt', 'ind-butt', 'ei-butt'])
   document.getElementsByClassName("sidebar-card")[4].className += " active";
 
   chooseCharacterData();
@@ -787,10 +815,9 @@ function chooseIndicatorData(){
   for (let i = 0; i < data.length; i++) {
     if (data[i].indicator_type === 'Показатель'){
       const row = document.createElement('tr');
-      row.dataset.id = data[i].indicator_id;
+      row.dataset.id = data[i].viv_id;
       row.innerHTML = `
                   <td><input type="checkbox" name="select-indicator" class="select-indicator" /></td>
-                  <td>${data[i].garage_name}</td>
                   <td>${data[i].indicator_name}</td>
                   <td>${data[i].indicator_unit}</td>
                   <td>${data[i].viv_value}</td>
@@ -1058,41 +1085,279 @@ delCharButton.addEventListener('click', function(){
   .catch(error => console.error('Error deleting data:', error));
 })
 
-// charEditingForm.addEventListener('submit', async function(event) {
-//   event.preventDefault();
+charEditingForm.addEventListener('submit', async function(event) {
+  event.preventDefault();
   
-//   const formData = new FormData(this);
-//   const editData = {};
-//   formData.forEach((value, key) => {
-//     editData[key] = value;
-//   });
+  const formData = new FormData(this);
+  const editData = {};
+  formData.forEach((value, key) => {
+    editData[key] = value;
+  });
 
-//   const selectedCheckbox = document.querySelector('.select-char:checked');
-//   const idToEdit = parseInt(selectedCheckbox.closest('tr').dataset.id, 10);
+  const selectedCheckbox = document.querySelector('.select-char:checked');
+  const idToEdit = parseInt(selectedCheckbox.closest('tr').dataset.id, 10);
 
-//   const response = await fetch('http://185.187.90.199:81/charEditing.php', {
-//       method: 'POST',
-//       headers: {
-//       'Content-Type': 'application/json'
-//       },
-//       body: JSON.stringify({ id: idToEdit, editData: editData})
-//   });
+  const response = await fetch('http://185.187.90.199:81/charEditing.php', {
+      method: 'POST',
+      headers: {
+      'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ id: idToEdit, editData: editData})
+  });
 
-//   const result = await response.json();
-//   //console.log(result);
-//   if (result.success) {
-//       window.location.href = 'index.html';
-//   }
-//   console.log(result);
-// });
+  const result = await response.json();
+  //console.log(result);
+  if (result.success) {
+    document.getElementById('char-edit-modal').classList.remove('open');
+    updateCharacterData();
+  }
+  console.log(result);
+});
 
-// editcharButton.addEventListener('click', function() {
-//   const selectedCheckbox = document.querySelector('.select-char:checked');
-//   const rowToEdit = selectedCheckbox.closest('tr');
+editCharButton.addEventListener('click', function() {
+  const selectedCheckbox = document.querySelector('.select-char:checked');
+  const rowToEdit = selectedCheckbox.closest('tr');
   
-//   document.getElementById('edit-char-name').value = rowToEdit.cells[1].innerText;
-//   document.getElementById('edit-char-role').value = rowToEdit.cells[3].innerText;
-//   document.getElementById('edit-char-login').value = rowToEdit.cells[4].innerText;
-//   document.getElementById('edit-char-password').value = rowToEdit.cells[5].innerText;
-//   document.getElementById('edit-char-part').value = rowToEdit.cells[2].innerText;
-// });
+  document.getElementById('edit-char-value').value = rowToEdit.cells[3].innerText;
+});
+
+//Indicators
+const addIndButton = document.getElementById('add-indicator');
+const delIndButton = document.getElementById('del-indicator');
+const editIndButton = document.getElementById('edit-indicator');
+
+//addmin butt
+addIndButton.addEventListener("click", function (){
+  document.getElementById('indicator-add-modal').classList.add('open');
+  resetIndForm();
+  const initialSelect = document.querySelector('.indicator-name');
+  indAddTap(initialSelect);
+})
+
+document.getElementById('indicator-close-modal-add').addEventListener("click", function (){
+  document.getElementById('indicator-add-modal').classList.remove('open')
+})
+
+//editing butt
+editIndButton.addEventListener("click", function (){
+  document.getElementById('indicator-edit-modal').classList.add('open')
+  })
+  
+document.getElementById('indicator-close-modal-edit').addEventListener("click", function (){
+  document.getElementById('indicator-edit-modal').classList.remove('open')
+  })
+
+document.getElementById('select-all-indicators').addEventListener('change', function(event) {
+  const checkboxes = document.querySelectorAll('.select-indicator');
+  checkboxes.forEach(checkbox => {
+      checkbox.checked = event.target.checked;
+  });
+  toggleButtonsChar();
+});
+
+document.getElementById('indicator-data').addEventListener('change', function(event) {
+  if (event.target.classList.contains('select-indicator')) {
+      toggleButtonsInd();
+  }
+});
+
+const toggleButtonsInd = () => {
+  const selectedCheckboxes = document.querySelectorAll('.select-indicator:checked');
+  delIndButton.disabled = selectedCheckboxes.length === 0;
+  editIndButton.disabled = selectedCheckboxes.length !== 1;
+};
+
+document.addEventListener('DOMContentLoaded', function(){
+  toggleButtonsInd();
+}) 
+
+//Forms
+const indEditingForm = document.getElementById('indicator-editing-form');
+const indAddingForm = document.getElementById('indicator-adding-form');
+
+indAddingForm.addEventListener('submit', async function(event){
+  event.preventDefault();
+
+  const indNames = document.querySelectorAll('.indicator-name');
+  const indValues = document.querySelectorAll('.indicator-value');
+  const startDates = document.querySelectorAll('.data-start-ind');
+  const endDates = document.querySelectorAll('.data-end-ind');
+  const data = [];
+
+  for (let i = 0; i < indNames.length; i++) {
+    data.push({
+        name: indNames[i].value,
+        value: indValues[i].value,
+        startDate: startDates[i].value,
+        endDate: endDates[i].value,
+        vehId: memData.vehicleId[0]
+    });
+  }
+  // console.log(data);
+  fetch('http://185.187.90.199:81/addingIndicator.php', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'  
+    },
+    body: JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(data => {
+    // console.log(data);
+    if (data.success) {
+      console.log('yes');
+      document.getElementById('indicator-add-modal').classList.remove('open');
+      updateIndicatorData();
+    } else {
+        console.log('Произошла ошибка');
+    }
+  })
+  .catch(error => console.error('Error:', error));
+});
+
+function resetIndForm() {
+  const indsContainer = document.getElementById('indicators-container');
+  indsContainer.innerHTML = `
+      <div class="couple">
+          <div class="label-couple">
+              <label>Показатель</label>
+              <select class="indicator-name" name="indicator-name">
+              </select>
+          </div>
+          <div class="label-couple">
+              <label>Значение</label>
+              <input class="indicator-value" name="indicator-value" type="text" placeholder="0">
+          </div>
+          <div class="label-couple">
+              <label>Дата начальное</label>
+              <input class="data-start-ind" name="data-start-ind" type="date" placeholder="10.10.1999">
+          </div>
+          <div class="label-couple">
+              <label>Дата конечное</label>
+              <input class="data-end-ind" name="data-end-ind" type="date" placeholder="10.10.1999">
+          </div>
+      </div>
+  `;
+}
+
+document.getElementById('add-more-indicator').addEventListener('click', function() {
+  // Создание новых полей
+  const newFields = document.createElement('div');
+  newFields.classList.add('couple');
+  newFields.innerHTML = `
+      <div class="label-couple">
+          <label>Показатель</label>
+          <select class="indicator-name" name="indicator-name">
+          </select>
+      </div>
+      <div class="label-couple">
+          <label>Значение</label>
+          <input class="indicator-value" name="indicator-value" type="text" placeholder="0">
+      </div>
+      <div class="label-couple">
+          <label>Дата начальное</label>
+          <input class="data-start-ind" name="data-start-ind" type="date" placeholder="10.10.1999">
+      </div>
+      <div class="label-couple">
+        <label>Дата конечное</label>
+        <input class="data-end-ind" name="data-end-ind" type="date" placeholder="10.10.1999">
+      </div>
+  `;
+
+  // Добавление новых полей в контейнер
+  document.getElementById('indicators-container').appendChild(newFields);
+  const newSelect = newFields.querySelector('.indicator-name');
+  indAddTap(newSelect); // Загрузка характеристик в новый select
+});
+
+function updateIndicatorData(){
+  const idToChoose = memData.vehicleId;
+
+  fetch('http://185.187.90.199:81/chooseIndicator.php', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ id: idToChoose })
+})
+.then(response => response.json())
+.then(data => {
+  memData.vehicleId = idToChoose;
+  const tbody = document.getElementById('indicator-data');
+  tbody.innerHTML = '';
+  for (let i = 0; i < data.length; i++) {
+    if (data[i].indicator_type === 'Показатель'){
+      const row = document.createElement('tr');
+      row.dataset.id = data[i].viv_id;
+      row.innerHTML = `
+                  <td><input type="checkbox" name="select-indicator" class="select-indicator" /></td>
+                  <td>${data[i].indicator_name}</td>
+                  <td>${data[i].indicator_unit}</td>
+                  <td>${data[i].viv_value}</td>
+                  <td>${data[i].viv_date}</td>
+              `;
+
+      tbody.appendChild(row);
+    }
+  }
+})
+.catch(error => console.error('Error choosing data:', error));
+}
+
+delIndButton.addEventListener('click', function(){
+  const selectedCheckboxes = document.querySelectorAll('.select-indicator:checked');
+  const idsToDelete = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
+
+  fetch('http://185.187.90.199:81/deletingChar.php', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ ids: idsToDelete })
+  })
+  .then(response => response.json())
+  .then(data => {
+      if (data.success) {
+          updateIndicatorData();
+      } else {
+          console.error('Error deleting data:', data.error);
+      }
+      // console.log(data);
+  })
+  .catch(error => console.error('Error deleting data:', error));
+})
+
+indEditingForm.addEventListener('submit', async function(event) {
+  event.preventDefault();
+  
+  const formData = new FormData(this);
+  const editData = {};
+  formData.forEach((value, key) => {
+    editData[key] = value;
+  });
+
+  const selectedCheckbox = document.querySelector('.select-indicator:checked');
+  const idToEdit = parseInt(selectedCheckbox.closest('tr').dataset.id, 10);
+  
+  const response = await fetch('http://185.187.90.199:81/indEditing.php', {
+      method: 'POST',
+      headers: {
+      'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ id: idToEdit, editData: editData})
+  });
+
+  const result = await response.json();
+  // console.log(result);
+  if (result.success) {
+    document.getElementById('indicator-edit-modal').classList.remove('open');
+    updateIndicatorData();
+  }
+});
+
+editIndButton.addEventListener('click', function() {
+  const selectedCheckbox = document.querySelector('.select-indicator:checked');
+  const rowToEdit = selectedCheckbox.closest('tr');
+  
+  document.getElementById('indicator-value-edit').value = rowToEdit.cells[3].innerText;
+});

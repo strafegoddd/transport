@@ -19,27 +19,27 @@
                 <img class="icon" src="./img/person-outline.svg" alt=""    >
                 <span>Пользователи</span>
             </button>
-            <button class="sidebar-card" onclick="openTab(event, 'tab1')">
+            <button class="sidebar-card" id="garage-butt" onclick="openTab(event, 'tab1')">
                 <img class="icon" src="./img/home.svg" alt=""    >
                 <span>Гаражи</span>
             </button>
-            <button class="sidebar-card" onclick="openTab(event, 'tab-garage-ind')">
+            <button class="sidebar-card disabled" id="garage-ind-butt" onclick="openTab(event, 'tab-garage-ind')">
                 <img class="icon" src="./img/chart-bar.svg" alt=""    >
                 <span>Показатели гаража</span>
             </button>
-            <button class="sidebar-card" onclick="openTab(event, 'tab2')">
+            <button class="sidebar-card disabled" id="veh-butt" onclick="openTab(event, 'tab2')">
                 <img class="icon" src="./img/car-outline.svg" alt="">
                 <span>Транспортные средства</span>
             </button>
-            <button class="sidebar-card" onclick="openTab(event, 'tab-vehicle-char')">
+            <button class="sidebar-card disabled" id="char-butt" onclick="openTab(event, 'tab-vehicle-char')">
                 <img class="icon" src="./img/ruler.svg" alt="">
                 <span>Характеристики транспорта</span>
             </button>
-            <button class="sidebar-card" onclick="openTab(event, 'tab3')">
+            <button class="sidebar-card disabled" id="ind-butt" onclick="openTab(event, 'tab3')">
                 <img class="icon" src="./img/analytics-outline.svg" alt="">
                 <span>Показатели транспорта</span>
             </button>
-            <button class="sidebar-card" onclick="openTab(event, 'tab4')">
+            <button class="sidebar-card disabled" id="ei-butt" onclick="openTab(event, 'tab4')">
                 <img class="icon" src="./img/trending-up-outline.svg" alt="">
                 <span>Показатели эффективности</span>
             </button>
@@ -401,16 +401,14 @@
                         <button class="modal-close" id="char-close-modal-edit">
                             <img src="img/close.svg" alt="close-modal">
                         </button>
-                        <div class="text-section">Изменить данные гаража</div>
+                        <div class="text-section">Изменить данные характеристики</div>
                         <form class="l-form" id="char-editing-form">
-                            <div class="couple">
-                                <div class="label-couple">
-                                    <label>Название транспорта</label>
-                                    <input id="vehicle-name-edit" name="vehicle-name-edit" type="text">
-                                </div>
-                                <div class="label-couple">
-                                    <label>Тип транспорта</label>
-                                    <input id="vehicle-type-edit" name="vehicle-type-edit" type="text">
+                            <div id="chars-container-editing">
+                                <div class="couple">
+                                    <div class="label-couple">
+                                        <label>Значение</label>
+                                        <input id="edit-char-value" name="edit-char-value" type="text">
+                                    </div>
                                 </div>
                             </div>
                             <input class="submit" type="submit" value="Изменить">
@@ -436,7 +434,6 @@
         <div id="tab3" class="tabcontent">
             <div class="table-header">
                 <div class="table-tabs">
-                    <button id="choose-indicator" class="table-butts">Выбрать</button>
                     <button id="add-indicator" class="table-butts">Добавить</button>
                     <button id="edit-indicator" class="table-butts">Изменить</button>
                     <button id="del-indicator" class="table-butts">Удалить</button>
@@ -446,18 +443,30 @@
                         <button class="modal-close" id="indicator-close-modal-add">
                             <img src="img/close.svg" alt="close-modal">
                         </button>
-                        <div class="text-section">Добавить транспорт</div>
+                        <div class="text-section">Добавить показатели</div>
                         <form class="l-form" id="indicator-adding-form">
-                            <div class="couple">
-                                <div class="label-couple">
-                                    <label>Название транспорта</label>
-                                    <input id="vehicle-name" name="vehicle-name" type="text" placeholder="Боинг 773">
-                                </div>
-                                <div class="label-couple">
-                                    <label>Тип транспорта</label>
-                                    <input id="vehicle-type" name="vehicle-type" type="text" placeholder="Наземный">
+                            <div id="indicators-container">
+                                <div class="couple">
+                                    <div class="label-couple">
+                                        <label>Показатель</label>
+                                        <select class="indicator-name" name="indicator-name">
+                                        </select>
+                                    </div>
+                                    <div class="label-couple">
+                                        <label>Значение</label>
+                                        <input class="indicator-value" name="indicator-value" type="text" placeholder="0">
+                                    </div>
+                                    <div class="label-couple">
+                                        <label>Дата начальное</label>
+                                        <input class="data-start-ind" name="data-start-ind" type="date" placeholder="10.10.1999">
+                                    </div>
+                                    <div class="label-couple">
+                                        <label>Дата конечное</label>
+                                        <input class="data-end-ind" name="data-end-ind" type="date" placeholder="10.10.1999">
+                                    </div>
                                 </div>
                             </div>
+                            <button type="button" id="add-more-indicator">+</button>
                             <input class="submit" type="submit" value="Добавить">
                         </form>
                     </div>
@@ -467,16 +476,12 @@
                         <button class="modal-close" id="indicator-close-modal-edit">
                             <img src="img/close.svg" alt="close-modal">
                         </button>
-                        <div class="text-section">Изменить данные гаража</div>
+                        <div class="text-section">Изменить данные показателя</div>
                         <form class="l-form" id="indicator-editing-form">
                             <div class="couple">
                                 <div class="label-couple">
-                                    <label>Название транспорта</label>
-                                    <input id="vehicle-name-edit" name="vehicle-name-edit" type="text">
-                                </div>
-                                <div class="label-couple">
-                                    <label>Тип транспорта</label>
-                                    <input id="vehicle-type-edit" name="vehicle-type-edit" type="text">
+                                    <label>Значение</label>
+                                    <input id="indicator-value-edit" name="indicator-value-edit" type="text">
                                 </div>
                             </div>
                             <input class="submit" type="submit" value="Изменить">
@@ -489,12 +494,11 @@
                 <thead>
                 <tr>
                     <th><input type="checkbox" name="select-all-indicators" id="select-all-indicators" />&nbsp;</th>
-                    <th>Гараж</th>
                     <th>Показатель</th>
                     <th>Единица измерения</th>
                     <th>Значение</th>
-                    <!-- <th>Дата фиксации</th> -->
-                    <th>Время фиксации</th>
+                    <th>Дата фиксации</th>
+                    <!-- <th>Время фиксации</th> -->
                 </tr>
                 </thead>
                 <tbody class="indicatorBody" id="indicator-data">
