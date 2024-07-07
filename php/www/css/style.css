@@ -511,6 +511,17 @@ label{
         }
     }
 
+    #eis-container{
+        select{
+            min-width: 300px;
+            max-width: 305px;
+        }
+        input{
+            min-width: 130px;
+            max-width: 135px;
+        }
+    }
+
     input{
         margin-top: 5px;
         min-width: 270px;
@@ -580,4 +591,8 @@ label{
     background-color: #ccc;
     color: #bebcbccc;
     cursor: not-allowed;
+}
+
+.info {
+    margin-right: auto;
 }

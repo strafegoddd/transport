@@ -50,10 +50,20 @@ function openTab(evt, tabName){
   }
     tabcontent = document.getElementsByClassName("tabcontent");
     if(tabName == 'tab1'){
+      disableTabs(['garage-ind-butt', 'veh-butt', 'char-butt', 'ind-butt', 'ei-butt']);
       fetchGarageData();
     }
     if(tabName == 'tab2'){
-      fetchAllVehicleData()
+      disableTabs(['char-butt', 'ind-butt']);
+    }
+    if(tabName == 'tab-vehicle-char'){
+      disableTabs(['ei-butt']);
+    }
+    if(tabName == 'tab3'){
+      disableTabs(['ei-butt']);
+    }
+    if(tabName == 'tab4'){
+      fetchEI();
     }
     for (i = 0; i < tabcontent.length; i++) {
         tabcontent[i].style.display = "none";
@@ -99,6 +109,12 @@ function burger(){
 function activateTabs(tabIds) {
   tabIds.forEach(function(tabId) {
       document.getElementById(tabId).classList.remove("disabled");
+  });
+}
+
+function disableTabs(tabIds) {
+  tabIds.forEach(function(tabId) {
+      document.getElementById(tabId).classList.add("disabled");
   });
 }
 
@@ -200,11 +216,27 @@ function indAddTap(selectElem){
       selectElem.innerHTML = '';
       for (let i = 0; i < data.length; i++) {
           if (data[i].indicator_type === 'Показатель'){
-            const optCharName = document.createElement('option');
-            optCharName.value = data[i].indicator_name;
-            optCharName.textContent = data[i].indicator_name;
-            selectElem.appendChild(optCharName);
+            const optIndicatorName = document.createElement('option');
+            optIndicatorName.value = data[i].indicator_name;
+            optIndicatorName.textContent = data[i].indicator_name;
+            selectElem.appendChild(optIndicatorName);
           }
+      }
+      // console.log(data);
+  })
+  .catch(error => console.error('Error fetching data:', error));
+}
+
+function eiAddTap(selectElem){
+  fetch('http://185.187.90.199:81/allEIdata.php')
+  .then(response => response.json())
+  .then(data => {
+      selectElem.innerHTML = '';
+      for (let i = 0; i < data.length; i++) {
+        const optEIName = document.createElement('option');
+        optEIName.value = data[i].ei_name;
+        optEIName.textContent = data[i].ei_name;
+        selectElem.appendChild(optEIName);
       }
       // console.log(data);
   })
@@ -642,6 +674,12 @@ const toggleButtonsVeh = () => {
   editVehicleButton.disabled = selectedCheckboxes.length !== 1;
   chooseVehicleButton.disabled = selectedCheckboxes.length !== 1;
   chooseVehCharButton.disabled = selectedCheckboxes.length !== 1;
+  if (selectedCheckboxes.length === 1){
+    activateTabs(['ei-butt']);
+  }
+  else{
+    disableTabs(['ei-butt']);
+  }
 };
 
 document.addEventListener('DOMContentLoaded', function(){
@@ -766,6 +804,8 @@ chooseVehCharButton.addEventListener('click', function() {
 function fetchVehicleData(){
   const selectedCheckboxes = document.querySelectorAll('.select-garage:checked');
   const idToChoose = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
+  const rowToEdit = selectedCheckboxes[0].closest('tr');
+  document.getElementsByClassName('info')[0].innerText = rowToEdit.cells[1].innerText;
 
   fetch('http://185.187.90.199:81/choose.php', {
     method: 'POST',
@@ -799,6 +839,9 @@ function fetchVehicleData(){
 function chooseIndicatorData(){
   const selectedCheckboxes = document.querySelectorAll('.select-vehicle:checked');
   const idToChoose = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
+  const rowToEdit = selectedCheckboxes[0].closest('tr');
+  document.getElementsByClassName('info')[2].innerText = rowToEdit.cells[1].innerText;
+  disableTabs(['char-butt','ei-butt']);
 
   fetch('http://185.187.90.199:81/chooseIndicator.php', {
     method: 'POST',
@@ -834,6 +877,9 @@ function chooseIndicatorData(){
 function chooseCharacterData(){
   const selectedCheckboxes = document.querySelectorAll('.select-vehicle:checked');
   const idToChoose = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
+  const rowToEdit = selectedCheckboxes[0].closest('tr');
+  document.getElementsByClassName('info')[1].innerText = rowToEdit.cells[1].innerText;
+  disableTabs(['ind-butt','ei-butt']);
 
   fetch('http://185.187.90.199:81/chooseIndicator.php', {
     method: 'POST',
@@ -1308,7 +1354,7 @@ delIndButton.addEventListener('click', function(){
   const selectedCheckboxes = document.querySelectorAll('.select-indicator:checked');
   const idsToDelete = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
 
-  fetch('http://185.187.90.199:81/deletingChar.php', {
+  fetch('http://185.187.90.199:81/deletingInd.php', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
@@ -1361,3 +1407,235 @@ editIndButton.addEventListener('click', function() {
   
   document.getElementById('indicator-value-edit').value = rowToEdit.cells[3].innerText;
 });
+
+//EI
+//Indicators
+const addEIButton = document.getElementById('calculate-ei');
+const delEIButton = document.getElementById('del-ei');
+const editEIButton = document.getElementById('edit-ei');
+
+//addmin butt
+addEIButton.addEventListener("click", function (){
+  document.getElementById('ei-add-modal').classList.add('open');
+  resetEIForm();
+  const initialSelect = document.querySelector('.ei-name');
+  eiAddTap(initialSelect);
+})
+
+document.getElementById('ei-close-modal-add').addEventListener("click", function (){
+  document.getElementById('ei-add-modal').classList.remove('open')
+})
+
+//editing butt
+editEIButton.addEventListener("click", function (){
+  document.getElementById('ei-edit-modal').classList.add('open')
+  })
+  
+document.getElementById('ei-close-modal-edit').addEventListener("click", function (){
+  document.getElementById('ei-edit-modal').classList.remove('open')
+  })
+
+document.getElementById('select-all-eis').addEventListener('change', function(event) {
+  const checkboxes = document.querySelectorAll('.select-ei');
+  checkboxes.forEach(checkbox => {
+      checkbox.checked = event.target.checked;
+  });
+  toggleButtonsEI();
+});
+
+document.getElementById('ei-data').addEventListener('change', function(event) {
+  if (event.target.classList.contains('select-ei')) {
+      toggleButtonsEI();
+  }
+});
+
+const toggleButtonsEI = () => {
+  const selectedCheckboxes = document.querySelectorAll('.select-ei:checked');
+  delEIButton.disabled = selectedCheckboxes.length === 0;
+  editEIButton.disabled = selectedCheckboxes.length !== 1;
+};
+
+document.addEventListener('DOMContentLoaded', function(){
+  toggleButtonsEI();
+})
+
+//Forms
+const eiEditingForm = document.getElementById('ei-editing-form');
+const eiCalcForm = document.getElementById('ei-adding-form');
+
+eiCalcForm.addEventListener('submit', async function(event){
+  event.preventDefault();
+
+  const eiNames = document.querySelectorAll('.ei-name');
+  const startDates = document.querySelectorAll('.data-start-ei');
+  const endDates = document.querySelectorAll('.data-end-ei');
+  const data = [];
+//!!!
+  for (let i = 0; i < eiNames.length; i++) {
+    data.push({
+        name: eiNames[i].value,
+        startDate: startDates[i].value,
+        endDate: endDates[i].value,
+        vehId: memData.vehicleId[0]
+    });
+  }
+   //console.log(data);
+  fetch('http://185.187.90.199:81/calculateEI.php', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'  
+    },
+    body: JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(data => {
+     //console.log(data);
+    if (data.success) {
+      console.log('yes');
+      document.getElementById('ei-add-modal').classList.remove('open');
+      updateEIData();
+    } else {
+        console.log('Произошла ошибка');
+    }
+  })
+  .catch(error => console.error('Error:', error));
+});
+
+function resetEIForm() {
+  const indsContainer = document.getElementById('eis-container');
+  indsContainer.innerHTML = `
+      <div class="couple">
+          <div class="label-couple">
+              <label>Показатель эффективности</label>
+              <select class="ei-name" name="ei-name">
+              </select>
+          </div>
+          <div class="label-couple">
+              <label>Дата начальное</label>
+              <input class="data-start-ei" name="data-start-ei" type="date" placeholder="10.10.1999">
+          </div>
+          <div class="label-couple">
+              <label>Дата конечное</label>
+              <input class="data-end-ei" name="data-end-ei" type="date" placeholder="10.10.1999">
+          </div>
+      </div>
+  `;
+}
+
+document.getElementById('add-more-ei').addEventListener('click', function() {
+  // Создание новых полей
+  const newFields = document.createElement('div');
+  newFields.classList.add('couple');
+  newFields.innerHTML = `
+      <div class="label-couple">
+          <label>Показатель эффективности</label>
+          <select class="ei-name" name="ei-name">
+          </select>
+      </div>
+      <div class="label-couple">
+          <label>Дата начальное</label>
+          <input class="data-start-ei" name="data-start-ei" type="date">
+      </div>
+      <div class="label-couple">
+        <label>Дата конечное</label>
+        <input class="data-end-ei" name="data-end-ei" type="date">
+      </div>
+  `;
+
+  // Добавление новых полей в контейнер
+  document.getElementById('eis-container').appendChild(newFields);
+  const newSelect = newFields.querySelector('.ei-name');
+  eiAddTap(newSelect); // Загрузка характеристик в новый select
+});
+
+function fetchEI(){
+  const selectedCheckboxes = document.querySelectorAll('.select-vehicle:checked');
+  const idToChoose = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
+  // const rowToEdit = selectedCheckboxes[0].closest('tr');
+  // document.getElementsByClassName('info')[1].innerText = rowToEdit.cells[1].innerText;
+
+  fetch('http://185.187.90.199:81/eiData.php', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ id: idToChoose })
+})
+.then(response => response.json())
+.then(data => {
+  memData.vehicleId = idToChoose;
+  const tbody = document.getElementById('ei-data');
+  tbody.innerHTML = '';
+  for (let i = 0; i < data.length; i++) {
+      const row = document.createElement('tr');
+      row.dataset.id = data[i].vev_id;
+      row.innerHTML = `
+                  <td><input type="checkbox" name="select-ei" class="select-ei" /></td>
+                  <td>${data[i].ei_name}</td>
+                  <td>${data[i].ei_unit}</td>
+                  <td>${data[i].vev_value}</td>
+                  <td>${data[i].vev_date_start}</td>
+                  <td>${data[i].vev_date_end}</td>
+              `;
+
+      tbody.appendChild(row);
+  }
+})
+.catch(error => console.error('Error choosing data:', error));
+}
+
+function updateEIData(){
+  const idToChoose = memData.vehicleId;
+
+  fetch('http://185.187.90.199:81/eiData.php', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ id: idToChoose })
+})
+.then(response => response.json())
+.then(data => {
+  memData.vehicleId = idToChoose;
+  const tbody = document.getElementById('ei-data');
+  tbody.innerHTML = '';
+  for (let i = 0; i < data.length; i++) {
+      const row = document.createElement('tr');
+      row.dataset.id = data[i].vev_id;
+      row.innerHTML = `
+                  <td><input type="checkbox" name="select-ei" class="select-ei" /></td>
+                  <td>${data[i].ei_name}</td>
+                  <td>${data[i].ei_unit}</td>
+                  <td>${data[i].vev_value}</td>
+                  <td>${data[i].vev_date_start}</td>
+                  <td>${data[i].vev_date_end}</td>
+              `;
+
+      tbody.appendChild(row);
+  }
+})
+.catch(error => console.error('Error choosing data:', error));
+}
+
+delEIButton.addEventListener('click', function(){
+  const selectedCheckboxes = document.querySelectorAll('.select-ei:checked');
+  const idsToDelete = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
+
+  fetch('http://185.187.90.199:81/deletingEI.php', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ ids: idsToDelete })
+  })
+  .then(response => response.json())
+  .then(data => {
+      if (data.success) {
+          updateEIData();
+      } else {
+          console.error('Error deleting data:', data.error);
+      }
+      // console.log(data);
+  })
+  .catch(error => console.error('Error deleting data:', error));
+})

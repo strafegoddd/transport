@@ -279,6 +279,8 @@
         </div>
         <div id="tab2" class="tabcontent">
             <div class="table-header">
+                <div class="info">
+                </div>
                 <div class="table-tabs">
                     <button id="choose-vehicle" class="table-butts">Выбрать показатели</button>
                     <button id="choose-vehicle-char" class="table-butts">Выбрать характеристики</button>
@@ -366,6 +368,8 @@
         </div>
         <div id="tab-vehicle-char" class="tabcontent">
             <div class="table-header">
+                <div class="info">
+                </div>
                 <div class="table-tabs">
                     <button id="add-char" class="table-butts">Добавить</button>
                     <button id="edit-char" class="table-butts">Изменить</button>
@@ -433,6 +437,8 @@
         </div>
         <div id="tab3" class="tabcontent">
             <div class="table-header">
+                <div class="info">
+                </div>
                 <div class="table-tabs">
                     <button id="add-indicator" class="table-butts">Добавить</button>
                     <button id="edit-indicator" class="table-butts">Изменить</button>
@@ -507,52 +513,73 @@
         </div>
         <div id="tab4" class="tabcontent">
             <div class="table-header">
+                <div class="info">
+                </div>
                 <div class="table-tabs">
-                    <button class="table-butts"><a href="adding.html">Добавить</a></button>
-                    <button class="table-butts"><a href="#">Изменить</a></button>
-                    <button class="table-butts"><a href="#">Удалить</a></button>
+                    <button id="calculate-ei" class="table-butts">Рассчитать</button>
+                    <button id="edit-ei" class="table-butts">Изменить</button>
+                    <button id="del-ei" class="table-butts">Удалить</button>
+                </div>
+                <div class="modal" id="ei-add-modal">
+                    <div class="modal-window">
+                        <button class="modal-close" id="ei-close-modal-add">
+                            <img src="img/close.svg" alt="close-modal">
+                        </button>
+                        <div class="text-section">Рассчитать показатели эффективности</div>
+                        <form class="l-form" id="ei-adding-form">
+                            <div id="eis-container">
+                                <div class="couple">
+                                    <div class="label-couple">
+                                        <label>Показатель эффективности</label>
+                                        <select class="ei-name" name="ei-name">
+                                        </select>
+                                    </div>
+                                    <div class="label-couple">
+                                        <label>Дата начальное</label>
+                                        <input class="data-start-ei" name="data-start-ei" type="date">
+                                    </div>
+                                    <div class="label-couple">
+                                        <label>Дата конечное</label>
+                                        <input class="data-end-ei" name="data-end-ei" type="date">
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" id="add-more-ei">+</button>
+                            <input class="submit" type="submit" value="Добавить">
+                        </form>
+                    </div>
+                </div>
+                <div class="modal" id="ei-edit-modal">
+                    <div class="modal-window">
+                        <button class="modal-close" id="ei-close-modal-edit">
+                            <img src="img/close.svg" alt="close-modal">
+                        </button>
+                        <div class="text-section">Изменить данные показателя</div>
+                        <form class="l-form" id="ei-editing-form">
+                            <div class="couple">
+                                <div class="label-couple">
+                                    <label>Значение</label>
+                                    <input id="ei-value-edit" name="ei-value-edit" type="text">
+                                </div>
+                            </div>
+                            <input class="submit" type="submit" value="Изменить">
+                        </form>
+                    </div>
                 </div>
                 <input type="text" id="myInput" onkeyup="searchFunction()" placeholder="Поиск"></input>
             </div>
-            <table class="table" >
+            <table class="table" id="ei-table">
                 <thead>
                 <tr>
-                    <th><input type="checkbox" />&nbsp;</th>
-                    <th>Гараж</th>
-                    <th>Показатель</th>
+                    <th><input type="checkbox" name="select-all-eis" id="select-all-eis" />&nbsp;</th>
+                    <th>Показатель эффективности</th>
                     <th>Единица измерения</th>
                     <th>Значение</th>
-                    <th>Дата фиксации</th>
-                    <th>Время фиксации</th>
+                    <th>Дата начала</th>
+                    <th>Дата конца</th>
                 </tr>
                 </thead>
-                <tbody class="vehicleBody">
-                <tr>
-                    <td><input type="checkbox" name="name1" />&nbsp;</td>
-                    <td>Ангар №1</td>
-                    <td>Перевезено груза</td>
-                    <td>кг</td>
-                    <td>14 123</td>
-                    <td>20.01.2022</td>
-                    <td>10:30</td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" name="name1" />&nbsp;</td>
-                    <td>Ангар №1</td>
-                    <td>Перевезено груза</td>
-                    <td>кг</td>
-                    <td>14 123</td>
-                    <td>20.01.2022</td>
-                    <td>10:30</td>
-                <tr>
-                    <td><input type="checkbox" name="name1" />&nbsp;</td>
-                    <td>Ангар №1</td>
-                    <td>Перевезено груза</td>
-                    <td>кг</td>
-                    <td>14 123</td>
-                    <td>20.01.2022</td>
-                    <td>10:30</td>
-                </tr>
+                <tbody class="eiBody" id="ei-data">
                 </tbody>
             </table>
         </div>
