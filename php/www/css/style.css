@@ -581,3 +581,66 @@ label{
     color: #bebcbccc;
     cursor: not-allowed;
 }
+
+#favorites {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+nav#navbar {
+    position: fixed;
+    grid-area: navbar;
+    right: 30px;
+}
+
+ 
+nav#navbar a {
+    width: 200px;
+    padding: 5px;
+    margin: 10px 0;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 10px;
+    border: none;  
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: row;
+    gap: 8px;
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.25);
+    background: var(--white);
+
+    &:hover{
+        background-color: cornflowerblue;
+    }
+}
+ 
+main#main-doc {
+    grid-area: mainContent;
+    width: 90%;
+    margin-right: 100px;
+}
+
+div.favorites {
+    display: grid;
+    grid-template-columns: minmax(200px, auto), minmax(200px, auto);
+    grid-template-areas: "mainContent navbar";
+    grid-gap: 20px;
+}
+
+section header {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color:#001d6c
+}
+code {
+    background-color:var(--coolgray-10);
+    display: block;
+    padding: 20px;
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 100%;
+    color: var(--coolgray-90);
+};
