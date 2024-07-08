@@ -1,30 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
     <title>Main</title>
 </head>
+
 <body>
 
     <h2 id="welcome-message"></h2>
     <div id="protected-content" class="sidebar">
-        <div class="sidebar-wrapper">         
+        <div class="sidebar-wrapper">
             <div class="sidebar-icon" onclick="burger()">
                 <!-- <img class="icon" src="/img/menu-outline.svg" alt=""> -->
                 <span></span>
             </div>
             <button class="sidebar-card" id="admin-butt" onclick="openTab(event, 'tab-admin')">
-                <img class="icon" src="./img/person-outline.svg" alt=""    >
+                <img class="icon" src="./img/person-outline.svg" alt="">
                 <span>Пользователи</span>
             </button>
             <button class="sidebar-card" id="garage-butt" onclick="openTab(event, 'tab1')">
-                <img class="icon" src="./img/home.svg" alt=""    >
+                <img class="icon" src="./img/home.svg" alt="">
                 <span>Гаражи</span>
             </button>
             <button class="sidebar-card disabled" id="garage-ind-butt" onclick="openTab(event, 'tab-garage-ind')">
-                <img class="icon" src="./img/chart-bar.svg" alt=""    >
+                <img class="icon" src="./img/chart-bar.svg" alt="">
                 <span>Показатели гаража</span>
             </button>
             <button class="sidebar-card disabled" id="veh-butt" onclick="openTab(event, 'tab2')">
@@ -60,7 +62,7 @@
                 <img src="./img/button.svg" alt="">
             </div>
         </div>
-        <div id ="tab-admin" class="tabcontent">
+        <div id="tab-admin" class="tabcontent">
             <div class="table-header">
                 <div class="table-tabs">
                     <button id="add-user" class="table-butts">Добавить</button>
@@ -151,14 +153,14 @@
             </div>
             <table class="table" id="user-table">
                 <thead>
-                <tr>
-                    <th><input type="checkbox" name="select-all-users" id="select-all-users" />&nbsp;</th>
-                    <th>Пользователь</th>
-                    <th>Номер части</th>
-                    <th>Права</th>
-                    <th>Логин</th>
-                    <th>Пароль</th>
-                </tr>
+                    <tr>
+                        <th><input type="checkbox" name="select-all-users" id="select-all-users" />&nbsp;</th>
+                        <th>Пользователь</th>
+                        <th>Номер части</th>
+                        <th>Права</th>
+                        <th>Логин</th>
+                        <th>Пароль</th>
+                    </tr>
                 </thead>
                 <tbody class="userBody" id="user-data">
                 </tbody>
@@ -186,7 +188,8 @@
                                 </div>
                                 <div class="label-couple">
                                     <label>Адрес</label>
-                                    <input id="address" name="address" type="text" placeholder="г. Владивосток, ул. Адмирал...">
+                                    <input id="address" name="address" type="text"
+                                        placeholder="г. Владивосток, ул. Адмирал...">
                                 </div>
                             </div>
                             <div class="couple">
@@ -223,11 +226,13 @@
                             <div class="couple">
                                 <div class="label-couple">
                                     <label>Название гаража</label>
-                                    <input id="garage-name-edit" name="garage-name-edit" type="text" placeholder="Гараж №1" required>
+                                    <input id="garage-name-edit" name="garage-name-edit" type="text"
+                                        placeholder="Гараж №1" required>
                                 </div>
                                 <div class="label-couple">
                                     <label>Адрес</label>
-                                    <input id="address-edit" name="address-edit" type="text" placeholder="г. Владивосток, ул. Адмирал..." required>
+                                    <input id="address-edit" name="address-edit" type="text"
+                                        placeholder="г. Владивосток, ул. Адмирал..." required>
                                 </div>
                             </div>
                             <div class="couple">
@@ -247,7 +252,8 @@
                                 </div>
                                 <div class="label-couple">
                                     <label>Рабочий телефон</label>
-                                    <input id="phone-edit" name="phone-edit" type="text" placeholder="+7 (924) 000 00 00">
+                                    <input id="phone-edit" name="phone-edit" type="text"
+                                        placeholder="+7 (924) 000 00 00">
                                 </div>
                             </div>
                             <div class="l-check"></div>
@@ -259,21 +265,21 @@
             </div>
             <table class="table" id="garage-table">
                 <thead>
-                <tr>
-                    <th><input type="checkbox" name="select-all-garages" id="select-all-garages" />&nbsp;</th>
-                    <th>Гараж</th>
-                    <th>Адрес</th>
-                    <th>Номер части</th>
-                    <th>Количество техники</th>
-                    <th>Площадь, м2</th>
-                    <th>Владелец</th>
-                    <th>Рабочий телефон</th>
-                </tr>
+                    <tr>
+                        <th><input type="checkbox" name="select-all-garages" id="select-all-garages" />&nbsp;</th>
+                        <th>Гараж</th>
+                        <th>Адрес</th>
+                        <th>Номер части</th>
+                        <th>Количество техники</th>
+                        <th>Площадь, м2</th>
+                        <th>Владелец</th>
+                        <th>Рабочий телефон</th>
+                    </tr>
                 </thead>
                 <tbody class="garageBody" id="garage-data">
                 </tbody>
             </table>
-        </div>  
+        </div>
         <div id="tab-garage-ind" class="tabcontent">
             Показатели гаража
         </div>
@@ -307,7 +313,7 @@
                                         <option value="Воздушный">Воздушный</option>
                                     </select>
                                 </div>
-                            </div>  
+                            </div>
                             <div class="couple">
                                 <div class="label-couple">
                                     <label>Подтип</label>
@@ -352,13 +358,13 @@
             </div>
             <table class="table" id="vehicle-table">
                 <thead>
-                <tr>
-                    <th><input type="checkbox" name="select-all-vehicles" id="select-all-vehicles" />&nbsp;</th>
-                    <th>Транспорт</th>
-                    <th>Тип</th>
-                    <th>Подтип</th>
-                    <th>Серийный номер</th>
-                </tr>
+                    <tr>
+                        <th><input type="checkbox" name="select-all-vehicles" id="select-all-vehicles" />&nbsp;</th>
+                        <th>Транспорт</th>
+                        <th>Тип</th>
+                        <th>Подтип</th>
+                        <th>Серийный номер</th>
+                    </tr>
                 </thead>
                 <tbody class="vehicleBody" id="vehicle-data">
                 </tbody>
@@ -419,13 +425,13 @@
             </div>
             <table class="table" id="char-table">
                 <thead>
-                <tr>
-                    <th><input type="checkbox" name="select-all-chars" id="select-all-chars" />&nbsp;</th>
-                    <th>Характеристика</th>
-                    <th>Единица измерения</th>
-                    <th>Значение</th>
-                    <th>Дата фиксации</th>
-                </tr>
+                    <tr>
+                        <th><input type="checkbox" name="select-all-chars" id="select-all-chars" />&nbsp;</th>
+                        <th>Характеристика</th>
+                        <th>Единица измерения</th>
+                        <th>Значение</th>
+                        <th>Дата фиксации</th>
+                    </tr>
                 </thead>
                 <tbody class="indicatorBody" id="char-data">
                 </tbody>
@@ -454,15 +460,18 @@
                                     </div>
                                     <div class="label-couple">
                                         <label>Значение</label>
-                                        <input class="indicator-value" name="indicator-value" type="text" placeholder="0">
+                                        <input class="indicator-value" name="indicator-value" type="text"
+                                            placeholder="0">
                                     </div>
                                     <div class="label-couple">
                                         <label>Дата начальное</label>
-                                        <input class="data-start-ind" name="data-start-ind" type="date" placeholder="10.10.1999">
+                                        <input class="data-start-ind" name="data-start-ind" type="date"
+                                            placeholder="10.10.1999">
                                     </div>
                                     <div class="label-couple">
                                         <label>Дата конечное</label>
-                                        <input class="data-end-ind" name="data-end-ind" type="date" placeholder="10.10.1999">
+                                        <input class="data-end-ind" name="data-end-ind" type="date"
+                                            placeholder="10.10.1999">
                                     </div>
                                 </div>
                             </div>
@@ -492,14 +501,14 @@
             </div>
             <table class="table" id="indicator-table">
                 <thead>
-                <tr>
-                    <th><input type="checkbox" name="select-all-indicators" id="select-all-indicators" />&nbsp;</th>
-                    <th>Показатель</th>
-                    <th>Единица измерения</th>
-                    <th>Значение</th>
-                    <th>Дата фиксации</th>
-                    <!-- <th>Время фиксации</th> -->
-                </tr>
+                    <tr>
+                        <th><input type="checkbox" name="select-all-indicators" id="select-all-indicators" />&nbsp;</th>
+                        <th>Показатель</th>
+                        <th>Единица измерения</th>
+                        <th>Значение</th>
+                        <th>Дата фиксации</th>
+                        <!-- <th>Время фиксации</th> -->
+                    </tr>
                 </thead>
                 <tbody class="indicatorBody" id="indicator-data">
                 </tbody>
@@ -514,54 +523,384 @@
                 </div>
                 <input type="text" id="myInput" onkeyup="searchFunction()" placeholder="Поиск"></input>
             </div>
-            <table class="table" >
+            <table class="table">
                 <thead>
-                <tr>
-                    <th><input type="checkbox" />&nbsp;</th>
-                    <th>Гараж</th>
-                    <th>Показатель</th>
-                    <th>Единица измерения</th>
-                    <th>Значение</th>
-                    <th>Дата фиксации</th>
-                    <th>Время фиксации</th>
-                </tr>
+                    <tr>
+                        <th><input type="checkbox" />&nbsp;</th>
+                        <th>Гараж</th>
+                        <th>Показатель</th>
+                        <th>Единица измерения</th>
+                        <th>Значение</th>
+                        <th>Дата фиксации</th>
+                        <th>Время фиксации</th>
+                    </tr>
                 </thead>
                 <tbody class="vehicleBody">
-                <tr>
-                    <td><input type="checkbox" name="name1" />&nbsp;</td>
-                    <td>Ангар №1</td>
-                    <td>Перевезено груза</td>
-                    <td>кг</td>
-                    <td>14 123</td>
-                    <td>20.01.2022</td>
-                    <td>10:30</td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" name="name1" />&nbsp;</td>
-                    <td>Ангар №1</td>
-                    <td>Перевезено груза</td>
-                    <td>кг</td>
-                    <td>14 123</td>
-                    <td>20.01.2022</td>
-                    <td>10:30</td>
-                <tr>
-                    <td><input type="checkbox" name="name1" />&nbsp;</td>
-                    <td>Ангар №1</td>
-                    <td>Перевезено груза</td>
-                    <td>кг</td>
-                    <td>14 123</td>
-                    <td>20.01.2022</td>
-                    <td>10:30</td>
-                </tr>
+                    <tr>
+                        <td><input type="checkbox" name="name1" />&nbsp;</td>
+                        <td>Ангар №1</td>
+                        <td>Перевезено груза</td>
+                        <td>кг</td>
+                        <td>14 123</td>
+                        <td>20.01.2022</td>
+                        <td>10:30</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" name="name1" />&nbsp;</td>
+                        <td>Ангар №1</td>
+                        <td>Перевезено груза</td>
+                        <td>кг</td>
+                        <td>14 123</td>
+                        <td>20.01.2022</td>
+                        <td>10:30</td>
+                    <tr>
+                        <td><input type="checkbox" name="name1" />&nbsp;</td>
+                        <td>Ангар №1</td>
+                        <td>Перевезено груза</td>
+                        <td>кг</td>
+                        <td>14 123</td>
+                        <td>20.01.2022</td>
+                        <td>10:30</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
         <div id="tab5" class="tabcontent">
+            <h2 id="favorites">Находится в стадии разработки</h2>
         </div>
         <div id="tab6" class="tabcontent">
+            <div class="favorites">
+                <nav id="navbar">
+                    <header>Термины</header>
+                    <a href="#Section_1" class="nav-link">
+                        Эффективность</a>
+                    <a href="#Section_2" class="nav-link">
+                        Показатель эффективности работы транспортного средства</a>
+                    <a href="#Section_3" class="nav-link">
+                        Коэффициент использования пробега</a>
+                    <a href="#Section_4" class="nav-link">
+                        Статический коэффициент использования грузоподъемности</a>
+                    <a href="#Section_5" class="nav-link">
+                        Статический коэффициент использования грузовместимости</a>
+                    <a href="#Section_6" class="nav-link">
+                        Динамический коэффициент использования грузоподъемности</a>
+                    <a href="#Section_7" class="nav-link">
+                        Средняя дальность рейсов</a>
+                    <a href="#Section_8" class="nav-link">
+                        Расход топлива в час</a>
+                    <a href="#Section_9" class="nav-link">
+                        Средняя скорость</a>
+                    <a href="#Section_10" class="nav-link">
+                        Коэффициент технической готовности</a>
+                    <a href="#Section_11" class="nav-link">
+                        Коэффициент использования транспорта</a>
+                    <a href="#Section_12" class="nav-link">
+                        Общий показатель эффективности работы ТС в гараже</a>
+                    <a href="#Section_13" class="nav-link">
+                        Показатели транспортных средств</a>
+                    <a href="#Section_14" class="nav-link">
+                        Водоизмещение</a>
+                    <a href="#Section_15" class="nav-link">
+                        Дедвейт</a>
+                    <a href="#Section_16" class="nav-link">
+                        Грузовместимость</a>
+                    <a href="#Section_17" class="nav-link">
+                        Грузоподъемность</a>
+                    <a href="#Section_18" class="nav-link">
+                        Возможная работа</a>
+                    <a href="#Section_19" class="nav-link">
+                        Фактическая работа</a>
+                </nav>
+                <main id="main-doc">
+                    <section class="main-section" id="Section_1">
+                        <header>
+                            Эффективность транспортно-грузовых перевозок
+                        </header>
+                        <p>
+                            В общем виде понятие эффективности транспортно-грузовых перевозок – это
+                            социально-экономическая характеристика
+                            объективных причинно-следственные связей или количественных соотношений между затратами и
+                            результатами. Уменьшение
+                            затрат предприятием материальных, финансовых, трудовых ресурсов приводит к росту
+                            экономического результата, и,
+                            следовательно, эффективности. Именно проблема повышения эффективности транспортно-грузовых
+                            перевозок заключается в
+                            действенном увеличении экономических результатов на единицу затрат в процессе использования
+                            уже имеющихся ресурсов, без
+                            привлечения новых.
+                        </p>
+                        <p>
+                            К числу факторов, определяющих более интенсивное использование автомобильного транспорта,
+                            относятся: улучшение
+                            использования грузоподъемности транспортных средств; повышение коэффициента сменности работы
+                            транспорта; сокращение
+                            простоев; улучшение использования пробега, ускорение погрузочно-разгрузочных работ и т. д.
+                        </p>
+                    </section>
+
+                    <section class="main-section" id="Section_2">
+                        <header>
+                            Показатель эффективности работы транспортного средства
+                        </header>
+                        <p>
+                            Термин «Показатель эффективности» обозначает функцию, которая сопоставляет каждому
+                            транспортному средству(ν) и
+                            промежутку времени(τ) числовое значение, используемое для оценки эффективности работы
+                            транспортного средства.
+                        </p>
+                        <code>
+                            (∀ν∈Транспортные средства)(∀τ∈Промежуток времени)
+                            Показатель эффективности работы ТС(ν,τ) = (Фактическая работа(ν,τ)) / (Возможная работа(ν,τ))
+                        </code>
+                    </section>
+                    <section class="main-section" id="Section_3">
+                        <header>
+                            Коэффициент использования пробега
+                        </header>
+                        <p>
+                            Термин «Коэффициент использования пробега» обозначает функцию, которая сопоставляет каждому
+                            транспортному средству(ν) и промежутку времени(τ) числовое значение, которое показывает долю
+                            груженого пробега в общем пробеге.
+                        </p>
+                        <code>
+                            (∀ν∈Транспортные средства)(∀τ∈Промежуток времени)
+                            Коэффициент использования пробега(ν,τ) = (Пробег с грузом(ν,τ)) / (Пробег (ν,τ))
+                        </code>
+                    </section>
+                    <section class="main-section" id="Section_4">
+                        <header>
+                            Статический коэффициент использования грузоподъемности
+                        </header>
+                        <p>
+                            Термин «Статический коэффициент использования грузоподъемности» обозначает функцию, которая
+                            сопоставляет каждому
+                            транспортному средству(ν) и промежутку времени(τ) числовое значение, которое показывает
+                            эффективность статического
+                            использования грузоподъемности транспортного средства.
+                        </p>
+                        <code>
+                            (∀ν∈Транспортные средства)(∀τ∈Промежуток времени)
+                            Статический коэффициент использования грузоподъемности(ν,τ) = (Фактическая масса перевезенного
+                            груза(ν,τ)) / Грузоподъемность(ν)
+                        </code>
+                    </section>
+                    <section class="main-section" id="Section_5">
+                        <header>
+                            Статический коэффициент использования грузовместимости
+                        </header>
+                        <p>
+                            Термин «Статический коэффициент использования грузовместимости» обозначает функцию, которая
+                            сопоставляет каждому
+                            транспортному средству(ν) и промежутку времени(τ) числовое значение, которое показывает
+                            эффективность статического
+                            использования грузовместимости транспортного средства.
+                        </p>
+                        <code>
+                            (∀ν∈Транспортные средства)(∀τ∈Промежуток времени)
+                            Статический коэффициент использования грузовместимости(ν,τ)= (Фактический объем перевезенного
+                            груза(ν,τ))/(Грузовместимость(ν))
+                        </code>
+                    </section>
+                    <section class="main-section" id="Section_6">
+                        <header>
+                            Динамический коэффициент использования грузоподъемности
+                        </header>
+                        <p>
+                            Термин «Динамический коэффициент использования грузоподъемности» обозначает функцию, которая
+                            сопоставляет каждому
+                            транспортному средству(ν) и промежутку времени(τ) числовое значение, которое показывает
+                            эффективность динамического
+                            использования грузоподъемности транспортного средства.
+                        </p>
+                        <code>
+                            (∀ν∈Транспортные средства)(∀τ∈Промежуток времени)
+                            Динамический коэффициент использования грузоподъемности(ν,τ)= (Фактическая работа в тоннокилометрах(ν,τ))/(Возможная
+                            работа в тоннокилометрах(ν,τ) )
+                        </code>
+                    </section>
+                    <section class="main-section" id="Section_7">
+                        <header>
+                            Средняя дальность рейсов
+                        </header>
+                        <p>
+                            Термин «Средняя дальность рейсов» обозначает функцию, которая сопоставляет каждому
+                            транспортному средству(ν) и
+                            промежутку времени расстояние в километрах, измеренное вдоль маршрута рейсов по земной
+                            поверхности от места начала до
+                            места назначения транспортного средства, которое оно проходит в среднем за рейс в заданном
+                            промежутке времени.
+                        </p>
+                        <code>
+                            (∀ν∈Транспортные средства)(∀τ∈Промежуток времени)
+                            Средняя дальность рейсов(ν)=(∑(ν_1:Промежуток времени)Пробег(ν,ν_1 ))/(Количество пробегов)
+                        </code>
+                    </section>
+                    <section class="main-section" id="Section_8">
+                        <header>
+                            Расход топлива в час
+                        </header>
+                        <p>
+                            Термин «Расход топлива в час» обозначает функцию, которая сопоставляет каждому транспортному
+                            средству(ν) и
+                            промежутку времени (τ) числовое значение, используемое для оценки уровня расхода топлива за
+                            час работы ТС.
+                        </p>
+                        <code>
+                            (∀ν∈Транспортные средства)(∀τ∈Промежуток времени)
+                            Расход топлива в час(ν,τ)= (Расход топлива(ν,τ))/(Время в движении(ν,τ))
+                        </code>
+                    </section>
+                    <section class="main-section" id="Section_9">
+                        <header>
+                            Средняя скорость
+                        </header>
+                        <p>
+                            Термин «Средняя скорость» обозначает функцию, которая сопоставляет каждому транспортному
+                            средству(ν) и промежутку
+                            времени (τ) числовое значение равное средней скорости ТС в км/ч во время работы.
+                        </p>
+                        <code>
+                            (∀ν∈Транспортные средства)(∀τ∈Промежуток времени)
+                            Средняя скорость(ν,τ)= (Пробег(ν,τ))/(Время в движении(ν,τ))
+                        </code>
+                    </section>
+                    <section class="main-section" id="Section_10">
+                        <header>
+                            Коэффициент технической готовности
+                        </header>
+                        <p>
+                            Термин «Коэффициент технической готовности» обозначает функцию, которая сопоставляет любому
+                            гаражу и дате показатель
+                            готовности к эксплуатации всего парка ТС, которое находится в гараже.
+                        </p>
+                        <code>
+                            (∀ν∈Гаражи)(∀ν_1∈Дата)
+                            Коэффициент технической готовности(ν,ν_1 )=(Количество транспорта готового к эксплуатации(ν,ν_1 ))/(Количество
+                            транспорта (ν,ν_1 ) )
+                        </code>
+                    </section>
+                    <section class="main-section" id="Section_11">
+                        <header>
+                            Коэффициент использования транспорта
+                        </header>
+                        <p>
+                            Термин «Коэффициент использования транспорта» обозначает функцию, которая сопоставляет
+                            любому гаражу и дате показатель использования парка ТС, которое находится в гараже.
+                        </p>
+                        <code>
+                            (∀ν∈Гаражи)(∀ν_1∈Дата)
+                            Коэффициент использования транспорта(ν,ν_1 )=(Количество транспорта в эксплуатации(ν,ν_1 ))/(Количество транспорта
+                            (ν,ν_1 ) )
+                        </code>
+                    </section>
+                    <section class="main-section" id="Section_12">
+                        <header>
+                            Общий показатель эффективности работы ТС в гараже
+                        </header>
+                        <p>
+                            Термин «Общий показатель эффективности работы ТС в гараже» обозначает функцию, которая сопоставляет любому гаражу и
+                            промежутку времени общий показатель эффективности работы парка ТС, которое находится в гараже.
+                        </p>
+                        <code>
+                            (∀ν∈Гаражи)(∀ν_1∈Промежуток времени)
+                            Общий показатель эффективности работы ТС в гараже(ν,ν_1 )=(Общая фактическая работа(ν,ν_1 ))/(Общая возможная работа
+                            (ν,ν_1 ) )
+                        </code>
+                    </section>
+                    <section class="main-section" id="Section_13">
+                        <header>
+                            Показатели транспортных средств 
+                        </header>
+                        <p>
+                            Показатели ТС позволяют оценить определенные стороны применения ТС с точки зрения времени его использования,
+                            скорости движения, использования пробега, номинальной грузоподъемности и т. д. . Эти показатели — составная часть
+                            таких обобщающих показателей эффективности использования ТС, как статический коэффициент использования
+                            грузоподъемности, коэффициент использования пробега и т. д. , с помощью которых оценивается конечный результат
+                            деятельности ТК
+                        </p>
+                        <br>
+                        <p>
+                            Примеры показателей:
+                        </p>
+                        <ul>
+                            <li>Фактическая работа</li>
+                            <li>Возможная работа</li>
+                            <li>Пробег</li>
+                            <li>Пробег с грузом</li>
+                            <li>Фактический объем перевезенного груза</li>
+                            <li>Фактическая масса перевезенного груза</li>
+                            <li>Расход топлива</li>
+                            <li>Расход топлива</li>
+                            <li>Время в движении </li>
+                        </ul>
+                    </section>
+                    <section class="main-section" id="Section_14">
+                        <header>
+                            Водоизмещение
+                        </header>
+                        <p>
+                            Термин «Водоизмещение» обозначает функцию, которая сопоставляет каждому транспортному средству водного типа объем
+                            воды, измеряемый в кубических метрах(м³), вытесняемой плавающим судном.
+                        </p>
+                    </section>
+                    <section class="main-section" id="Section_15">
+                        <header>
+                            Дедвейт
+                        </header>
+                        <p>
+                            Термин «Дедвейт» обозначает функцию, которая сопоставляет каждому транспортному средству водного вида количество
+                            тонн(т) груза, которое может принять судно сверх собственной массы до осадки по летнюю грузовую марку.
+                        </p>
+                    </section>
+                    <section class="main-section" id="Section_16">
+                        <header>
+                            Грузовместимость
+                        </header>
+                        <p>
+                            Термин «Грузовместимость» обозначает функцию, которая сопоставляет каждому транспортному средству полный объем(м³)
+                            груза, которое может перевезти ТС.
+                        </p>
+                    </section>
+                    <section class="main-section" id="Section_17">
+                        <header>
+                            Грузоподъемность
+                        </header>
+                        <p>
+                            Термин «Грузоподъемность» обозначает функцию, которая сопоставляет каждому транспортному средству массу груза в
+                            килограммах(кг), на перевозку которого рассчитано данное транспортное средство; основная эксплуатационная
+                            характеристика транспортного средства. Для сухопутных транспортных средств (вагон, автомобиль) расчётная
+                            грузоподъёмность определяется допустимой нагрузкой на ось подвижного состава и на 1 м пути; у морских судов — при
+                            погружении по грузовую марку, для судов внутреннего плавания — при нормальной или максимальной осадке.
+                        </p>
+                    </section>
+                    <section class="main-section" id="Section_18">
+                        <header>
+                            Возможная работа
+                        </header>
+                        <p>
+                            Термин «Возможная работа» обозначает функцию, которая сопоставляет каждому транспортному средству и промежутку
+                            времени максимально возможное расстояние, измеряемое в километрах(км), которое может быть преодолено транспортным
+                            средством за определенный период времени при оптимальных условиях. Этот параметр может быть использован для
+                            определения эффективности транспортного средства и его возможностей.
+                        </p>
+                    </section>
+                    <section class="main-section" id="Section_19">
+                        <header>
+                            Фактическая работа
+                        </header>
+                        <p>
+                            Термин «Фактическая работа» обозначает функцию, которая сопоставляет каждому транспортному средству и промежутку
+                            времени фактическое расстояние, измеряемое в километрах(км), которое преодолело транспортное средство за
+                            определенный период времени. Этот параметр показывает, насколько эффективно использовался транспортный ресурс, и
+                            может быть использован для оптимизации маршрутов и управления транспортной логистикой.
+                        </p>
+                    </section>
+                </main>
+            </div>
         </div>
     </div>
 
-<script src="js/script.js"></script>
+    <script src="js/script.js"></script>
 </body>
+
 </html>
