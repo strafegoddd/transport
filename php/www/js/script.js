@@ -3,10 +3,19 @@ let memData = {
   vehicleId: ''
 }
 
+const resetCharButton = document.getElementById('reset-find-char');
+const resetIndButton = document.getElementById('reset-find-indicator');
+const resetEIButton = document.getElementById('reset-find-ei');
+
 //Check auth
 document.addEventListener('DOMContentLoaded', function() {
   const username = sessionStorage.getItem('login');
   const role = sessionStorage.getItem('role');
+
+  //Options for finding
+  charAddTap(document.getElementById('find-char'), true);
+  indAddTap(document.getElementById('find-indicator'), true);
+  eiAddTap(document.getElementById('find-ei'), true);
 
   if (!username || !role) {
       window.location.href = 'auth.html';  // если не авторизован, редирект на страницу входа
@@ -53,8 +62,11 @@ function openTab(evt, tabName){
       disableTabs(['garage-ind-butt', 'veh-butt', 'char-butt', 'ind-butt', 'ei-butt']);
       fetchGarageData();
     }
+    if(tabName == 'tab-garage-ind'){
+      fetchEIgarage();
+    }
     if(tabName == 'tab2'){
-      disableTabs(['char-butt', 'ind-butt']);
+      disableTabs(['garage-ind-butt','char-butt', 'ind-butt']);
     }
     if(tabName == 'tab-vehicle-char'){
       disableTabs(['ei-butt']);
@@ -124,7 +136,7 @@ function fetchGarageData() {
   delGarageButton.disabled=1;
   editGarageButton.disabled=1;
   chooseGarageButton.disabled=1;
-  fetch('http://185.187.90.199:81/garageData.php')
+  fetch('http://localhost:81/garageData.php')
   .then(response => response.json())
   .then(data => {
     //console.log(data);
@@ -153,7 +165,7 @@ function fetchGarageData() {
 }
 
 function fetchAllVehicleData() {
-  fetch('http://185.187.90.199:81/allVehicleData.php')
+  fetch('http://localhost:81/allVehicleData.php')
   .then(response => response.json())
   .then(data => {
       const tbody = document.getElementById('vehicle-data');
@@ -176,7 +188,7 @@ function fetchAllVehicleData() {
 }
 
 function vehAddTap(){
-  fetch('http://185.187.90.199:81/allVehicleData.php')
+  fetch('http://localhost:81/allVehicleData.php')
   .then(response => response.json())
   .then(data => {
       const selVeh = document.getElementById('vehicle-name');
@@ -191,11 +203,38 @@ function vehAddTap(){
   .catch(error => console.error('Error fetching data:', error));
 }
 
-function charAddTap(selectElem){
-  fetch('http://185.187.90.199:81/allIndicatorData.php')
+function vehMoveTap(selectElem){
+  fetch('http://localhost:81/garageData.php')
   .then(response => response.json())
   .then(data => {
       selectElem.innerHTML = '';
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].garage_pn === sessionStorage.getItem('part_number')){
+          const optVehName = document.createElement('option');
+          optVehName.value = data[i].garage_name;
+          optVehName.textContent = data[i].garage_name;
+          selectElem.appendChild(optVehName);
+        }
+      }
+  })
+  .catch(error => console.error('Error fetching data:', error));
+}
+
+function charAddTap(selectElem, placeholder){
+  fetch('http://localhost:81/allIndicatorData.php')
+  .then(response => response.json())
+  .then(data => {
+      selectElem.innerHTML = '';
+
+      if (placeholder === true){
+        const placeholderOption = document.createElement('option');
+        placeholderOption.value = "";
+        placeholderOption.disabled = true;
+        placeholderOption.selected = true;
+        placeholderOption.textContent = 'Поиск по характеристике';
+        selectElem.appendChild(placeholderOption);
+      }
+      
       for (let i = 0; i < data.length; i++) {
           if (data[i].indicator_type === 'Характеристика'){
             const optCharName = document.createElement('option');
@@ -209,11 +248,21 @@ function charAddTap(selectElem){
   .catch(error => console.error('Error fetching data:', error));
 }
 
-function indAddTap(selectElem){
-  fetch('http://185.187.90.199:81/allIndicatorData.php')
+function indAddTap(selectElem, placeholder){
+  fetch('http://localhost:81/allIndicatorData.php')
   .then(response => response.json())
   .then(data => {
       selectElem.innerHTML = '';
+
+      if (placeholder === true){
+        const placeholderOption = document.createElement('option');
+        placeholderOption.value = "";
+        placeholderOption.disabled = true;
+        placeholderOption.selected = true;
+        placeholderOption.textContent = 'Поиск по показателю';
+        selectElem.appendChild(placeholderOption);
+      }
+
       for (let i = 0; i < data.length; i++) {
           if (data[i].indicator_type === 'Показатель'){
             const optIndicatorName = document.createElement('option');
@@ -225,13 +274,49 @@ function indAddTap(selectElem){
       // console.log(data);
   })
   .catch(error => console.error('Error fetching data:', error));
-}
+} 
 
-function eiAddTap(selectElem){
-  fetch('http://185.187.90.199:81/allEIdata.php')
+function eiAddTap(selectElem, placeholder){
+  fetch('http://localhost:81/allEIdata.php')
   .then(response => response.json())
   .then(data => {
       selectElem.innerHTML = '';
+
+      if (placeholder === true){
+        const placeholderOption = document.createElement('option');
+        placeholderOption.value = "";
+        placeholderOption.disabled = true;
+        placeholderOption.selected = true;
+        placeholderOption.textContent = 'Поиск по ПЭ';
+        selectElem.appendChild(placeholderOption);
+      }
+
+      for (let i = 0; i < data.length; i++) {
+        const optEIName = document.createElement('option');
+        optEIName.value = data[i].ei_name;
+        optEIName.textContent = data[i].ei_name;
+        selectElem.appendChild(optEIName);
+      }
+      // console.log(data);
+  })
+  .catch(error => console.error('Error fetching data:', error));
+}
+
+function garageEIAddTap(selectElem, placeholder){
+  fetch('http://localhost:81/allGarageEIdata.php')
+  .then(response => response.json())
+  .then(data => {
+      selectElem.innerHTML = '';
+
+      if (placeholder === true){
+        const placeholderOption = document.createElement('option');
+        placeholderOption.value = "";
+        placeholderOption.disabled = true;
+        placeholderOption.selected = true;
+        placeholderOption.textContent = 'Поиск по ПЭ';
+        selectElem.appendChild(placeholderOption);
+      }
+
       for (let i = 0; i < data.length; i++) {
         const optEIName = document.createElement('option');
         optEIName.value = data[i].ei_name;
@@ -244,7 +329,7 @@ function eiAddTap(selectElem){
 }
 
 function fetchAllUserData() {
-  fetch('http://185.187.90.199:81/allUserData.php')
+  fetch('http://localhost:81/allUserData.php')
   .then(response => response.json())
   .then(data => {
 
@@ -377,6 +462,81 @@ function searchFunction() {
   });
 }  
 
+document.getElementById('find-char').addEventListener('change', function() {
+  const selectedValue = this.value;
+  const table = document.getElementById('char-table');
+  const rows = table.getElementsByTagName('tr');
+
+  resetCharButton.disabled = false;
+
+  for (let i = 1; i < rows.length; i++) {
+      const indicatorCell = rows[i].getElementsByTagName('td')[1];
+
+      if (indicatorCell) {
+          if (indicatorCell.textContent === selectedValue) {
+              rows[i].style.display = ''; 
+          } else {
+              rows[i].style.display = 'none'; 
+          }
+      }
+  }
+});
+
+resetCharButton.addEventListener('click', function(){
+  updateCharacterData();
+  resetCharButton.disabled = true;
+});
+
+document.getElementById('find-indicator').addEventListener('change', function() {
+  const selectedValue = this.value;
+  const table = document.getElementById('indicator-table');
+  const rows = table.getElementsByTagName('tr');
+
+  resetIndButton.disabled = false;
+
+  for (let i = 1; i < rows.length; i++) {
+      const indicatorCell = rows[i].getElementsByTagName('td')[1];
+
+      if (indicatorCell) {
+          if (indicatorCell.textContent === selectedValue) {
+              rows[i].style.display = ''; 
+          } else {
+              rows[i].style.display = 'none'; 
+          }
+      }
+  }
+});
+
+resetIndButton.addEventListener('click', function(){
+  updateIndicatorData();
+  resetIndButton.disabled = true;
+});
+
+document.getElementById('find-ei').addEventListener('change', function() {
+  const selectedValue = this.value;
+  const table = document.getElementById('ei-table');
+  const rows = table.getElementsByTagName('tr');
+
+  resetEIButton.disabled = false;
+
+  for (let i = 1; i < rows.length; i++) {
+      const indicatorCell = rows[i].getElementsByTagName('td')[1];
+
+      if (indicatorCell) {
+          if (indicatorCell.textContent === selectedValue) {
+              rows[i].style.display = ''; 
+          } else {
+              rows[i].style.display = 'none'; 
+          }
+      }
+  }
+});
+
+resetEIButton.addEventListener('click', function(){
+  updateEIData();
+  resetEIButton.disabled = true;
+});
+
 //Buttons
 
 //Admin
@@ -434,7 +594,7 @@ userAddingForm.addEventListener('submit', async function(event){
   event.preventDefault();
 
   const formData = new FormData(userAddingForm);
-  const response = await fetch('http://185.187.90.199:81/addingUser.php', {
+  const response = await fetch('http://localhost:81/addingUser.php', {
       method: 'POST',
       body: formData
   });
@@ -457,7 +617,7 @@ userEditingForm.addEventListener('submit', async function(event) {
   const selectedCheckbox = document.querySelector('.select-user:checked');
   const idToEdit = parseInt(selectedCheckbox.closest('tr').dataset.id, 10);
 
-  const response = await fetch('http://185.187.90.199:81/userEditing.php', {
+  const response = await fetch('http://localhost:81/userEditing.php', {
       method: 'POST',
       headers: {
       'Content-Type': 'application/json'
@@ -527,6 +687,13 @@ const toggleButtons = () => {
   delGarageButton.disabled = selectedCheckboxes.length === 0;
   editGarageButton.disabled = selectedCheckboxes.length !== 1;
   chooseGarageButton.disabled = selectedCheckboxes.length !== 1;
+
+  if (selectedCheckboxes.length === 1){
+    activateTabs(['garage-ind-butt']);
+  }
+  else{
+    disableTabs(['garage-ind-butt']);
+  }
 };
 
 document.addEventListener('DOMContentLoaded', function(){
@@ -541,7 +708,7 @@ addingForm.addEventListener('submit', async function(event) {
   event.preventDefault();
 
   const formData = new FormData(addingForm);
-  const response = await fetch('http://185.187.90.199:81/adding.php', {
+  const response = await fetch('http://localhost:81/adding.php', {
       method: 'POST',
       body: formData
   });
@@ -564,7 +731,7 @@ editingForm.addEventListener('submit', async function(event) {
   const selectedCheckbox = document.querySelector('.select-garage:checked');
   const idToEdit = parseInt(selectedCheckbox.closest('tr').dataset.id, 10);
 
-  const response = await fetch('http://185.187.90.199:81/editing.php', {
+  const response = await fetch('http://localhost:81/editing.php', {
       method: 'POST',
       headers: {
       'Content-Type': 'application/json'
@@ -583,7 +750,7 @@ delGarageButton.addEventListener('click', function() {
   const selectedCheckboxes = document.querySelectorAll('.select-garage:checked');
   const idsToDelete = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
 
-  fetch('http://185.187.90.199:81/deleting.php', {
+  fetch('http://localhost:81/deleting.php', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
@@ -617,7 +784,8 @@ editGarageButton.addEventListener('click', function() {
 chooseGarageButton.addEventListener('click', function() {
   openTabChoose(event, 'tab2');
   document.getElementsByClassName("sidebar-card")[3].className += " active";
-  activateTabs(['veh-butt', 'garage-ind-butt']);
+  activateTabs(['veh-butt']);
+  disableTabs(['garage-ind-butt']);
   fetchVehicleData();
 
   const checkboxes = document.querySelectorAll('.select-garage:checked');
@@ -634,6 +802,7 @@ const delVehicleButton = document.getElementById('del-vehicle');
 const editVehicleButton = document.getElementById('edit-vehicle');
 const chooseVehicleButton = document.getElementById('choose-vehicle');
 const chooseVehCharButton = document.getElementById('choose-vehicle-char');
+const moveVehicleButton = document.getElementById('move-vehicle');
 
 //adding button
 addVehicleButton.addEventListener("click", function (){
@@ -647,11 +816,22 @@ document.getElementById('vehicle-close-modal-add').addEventListener("click", fun
 
 //editing button
 editVehicleButton.addEventListener("click", function (){
-document.getElementById('vehicle-edit-modal').classList.add('open')
+  document.getElementById('vehicle-edit-modal').classList.add('open')
 })
 
 document.getElementById('vehicle-close-modal-edit').addEventListener("click", function (){
-document.getElementById('vehicle-edit-modal').classList.remove('open')
+  document.getElementById('vehicle-edit-modal').classList.remove('open')
+})
+
+//moving button
+moveVehicleButton.addEventListener("click", function (){
+  document.getElementById('vehicle-move-modal').classList.add('open');
+  const initialSelect = document.querySelector('.garage-move-name');
+  vehMoveTap(initialSelect);
+})
+
+document.getElementById('vehicle-close-modal-move').addEventListener("click", function (){
+document.getElementById('vehicle-move-modal').classList.remove('open')
 })
 
 document.getElementById('select-all-vehicles').addEventListener('change', function(event) {
@@ -674,6 +854,7 @@ const toggleButtonsVeh = () => {
   editVehicleButton.disabled = selectedCheckboxes.length !== 1;
   chooseVehicleButton.disabled = selectedCheckboxes.length !== 1;
   chooseVehCharButton.disabled = selectedCheckboxes.length !== 1;
+  moveVehicleButton.disabled = selectedCheckboxes.length !== 1;
   if (selectedCheckboxes.length === 1){
     activateTabs(['ei-butt']);
   }
@@ -689,6 +870,7 @@ document.addEventListener('DOMContentLoaded', function(){
 //Forms and button onclicks (fetches)
 const vehicleAddingForm = document.getElementById('vehicle-adding-form');
 const vehicleEditingForm = document.getElementById('vehicle-editing-form');
+const vehicleMovingForm = document.getElementById('vehicle-moving-form');
 
 editVehicleButton.addEventListener('click', function() {
   const selectedCheckbox = document.querySelector('.select-vehicle:checked');
@@ -708,7 +890,7 @@ vehicleAddingForm.addEventListener('submit', async function(event){
     garageId: memData.garageId[0]
 };
 
-  const response = await fetch('http://185.187.90.199:81/addingVehicle.php', {
+  const response = await fetch('http://localhost:81/addingVehicle.php', {
     method: 'POST',
     headers: {
     'Content-Type': 'application/json'
@@ -721,7 +903,38 @@ vehicleAddingForm.addEventListener('submit', async function(event){
     document.getElementById('vehicle-add-modal').classList.remove('open');
     updateVehicleData();
   }
-  // console.log(result);
+   //console.log(result);
+});
+
+vehicleMovingForm.addEventListener('submit', async function(event){
+  event.preventDefault();
+
+  const garageName = document.querySelectorAll('.garage-move-name')[0];
+  const selectedCheckbox = document.querySelector('.select-vehicle:checked');
+  const idToEdit = parseInt(selectedCheckbox.closest('tr').dataset.id, 10);
+  const data = [];
+
+  data.push({
+      name: garageName.value,
+      id: idToEdit
+  });
+
+  //console.log(data);
+  
+  const response = await fetch('http://localhost:81/movingVehicle.php', {
+    method: 'POST',
+    headers: {
+    'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  });
+
+  const result = await response.json();
+  if (result.success) {
+    document.getElementById('vehicle-move-modal').classList.remove('open');
+    updateVehicleData();
+  }
+   //console.log(result);
 });
 
 vehicleEditingForm.addEventListener('submit', async function(event) {
@@ -736,7 +949,7 @@ vehicleEditingForm.addEventListener('submit', async function(event) {
   const selectedCheckbox = document.querySelector('.select-vehicle:checked');
   const idToEdit = parseInt(selectedCheckbox.closest('tr').dataset.id, 10);
 
-  const response = await fetch('http://185.187.90.199:81/editingVehicle.php', {
+  const response = await fetch('http://localhost:81/editingVehicle.php', {
       method: 'POST',
       headers: {
       'Content-Type': 'application/json'
@@ -757,7 +970,7 @@ delVehicleButton.addEventListener('click', function(){
   const idsToDelete = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
 
   
-  fetch('http://185.187.90.199:81/deletingVehicle.php', {
+  fetch('http://localhost:81/deletingVehicle.php', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
@@ -805,9 +1018,9 @@ function fetchVehicleData(){
   const selectedCheckboxes = document.querySelectorAll('.select-garage:checked');
   const idToChoose = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
   const rowToEdit = selectedCheckboxes[0].closest('tr');
-  document.getElementsByClassName('info')[0].innerText = rowToEdit.cells[1].innerText;
+  document.getElementsByClassName('info')[1].innerText = rowToEdit.cells[1].innerText;
 
-  fetch('http://185.187.90.199:81/choose.php', {
+  fetch('http://localhost:81/choose.php', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -840,10 +1053,10 @@ function chooseIndicatorData(){
   const selectedCheckboxes = document.querySelectorAll('.select-vehicle:checked');
   const idToChoose = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
   const rowToEdit = selectedCheckboxes[0].closest('tr');
-  document.getElementsByClassName('info')[2].innerText = rowToEdit.cells[1].innerText;
+  document.getElementsByClassName('info')[3].innerText = rowToEdit.cells[1].innerText;
   disableTabs(['char-butt','ei-butt']);
 
-  fetch('http://185.187.90.199:81/chooseIndicator.php', {
+  fetch('http://localhost:81/chooseIndicator.php', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -878,10 +1091,10 @@ function chooseCharacterData(){
   const selectedCheckboxes = document.querySelectorAll('.select-vehicle:checked');
   const idToChoose = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
   const rowToEdit = selectedCheckboxes[0].closest('tr');
-  document.getElementsByClassName('info')[1].innerText = rowToEdit.cells[1].innerText;
+  document.getElementsByClassName('info')[2].innerText = rowToEdit.cells[1].innerText;
   disableTabs(['ind-butt','ei-butt']);
 
-  fetch('http://185.187.90.199:81/chooseIndicator.php', {
+  fetch('http://localhost:81/chooseIndicator.php', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -915,7 +1128,7 @@ function chooseCharacterData(){
 function updateVehicleData(){
   const idToChoose = memData.garageId;
 
-  fetch('http://185.187.90.199:81/choose.php', {
+  fetch('http://localhost:81/choose.php', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -951,12 +1164,11 @@ const addCharButton = document.getElementById('add-char');
 const delCharButton = document.getElementById('del-char');
 const editCharButton = document.getElementById('edit-char');
 
-//addmin butt
 addCharButton.addEventListener("click", function (){
   document.getElementById('char-add-modal').classList.add('open');
   resetCharForm();
   const initialSelect = document.querySelector('.char-name');
-  charAddTap(initialSelect);
+  charAddTap(initialSelect, false);
 })
 
 document.getElementById('char-close-modal-add').addEventListener("click", function (){
@@ -990,6 +1202,7 @@ const toggleButtonsChar = () => {
   const selectedCheckboxes = document.querySelectorAll('.select-char:checked');
   delCharButton.disabled = selectedCheckboxes.length === 0;
   editCharButton.disabled = selectedCheckboxes.length !== 1;
+  resetCharButton.disabled = true;
 };
 
 document.addEventListener('DOMContentLoaded', function(){
@@ -1015,7 +1228,7 @@ charAddingForm.addEventListener('submit', async function(event){
     });
   }
   //console.log(data);
-  fetch('http://185.187.90.199:81/addingChar.php', {
+  fetch('http://localhost:81/addingChar.php', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'  
@@ -1071,13 +1284,13 @@ document.getElementById('add-more-char').addEventListener('click', function() {
   // Добавление новых полей в контейнер
   document.getElementById('chars-container').appendChild(newFields);
   const newSelect = newFields.querySelector('.char-name');
-  charAddTap(newSelect); // Загрузка характеристик в новый select
+  charAddTap(newSelect, false); // Загрузка характеристик в новый select
 });
 
 function updateCharacterData(){
   const idToChoose = memData.vehicleId;
 
-  fetch('http://185.187.90.199:81/chooseIndicator.php', {
+  fetch('http://localhost:81/chooseIndicator.php', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -1112,7 +1325,7 @@ delCharButton.addEventListener('click', function(){
   const selectedCheckboxes = document.querySelectorAll('.select-char:checked');
   const idsToDelete = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
 
-  fetch('http://185.187.90.199:81/deletingChar.php', {
+  fetch('http://localhost:81/deletingChar.php', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
@@ -1143,7 +1356,7 @@ charEditingForm.addEventListener('submit', async function(event) {
   const selectedCheckbox = document.querySelector('.select-char:checked');
   const idToEdit = parseInt(selectedCheckbox.closest('tr').dataset.id, 10);
 
-  const response = await fetch('http://185.187.90.199:81/charEditing.php', {
+  const response = await fetch('http://localhost:81/charEditing.php', {
       method: 'POST',
       headers: {
       'Content-Type': 'application/json'
@@ -1177,7 +1390,7 @@ addIndButton.addEventListener("click", function (){
   document.getElementById('indicator-add-modal').classList.add('open');
   resetIndForm();
   const initialSelect = document.querySelector('.indicator-name');
-  indAddTap(initialSelect);
+  indAddTap(initialSelect, false);
 })
 
 document.getElementById('indicator-close-modal-add').addEventListener("click", function (){
@@ -1211,6 +1424,7 @@ const toggleButtonsInd = () => {
   const selectedCheckboxes = document.querySelectorAll('.select-indicator:checked');
   delIndButton.disabled = selectedCheckboxes.length === 0;
   editIndButton.disabled = selectedCheckboxes.length !== 1;
+  resetIndButton.disabled = true;
 };
 
 document.addEventListener('DOMContentLoaded', function(){
@@ -1240,7 +1454,7 @@ indAddingForm.addEventListener('submit', async function(event){
     });
   }
   // console.log(data);
-  fetch('http://185.187.90.199:81/addingIndicator.php', {
+  fetch('http://localhost:81/addingIndicator.php', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'  
@@ -1313,13 +1527,13 @@ document.getElementById('add-more-indicator').addEventListener('click', function
   // Добавление новых полей в контейнер
   document.getElementById('indicators-container').appendChild(newFields);
   const newSelect = newFields.querySelector('.indicator-name');
-  indAddTap(newSelect); // Загрузка характеристик в новый select
+  indAddTap(newSelect, false); // Загрузка характеристик в новый select
 });
 
 function updateIndicatorData(){
   const idToChoose = memData.vehicleId;
 
-  fetch('http://185.187.90.199:81/chooseIndicator.php', {
+  fetch('http://localhost:81/chooseIndicator.php', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -1354,7 +1568,7 @@ delIndButton.addEventListener('click', function(){
   const selectedCheckboxes = document.querySelectorAll('.select-indicator:checked');
   const idsToDelete = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
 
-  fetch('http://185.187.90.199:81/deletingInd.php', {
+  fetch('http://localhost:81/deletingInd.php', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
@@ -1385,7 +1599,7 @@ indEditingForm.addEventListener('submit', async function(event) {
   const selectedCheckbox = document.querySelector('.select-indicator:checked');
   const idToEdit = parseInt(selectedCheckbox.closest('tr').dataset.id, 10);
   
-  const response = await fetch('http://185.187.90.199:81/indEditing.php', {
+  const response = await fetch('http://localhost:81/indEditing.php', {
       method: 'POST',
       headers: {
       'Content-Type': 'application/json'
@@ -1419,7 +1633,7 @@ addEIButton.addEventListener("click", function (){
   document.getElementById('ei-add-modal').classList.add('open');
   resetEIForm();
   const initialSelect = document.querySelector('.ei-name');
-  eiAddTap(initialSelect);
+  eiAddTap(initialSelect, false);
 })
 
 document.getElementById('ei-close-modal-add').addEventListener("click", function (){
@@ -1480,7 +1694,7 @@ eiCalcForm.addEventListener('submit', async function(event){
     });
   }
    //console.log(data);
-  fetch('http://185.187.90.199:81/calculateEI.php', {
+  fetch('http://localhost:81/calculateEI.php', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'  
@@ -1545,16 +1759,16 @@ document.getElementById('add-more-ei').addEventListener('click', function() {
   // Добавление новых полей в контейнер
   document.getElementById('eis-container').appendChild(newFields);
   const newSelect = newFields.querySelector('.ei-name');
-  eiAddTap(newSelect); // Загрузка характеристик в новый select
+  eiAddTap(newSelect, false); // Загрузка характеристик в новый select
 });
 
 function fetchEI(){
   const selectedCheckboxes = document.querySelectorAll('.select-vehicle:checked');
   const idToChoose = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
-  // const rowToEdit = selectedCheckboxes[0].closest('tr');
-  // document.getElementsByClassName('info')[1].innerText = rowToEdit.cells[1].innerText;
+  const rowToEdit = selectedCheckboxes[0].closest('tr');
+  document.getElementsByClassName('info')[4].innerText = rowToEdit.cells[1].innerText;
 
-  fetch('http://185.187.90.199:81/eiData.php', {
+  fetch('http://localhost:81/eiData.php', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -1587,7 +1801,7 @@ function fetchEI(){
 function updateEIData(){
   const idToChoose = memData.vehicleId;
 
-  fetch('http://185.187.90.199:81/eiData.php', {
+  fetch('http://localhost:81/eiData.php', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -1621,7 +1835,7 @@ delEIButton.addEventListener('click', function(){
   const selectedCheckboxes = document.querySelectorAll('.select-ei:checked');
   const idsToDelete = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
 
-  fetch('http://185.187.90.199:81/deletingEI.php', {
+  fetch('http://localhost:81/deletingEI.php', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
@@ -1639,3 +1853,179 @@ delEIButton.addEventListener('click', function(){
   })
   .catch(error => console.error('Error deleting data:', error));
 })
+
+//Garage EI
+//Indicators
+const addGarageEIButton = document.getElementById('calculate-garage-ei');
+const delGarageEIButton = document.getElementById('del-garage-ei');
+const editGarageEIButton = document.getElementById('edit-garage-ei');
+
+//addmin butt
+addGarageEIButton.addEventListener("click", function (){
+  document.getElementById('garage-ei-add-modal').classList.add('open');
+  resetGarageEIForm();
+  const initialSelect = document.querySelector('.garage-ei-name');
+  garageEIAddTap(initialSelect, false);
+})
+
+document.getElementById('garage-ei-close-modal-add').addEventListener("click", function (){
+  document.getElementById('garage-ei-add-modal').classList.remove('open')
+})
+
+//editing butt
+editGarageEIButton.addEventListener("click", function (){
+  document.getElementById('garage-ei-edit-modal').classList.add('open')
+  })
+  
+document.getElementById('garage-ei-close-modal-edit').addEventListener("click", function (){
+  document.getElementById('garage-ei-edit-modal').classList.remove('open')
+  })
+
+document.getElementById('select-all-garage-eis').addEventListener('change', function(event) {
+  const checkboxes = document.querySelectorAll('.select-garage-ei');
+  checkboxes.forEach(checkbox => {
+      checkbox.checked = event.target.checked;
+  });
+  toggleButtonsGarageEI();
+});
+
+document.getElementById('garage-ei-data').addEventListener('change', function(event) {
+  if (event.target.classList.contains('select-garage-ei')) {
+      toggleButtonsGarageEI();
+  }
+});
+
+const toggleButtonsGarageEI = () => {
+  const selectedCheckboxes = document.querySelectorAll('.select-garage-ei:checked');
+  delGarageEIButton.disabled = selectedCheckboxes.length === 0;
+  editGarageEIButton.disabled = selectedCheckboxes.length !== 1;
+};
+
+document.addEventListener('DOMContentLoaded', function(){
+  toggleButtonsGarageEI();
+})
+
+function fetchEIgarage(){
+  const selectedCheckboxes = document.querySelectorAll('.select-garage:checked');
+  const idToChoose = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
+  const rowToEdit = selectedCheckboxes[0].closest('tr');
+  document.getElementsByClassName('info')[0].innerText = rowToEdit.cells[1].innerText;
+
+  fetch('http://localhost:81/garageEiData.php', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ id: idToChoose })
+})
+.then(response => response.json())
+.then(data => {
+  memData.garageId = idToChoose;
+  const tbody = document.getElementById('garage-ei-data');
+  tbody.innerHTML = '';
+  for (let i = 0; i < data.length; i++) {
+      const row = document.createElement('tr');
+      row.dataset.id = data[i].gev_id;
+      row.innerHTML = `
+                  <td><input type="checkbox" name="select-garage-ei" class="select-garage-ei" /></td>
+                  <td>${data[i].ei_name}</td>
+                  <td>${data[i].ei_unit}</td>
+                  <td>${data[i].gev_value}</td>
+                  <td>${data[i].gev_date_start}</td>
+                  <td>${data[i].gev_date_end}</td>
+              `;
+
+      tbody.appendChild(row);
+  }
+})
+.catch(error => console.error('Error choosing data:', error));
+}
+
+//Forms
+const garageEIEditingForm = document.getElementById('garage-ei-editing-form');
+const garageEICalcForm = document.getElementById('garage-ei-adding-form');
+
+garageEICalcForm.addEventListener('submit', async function(event){
+  event.preventDefault();
+
+  const eiNames = document.querySelectorAll('.garage-ei-name');
+  const startDates = document.querySelectorAll('.data-start-garage-ei');
+  const endDates = document.querySelectorAll('.data-end-garage-ei');
+  const data = [];
+//!!!
+  for (let i = 0; i < eiNames.length; i++) {
+    data.push({
+        name: eiNames[i].value,
+        startDate: startDates[i].value,
+        endDate: endDates[i].value,
+        garageId: memData.garageId[0]
+    });
+  }
+   //console.log(data);
+  fetch('http://localhost:81/calculateGarageEI.php', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'  
+    },
+    body: JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(data => {
+     console.log(data);
+    // if (data.success) {
+    //   console.log('yes');
+    //   document.getElementById('garage-ei-add-modal').classList.remove('open');
+    //   updateGarageEIData();
+    // } else {
+    //     console.log('Произошла ошибка');
+    // }
+  })
+  .catch(error => console.error('Error:', error));
+});
+
+function resetGarageEIForm() {
+  const indsContainer = document.getElementById('garage-eis-container');
+  indsContainer.innerHTML = `
+      <div class="couple">
+          <div class="label-couple">
+              <label>Показатель эффективности</label>
+              <select class="garage-ei-name" name="garage-ei-name">
+              </select>
+          </div>
+          <div class="label-couple">
+              <label>Дата начальное</label>
+              <input class="data-start-garage-ei" name="data-start-garage-ei" type="date">
+          </div>
+          <div class="label-couple">
+              <label>Дата конечное</label>
+              <input class="data-end-garage-ei" name="data-end-garage-ei" type="date">
+          </div>
+      </div>
+  `;
+}
+
+document.getElementById('add-more-garage-ei').addEventListener('click', function() {
+  // Создание новых полей
+  const newFields = document.createElement('div');
+  newFields.classList.add('couple');
+  newFields.innerHTML = `
+      <div class="label-couple">
+          <label>Показатель эффективности</label>
+          <select class="garage-ei-name" name="garage-ei-name">
+          </select>
+      </div>
+      <div class="label-couple">
+          <label>Дата начальное</label>
+          <input class="data-start-garage-ei" name="data-start-garage-ei" type="date">
+      </div>
+      <div class="label-couple">
+        <label>Дата конечное</label>
+        <input class="data-end-garage-ei" name="data-end-garage-ei" type="date">
+      </div>
+  `;
+
+  // Добавление новых полей в контейнер
+  document.getElementById('garage-eis-container').appendChild(newFields);
+  const newSelect = newFields.querySelector('.garage-ei-name');
+  garageEIAddTap(newSelect, false); // Загрузка характеристик в новый select
+});
