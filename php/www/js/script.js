@@ -136,7 +136,7 @@ function fetchGarageData() {
   delGarageButton.disabled=1;
   editGarageButton.disabled=1;
   chooseGarageButton.disabled=1;
-  fetch('http://185.187.90.199:81/garageData.php')
+  fetch('http://localhost:81/back/garageData.php')
   .then(response => response.json())
   .then(data => {
     //console.log(data);
@@ -165,7 +165,7 @@ function fetchGarageData() {
 }
 
 function fetchAllVehicleData() {
-  fetch('http://185.187.90.199:81/allVehicleData.php')
+  fetch('http://localhost:81/back/allVehicleData.php')
   .then(response => response.json())
   .then(data => {
       const tbody = document.getElementById('vehicle-data');
@@ -188,7 +188,7 @@ function fetchAllVehicleData() {
 }
 
 function vehAddTap(){
-  fetch('http://185.187.90.199:81/allVehicleData.php')
+  fetch('http://localhost:81/back/allVehicleData.php')
   .then(response => response.json())
   .then(data => {
       const selVeh = document.getElementById('vehicle-name');
@@ -204,7 +204,7 @@ function vehAddTap(){
 }
 
 function vehMoveTap(selectElem){
-  fetch('http://185.187.90.199:81/garageData.php')
+  fetch('http://localhost:81/back/garageData.php')
   .then(response => response.json())
   .then(data => {
       selectElem.innerHTML = '';
@@ -221,7 +221,7 @@ function vehMoveTap(selectElem){
 }
 
 function charAddTap(selectElem, placeholder){
-  fetch('http://185.187.90.199:81/allIndicatorData.php')
+  fetch('http://localhost:81/back/allIndicatorData.php')
   .then(response => response.json())
   .then(data => {
       selectElem.innerHTML = '';
@@ -249,7 +249,7 @@ function charAddTap(selectElem, placeholder){
 }
 
 function indAddTap(selectElem, placeholder){
-  fetch('http://185.187.90.199:81/allIndicatorData.php')
+  fetch('http://localhost:81/back/allIndicatorData.php')
   .then(response => response.json())
   .then(data => {
       selectElem.innerHTML = '';
@@ -277,7 +277,7 @@ function indAddTap(selectElem, placeholder){
 } 
 
 function eiAddTap(selectElem, placeholder){
-  fetch('http://185.187.90.199:81/allEIdata.php')
+  fetch('http://localhost:81/back/allEIdata.php')
   .then(response => response.json())
   .then(data => {
       selectElem.innerHTML = '';
@@ -303,7 +303,7 @@ function eiAddTap(selectElem, placeholder){
 }
 
 function garageEIAddTap(selectElem, placeholder){
-  fetch('http://185.187.90.199:81/allGarageEIdata.php')
+  fetch('http://localhost:81/back/allGarageEIdata.php')
   .then(response => response.json())
   .then(data => {
       selectElem.innerHTML = '';
@@ -328,8 +328,40 @@ function garageEIAddTap(selectElem, placeholder){
   .catch(error => console.error('Error fetching data:', error));
 }
 
+function userAddTap(selectElem){
+  fetch('http://localhost:81/back/allPN.php')
+  .then(response => response.json())
+  .then(data => {
+      selectElem.innerHTML = '';
+
+      for (let i = 0; i < data.length; i++) {
+        const optEIName = document.createElement('option');
+        optEIName.value = data[i].part_number_value;
+        optEIName.textContent = data[i].part_number_value;
+        selectElem.appendChild(optEIName);
+      }
+  })
+  .catch(error => console.error('Error fetching data:', error));
+}
+
+// function garagePartAddTap(selectElem){
+//   fetch('http://localhost:81/back/allPN.php')
+//   .then(response => response.json())
+//   .then(data => {
+//       selectElem.innerHTML = '';
+
+//       for (let i = 0; i < data.length; i++) {
+//         const optEIName = document.createElement('option');
+//         optEIName.value = data[i].part_number_value;
+//         optEIName.textContent = data[i].part_number_value;
+//         selectElem.appendChild(optEIName);
+//       }
+//   })
+//   .catch(error => console.error('Error fetching data:', error));
+// }
+
 function fetchAllUserData() {
-  fetch('http://185.187.90.199:81/allUserData.php')
+  fetch('http://localhost:81/back/allUserData.php')
   .then(response => response.json())
   .then(data => {
 
@@ -547,6 +579,8 @@ const editUserButton = document.getElementById('edit-user');
 //addmin butt
 addUserButton.addEventListener("click", function (){
   document.getElementById('user-add-modal').classList.add('open')
+  const initialSelect = document.querySelector('.user-part')
+  userAddTap(initialSelect);
 })
 
 document.getElementById('user-close-modal-add').addEventListener("click", function (){
@@ -594,7 +628,7 @@ userAddingForm.addEventListener('submit', async function(event){
   event.preventDefault();
 
   const formData = new FormData(userAddingForm);
-  const response = await fetch('http://185.187.90.199:81/addingUser.php', {
+  const response = await fetch('http://localhost:81/back/addingUser.php', {
       method: 'POST',
       body: formData
   });
@@ -617,7 +651,7 @@ userEditingForm.addEventListener('submit', async function(event) {
   const selectedCheckbox = document.querySelector('.select-user:checked');
   const idToEdit = parseInt(selectedCheckbox.closest('tr').dataset.id, 10);
 
-  const response = await fetch('http://185.187.90.199:81/userEditing.php', {
+  const response = await fetch('http://localhost:81/back/userEditing.php', {
       method: 'POST',
       headers: {
       'Content-Type': 'application/json'
@@ -653,6 +687,8 @@ const chooseGarageButton = document.getElementById('choose-garage');
 //adding button
 addGarageButton.addEventListener("click", function (){
   document.getElementById('garage-add-modal').classList.add('open')
+  const initialSelect = document.getElementById('number');
+  userAddTap(initialSelect);
 })
 
 document.getElementById('close-modal-add').addEventListener("click", function (){
@@ -708,7 +744,7 @@ addingForm.addEventListener('submit', async function(event) {
   event.preventDefault();
 
   const formData = new FormData(addingForm);
-  const response = await fetch('http://185.187.90.199:81/adding.php', {
+  const response = await fetch('http://localhost:81/back/adding.php', {
       method: 'POST',
       body: formData
   });
@@ -731,7 +767,7 @@ editingForm.addEventListener('submit', async function(event) {
   const selectedCheckbox = document.querySelector('.select-garage:checked');
   const idToEdit = parseInt(selectedCheckbox.closest('tr').dataset.id, 10);
 
-  const response = await fetch('http://185.187.90.199:81/editing.php', {
+  const response = await fetch('http://localhost:81/back/editing.php', {
       method: 'POST',
       headers: {
       'Content-Type': 'application/json'
@@ -750,7 +786,7 @@ delGarageButton.addEventListener('click', function() {
   const selectedCheckboxes = document.querySelectorAll('.select-garage:checked');
   const idsToDelete = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
 
-  fetch('http://185.187.90.199:81/deleting.php', {
+  fetch('http://localhost:81/back/deleting.php', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
@@ -762,11 +798,11 @@ delGarageButton.addEventListener('click', function() {
       if (data.success) {
           fetchGarageData();
       } else {
-          console.error('Error deleting data:', data.error);
+          alert('Error deleting data:', data.error);
       }
       // console.log(data);
   })
-  .catch(error => console.error('Error deleting data:', error));
+  .catch(error => console.error('В данном гараже есть транспорт(ы)', error));
 });
 
 editGarageButton.addEventListener('click', function() {
@@ -794,6 +830,91 @@ chooseGarageButton.addEventListener('click', function() {
   });
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+  // Загружаем опции для типов транспорта при загрузке страницы
+  fetchVehicleTypes();
+
+  // Событие при изменении выбора типа транспорта
+  document.getElementById('vehicle-type').addEventListener('change', function() {
+      var typeId = this.value;
+      fetchVehicleSubtypes(typeId);
+  });
+
+  // Событие при изменении выбора подтипа транспорта
+  document.getElementById('vehicle-subtype').addEventListener('change', function() {
+      var subtypeId = this.value;
+      fetchVehicleNames(subtypeId);
+  });
+});
+
+function fetchVehicleTypes() {
+  fetch('http://localhost:81/back/get_vehicle_types.php')
+      .then(function(response) {
+          if (!response.ok) {
+              throw new Error('Ошибка загрузки типов транспорта');
+          }
+          return response.json();
+      })
+      .then(function(types) {
+          var select = document.getElementById('vehicle-type');
+          select.innerHTML = '<option value="">Выберите тип транспорта</option>';
+          types.forEach(function(type) {
+              var option = document.createElement('option');
+              option.value = type.type_id;
+              option.textContent = type.type_name;
+              select.appendChild(option);
+          });
+      })
+      .catch(function(error) {
+          console.error(error);
+      });
+}
+
+function fetchVehicleSubtypes(typeId) {
+  fetch('http://localhost:81/back/get_vehicle_subtypes.php?type_id=' + typeId)
+      .then(function(response) {
+          if (!response.ok) {
+              throw new Error('Ошибка загрузки подтипов транспорта');
+          }
+          return response.json();
+      })
+      .then(function(subtypes) {
+          var select = document.getElementById('vehicle-subtype');
+          select.innerHTML = '<option value="">Выберите подтип транспорта</option>';
+          subtypes.forEach(function(subtype) {
+              var option = document.createElement('option');
+              option.value = subtype.subtype_id;
+              option.textContent = subtype.subtype_name;
+              select.appendChild(option);
+          });
+      })
+      .catch(function(error) {
+          console.error(error);
+      });
+}
+
+function fetchVehicleNames(subtypeId) {
+  fetch('http://localhost:81/back/get_vehicle_names.php?subtype_id=' + subtypeId)
+      .then(function(response) {
+          if (!response.ok) {
+              throw new Error('Ошибка загрузки названий транспорта');
+          }
+          return response.json();
+      })
+      .then(function(vehicles) {
+          var select = document.getElementById('vehicle-name');
+          select.innerHTML = '<option value="">Выберите название транспорта</option>';
+          vehicles.forEach(function(vehicle) {
+              var option = document.createElement('option');
+              option.value = vehicle.vehicle_id;
+              option.textContent = vehicle.vehicle_name;
+              select.appendChild(option);
+          });
+      })
+      .catch(function(error) {
+          console.error(error);
+      });
+}
 
 
 //Vehicle
@@ -883,14 +1004,31 @@ editVehicleButton.addEventListener('click', function() {
 vehicleAddingForm.addEventListener('submit', async function(event){
   event.preventDefault();
 
+  //var serialNumberInput = document.getElementById('serial-number');
+
+    // serialNumberInput.addEventListener('input', function() {
+    //     var serialNumber = this.value.trim();
+    //     var serialNumberPattern = /^\d{8}$/;
+
+    //     if (!serialNumberPattern.test(serialNumber)) {
+    //         // Выводим сообщение об ошибке или делаем что-то другое при неверном формате
+    //         alert('Серийный номер должен содержать ровно 8 цифр');
+    //     } else {
+    //         // Сбрасываем сообщение об ошибке, если введено правильное значение
+    //         this.setCustomValidity('');
+    //     }
+    // });
+
   const formData = new FormData(vehicleAddingForm);
   const vehicleData = {
-    vehicleName: formData.get('vehicle-name'),
+    vehicleID: formData.get('vehicle-name'),
     vehicleType: formData.get('vehicle-type'),
+    vehicleSubType: formData.get('vehicle-subtype'),
+    vehicleSerial: formData.get('serial-number'),
     garageId: memData.garageId[0]
 };
-
-  const response = await fetch('http://185.187.90.199:81/addingVehicle.php', {
+  //console.log(vehicleData) ;
+  const response = await fetch('http://localhost:81/back/addingVehicle.php', {
     method: 'POST',
     headers: {
     'Content-Type': 'application/json'
@@ -903,7 +1041,7 @@ vehicleAddingForm.addEventListener('submit', async function(event){
     document.getElementById('vehicle-add-modal').classList.remove('open');
     updateVehicleData();
   }
-   //console.log(result);
+  //console.log(result);
 });
 
 vehicleMovingForm.addEventListener('submit', async function(event){
@@ -921,7 +1059,7 @@ vehicleMovingForm.addEventListener('submit', async function(event){
 
   //console.log(data);
   
-  const response = await fetch('http://185.187.90.199:81/movingVehicle.php', {
+  const response = await fetch('http://localhost:81/back/movingVehicle.php', {
     method: 'POST',
     headers: {
     'Content-Type': 'application/json'
@@ -949,7 +1087,7 @@ vehicleEditingForm.addEventListener('submit', async function(event) {
   const selectedCheckbox = document.querySelector('.select-vehicle:checked');
   const idToEdit = parseInt(selectedCheckbox.closest('tr').dataset.id, 10);
 
-  const response = await fetch('http://185.187.90.199:81/editingVehicle.php', {
+  const response = await fetch('http://localhost:81/back/editingVehicle.php', {
       method: 'POST',
       headers: {
       'Content-Type': 'application/json'
@@ -968,9 +1106,9 @@ vehicleEditingForm.addEventListener('submit', async function(event) {
 delVehicleButton.addEventListener('click', function(){
   const selectedCheckboxes = document.querySelectorAll('.select-vehicle:checked');
   const idsToDelete = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
-
+  console.log(idsToDelete);
   
-  fetch('http://185.187.90.199:81/deletingVehicle.php', {
+  fetch('http://localhost:81/back/deletingVehicle.php', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
@@ -986,7 +1124,7 @@ delVehicleButton.addEventListener('click', function(){
       }
       // console.log(data);
   })
-  .catch(error => console.error('Error deleting data:', error));
+  .catch(error => console.log('Error deleting data:', error));
 })
 
 chooseVehicleButton.addEventListener('click', function() {
@@ -1020,7 +1158,7 @@ function fetchVehicleData(){
   const rowToEdit = selectedCheckboxes[0].closest('tr');
   document.getElementsByClassName('info')[1].innerText = rowToEdit.cells[1].innerText;
 
-  fetch('http://185.187.90.199:81/choose.php', {
+  fetch('http://localhost:81/back/choose.php', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -1039,7 +1177,7 @@ function fetchVehicleData(){
                   <td><input type="checkbox" name="select-vehicle" class="select-vehicle" /></td>
                   <td>${data[i].vehicle_name}</td>
                   <td>${data[i].type_name}</td>
-                  <td>${data[i].vehicle_subtype}</td>
+                  <td>${data[i].subtype_name}</td>
                   <td>${data[i].vehicle_serial_number}</td>
               `;
 
@@ -1056,7 +1194,7 @@ function chooseIndicatorData(){
   document.getElementsByClassName('info')[3].innerText = rowToEdit.cells[1].innerText;
   disableTabs(['char-butt','ei-butt']);
 
-  fetch('http://185.187.90.199:81/chooseIndicator.php', {
+  fetch('http://localhost:81/back/chooseIndicator.php', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -1094,7 +1232,7 @@ function chooseCharacterData(){
   document.getElementsByClassName('info')[2].innerText = rowToEdit.cells[1].innerText;
   disableTabs(['ind-butt','ei-butt']);
 
-  fetch('http://185.187.90.199:81/chooseIndicator.php', {
+  fetch('http://localhost:81/back/chooseIndicator.php', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -1108,6 +1246,12 @@ function chooseCharacterData(){
   tbody.innerHTML = '';
   for (let i = 0; i < data.length; i++) {
     if (data[i].indicator_type === 'Характеристика'){
+      if (data[i].viv_value == 1){
+        data[i].viv_value = 'Работает';
+      }
+      if (data[i].viv_value == 0){
+        data[i].viv_value = 'Сломано';
+      }
       const row = document.createElement('tr');
       row.dataset.id = data[i].indicator_id;
       row.innerHTML = `
@@ -1128,7 +1272,7 @@ function chooseCharacterData(){
 function updateVehicleData(){
   const idToChoose = memData.garageId;
 
-  fetch('http://185.187.90.199:81/choose.php', {
+  fetch('http://localhost:81/back/choose.php', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -1147,7 +1291,7 @@ function updateVehicleData(){
                   <td><input type="checkbox" name="select-vehicle" class="select-vehicle" /></td>
                   <td>${data[i].vehicle_name}</td>
                   <td>${data[i].type_name}</td>
-                  <td>${data[i].vehicle_subtype}</td>
+                  <td>${data[i].subtype_name}</td>
                   <td>${data[i].vehicle_serial_number}</td>
               `;
 
@@ -1221,14 +1365,29 @@ charAddingForm.addEventListener('submit', async function(event){
   const data = [];
 
   for (let i = 0; i < charNames.length; i++) {
-    data.push({
+    if (charValues[i].value == 'Сломано'){
+      data.push({
+        name: charNames[i].value,
+        value: 0,
+        vehId: memData.vehicleId[0]
+    });
+    }
+    else if (charValues[i].value == 'Работает'){
+      data.push({
+        name: charNames[i].value,
+        value: 1,
+        vehId: memData.vehicleId[0]
+    });
+    } else{
+      data.push({
         name: charNames[i].value,
         value: charValues[i].value,
         vehId: memData.vehicleId[0]
     });
+    }
   }
-  //console.log(data);
-  fetch('http://185.187.90.199:81/addingChar.php', {
+  console.log(data);
+  fetch('http://localhost:81/back/addingChar.php', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'  
@@ -1285,12 +1444,48 @@ document.getElementById('add-more-char').addEventListener('click', function() {
   document.getElementById('chars-container').appendChild(newFields);
   const newSelect = newFields.querySelector('.char-name');
   charAddTap(newSelect, false); // Загрузка характеристик в новый select
+  newFields.querySelector('.char-name').addEventListener('change', handleCharNameChange);
 });
+
+document.querySelector('.char-name').addEventListener('change', handleCharNameChange);
+
+function handleCharNameChange(event) {
+  const selectedValue = event.target.value;
+  const coupleDiv = event.target.closest('.couple');
+  const charValueInput = coupleDiv.querySelector('.char-value');
+
+  if (selectedValue === 'Состояние') {
+      const select = document.createElement('select');
+      select.className = 'char-value';
+      select.name = 'char-value';
+
+      const optionWorking = document.createElement('option');
+      optionWorking.value = 'Работает';
+      optionWorking.textContent = 'Работает';
+
+      const optionBroken = document.createElement('option');
+      optionBroken.value = 'Сломано';
+      optionBroken.textContent = 'Сломано';
+
+      select.appendChild(optionWorking);
+      select.appendChild(optionBroken);
+
+      charValueInput.replaceWith(select);
+  } else if (charValueInput.tagName.toLowerCase() === 'select') {
+      const input = document.createElement('input');
+      input.className = 'char-value';
+      input.name = 'char-value';
+      input.type = 'text';
+      input.placeholder = '0';
+
+      charValueInput.replaceWith(input);
+  }
+}
 
 function updateCharacterData(){
   const idToChoose = memData.vehicleId;
 
-  fetch('http://185.187.90.199:81/chooseIndicator.php', {
+  fetch('http://localhost:81/back/chooseIndicator.php', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -1304,6 +1499,12 @@ function updateCharacterData(){
   tbody.innerHTML = '';
   for (let i = 0; i < data.length; i++) {
     if (data[i].indicator_type === 'Характеристика'){
+      if (data[i].viv_value == 1){
+        data[i].viv_value = 'Работает';
+      }
+      if (data[i].viv_value == 0){
+        data[i].viv_value = 'Сломано';
+      }
       const row = document.createElement('tr');
       row.dataset.id = data[i].indicator_id;
       row.innerHTML = `
@@ -1325,7 +1526,7 @@ delCharButton.addEventListener('click', function(){
   const selectedCheckboxes = document.querySelectorAll('.select-char:checked');
   const idsToDelete = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
 
-  fetch('http://185.187.90.199:81/deletingChar.php', {
+  fetch('http://localhost:81/back/deletingChar.php', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
@@ -1356,7 +1557,7 @@ charEditingForm.addEventListener('submit', async function(event) {
   const selectedCheckbox = document.querySelector('.select-char:checked');
   const idToEdit = parseInt(selectedCheckbox.closest('tr').dataset.id, 10);
 
-  const response = await fetch('http://185.187.90.199:81/charEditing.php', {
+  const response = await fetch('http://localhost:81/back/charEditing.php', {
       method: 'POST',
       headers: {
       'Content-Type': 'application/json'
@@ -1454,7 +1655,7 @@ indAddingForm.addEventListener('submit', async function(event){
     });
   }
   // console.log(data);
-  fetch('http://185.187.90.199:81/addingIndicator.php', {
+  fetch('http://localhost:81/back/addingIndicator.php', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'  
@@ -1533,7 +1734,7 @@ document.getElementById('add-more-indicator').addEventListener('click', function
 function updateIndicatorData(){
   const idToChoose = memData.vehicleId;
 
-  fetch('http://185.187.90.199:81/chooseIndicator.php', {
+  fetch('http://localhost:81/back/chooseIndicator.php', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -1568,7 +1769,7 @@ delIndButton.addEventListener('click', function(){
   const selectedCheckboxes = document.querySelectorAll('.select-indicator:checked');
   const idsToDelete = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
 
-  fetch('http://185.187.90.199:81/deletingInd.php', {
+  fetch('http://localhost:81/back/deletingInd.php', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
@@ -1599,7 +1800,7 @@ indEditingForm.addEventListener('submit', async function(event) {
   const selectedCheckbox = document.querySelector('.select-indicator:checked');
   const idToEdit = parseInt(selectedCheckbox.closest('tr').dataset.id, 10);
   
-  const response = await fetch('http://185.187.90.199:81/indEditing.php', {
+  const response = await fetch('http://localhost:81/back/indEditing.php', {
       method: 'POST',
       headers: {
       'Content-Type': 'application/json'
@@ -1694,7 +1895,7 @@ eiCalcForm.addEventListener('submit', async function(event){
     });
   }
    //console.log(data);
-  fetch('http://185.187.90.199:81/calculateEI.php', {
+  fetch('http://localhost:81/back/calculateEI.php', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'  
@@ -1768,7 +1969,7 @@ function fetchEI(){
   const rowToEdit = selectedCheckboxes[0].closest('tr');
   document.getElementsByClassName('info')[4].innerText = rowToEdit.cells[1].innerText;
 
-  fetch('http://185.187.90.199:81/eiData.php', {
+  fetch('http://localhost:81/back/eiData.php', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -1801,7 +2002,7 @@ function fetchEI(){
 function updateEIData(){
   const idToChoose = memData.vehicleId;
 
-  fetch('http://185.187.90.199:81/eiData.php', {
+  fetch('http://localhost:81/back/eiData.php', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -1835,7 +2036,7 @@ delEIButton.addEventListener('click', function(){
   const selectedCheckboxes = document.querySelectorAll('.select-ei:checked');
   const idsToDelete = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
 
-  fetch('http://185.187.90.199:81/deletingEI.php', {
+  fetch('http://localhost:81/back/deletingEI.php', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
@@ -1855,68 +2056,19 @@ delEIButton.addEventListener('click', function(){
 })
 
 //Garage EI
-//Indicators
-const addGarageEIButton = document.getElementById('calculate-garage-ei');
-const delGarageEIButton = document.getElementById('del-garage-ei');
-const editGarageEIButton = document.getElementById('edit-garage-ei');
-
-//addmin butt
-addGarageEIButton.addEventListener("click", function (){
-  document.getElementById('garage-ei-add-modal').classList.add('open');
-  resetGarageEIForm();
-  const initialSelect = document.querySelector('.garage-ei-name');
-  garageEIAddTap(initialSelect, false);
-})
-
-document.getElementById('garage-ei-close-modal-add').addEventListener("click", function (){
-  document.getElementById('garage-ei-add-modal').classList.remove('open')
-})
-
-//editing butt
-editGarageEIButton.addEventListener("click", function (){
-  document.getElementById('garage-ei-edit-modal').classList.add('open')
-  })
-  
-document.getElementById('garage-ei-close-modal-edit').addEventListener("click", function (){
-  document.getElementById('garage-ei-edit-modal').classList.remove('open')
-  })
-
-document.getElementById('select-all-garage-eis').addEventListener('change', function(event) {
-  const checkboxes = document.querySelectorAll('.select-garage-ei');
-  checkboxes.forEach(checkbox => {
-      checkbox.checked = event.target.checked;
-  });
-  toggleButtonsGarageEI();
-});
-
-document.getElementById('garage-ei-data').addEventListener('change', function(event) {
-  if (event.target.classList.contains('select-garage-ei')) {
-      toggleButtonsGarageEI();
-  }
-});
-
-const toggleButtonsGarageEI = () => {
-  const selectedCheckboxes = document.querySelectorAll('.select-garage-ei:checked');
-  delGarageEIButton.disabled = selectedCheckboxes.length === 0;
-  editGarageEIButton.disabled = selectedCheckboxes.length !== 1;
-};
-
-document.addEventListener('DOMContentLoaded', function(){
-  toggleButtonsGarageEI();
-})
-
 function fetchEIgarage(){
   const selectedCheckboxes = document.querySelectorAll('.select-garage:checked');
   const idToChoose = Array.from(selectedCheckboxes).map(checkbox => checkbox.closest('tr').dataset.id);
   const rowToEdit = selectedCheckboxes[0].closest('tr');
+  const eiGarageFormulas = ['Коэффициент технической готовности', 'Коэффициент использования транспорта', 'Общий показатель эффективности работы ТС в гараже'];
   document.getElementsByClassName('info')[0].innerText = rowToEdit.cells[1].innerText;
 
-  fetch('http://185.187.90.199:81/garageEiData.php', {
+  fetch('http://localhost:81/back/calculateGarageEI.php', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ id: idToChoose })
+    body: JSON.stringify(idToChoose)
 })
 .then(response => response.json())
 .then(data => {
@@ -1928,11 +2080,8 @@ function fetchEIgarage(){
       row.dataset.id = data[i].gev_id;
       row.innerHTML = `
                   <td><input type="checkbox" name="select-garage-ei" class="select-garage-ei" /></td>
-                  <td>${data[i].ei_name}</td>
-                  <td>${data[i].ei_unit}</td>
-                  <td>${data[i].gev_value}</td>
-                  <td>${data[i].gev_date_start}</td>
-                  <td>${data[i].gev_date_end}</td>
+                  <td>${eiGarageFormulas[i]}</td>
+                  <td>${data[i]}</td>
               `;
 
       tbody.appendChild(row);
@@ -1941,33 +2090,13 @@ function fetchEIgarage(){
 .catch(error => console.error('Error choosing data:', error));
 }
 
-//Forms
-const garageEIEditingForm = document.getElementById('garage-ei-editing-form');
-const garageEICalcForm = document.getElementById('garage-ei-adding-form');
-
-garageEICalcForm.addEventListener('submit', async function(event){
-  event.preventDefault();
-
-  const eiNames = document.querySelectorAll('.garage-ei-name');
-  const startDates = document.querySelectorAll('.data-start-garage-ei');
-  const endDates = document.querySelectorAll('.data-end-garage-ei');
-  const data = [];
-//!!!
-  for (let i = 0; i < eiNames.length; i++) {
-    data.push({
-        name: eiNames[i].value,
-        startDate: startDates[i].value,
-        endDate: endDates[i].value,
-        garageId: memData.garageId[0]
-    });
-  }
-   //console.log(data);
-  fetch('http://185.187.90.199:81/calculateGarageEI.php', {
+function calculateGarageEI(garageID){
+  fetch('http://localhost:81/back/calculateGarageEI.php', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'  
     },
-    body: JSON.stringify(data)
+    body: JSON.stringify(garageID)
   })
   .then(response => response.json())
   .then(data => {
@@ -1981,51 +2110,4 @@ garageEICalcForm.addEventListener('submit', async function(event){
     // }
   })
   .catch(error => console.error('Error:', error));
-});
-
-function resetGarageEIForm() {
-  const indsContainer = document.getElementById('garage-eis-container');
-  indsContainer.innerHTML = `
-      <div class="couple">
-          <div class="label-couple">
-              <label>Показатель эффективности</label>
-              <select class="garage-ei-name" name="garage-ei-name">
-              </select>
-          </div>
-          <div class="label-couple">
-              <label>Дата начальное</label>
-              <input class="data-start-garage-ei" name="data-start-garage-ei" type="date">
-          </div>
-          <div class="label-couple">
-              <label>Дата конечное</label>
-              <input class="data-end-garage-ei" name="data-end-garage-ei" type="date">
-          </div>
-      </div>
-  `;
-}
-
-document.getElementById('add-more-garage-ei').addEventListener('click', function() {
-  // Создание новых полей
-  const newFields = document.createElement('div');
-  newFields.classList.add('couple');
-  newFields.innerHTML = `
-      <div class="label-couple">
-          <label>Показатель эффективности</label>
-          <select class="garage-ei-name" name="garage-ei-name">
-          </select>
-      </div>
-      <div class="label-couple">
-          <label>Дата начальное</label>
-          <input class="data-start-garage-ei" name="data-start-garage-ei" type="date">
-      </div>
-      <div class="label-couple">
-        <label>Дата конечное</label>
-        <input class="data-end-garage-ei" name="data-end-garage-ei" type="date">
-      </div>
-  `;
-
-  // Добавление новых полей в контейнер
-  document.getElementById('garage-eis-container').appendChild(newFields);
-  const newSelect = newFields.querySelector('.garage-ei-name');
-  garageEIAddTap(newSelect, false); // Загрузка характеристик в новый select
-});
+};

@@ -31,7 +31,7 @@ if (is_array($data)) {
                 $start_date = new DateTime($indicator['startDate']);
                 $end_date = new DateTime($indicator['endDate']);
                 $interval = $start_date->diff($end_date)->days;
-                $average_value = $total_value / ($interval + 1);
+                $average_value = (float) $total_value / ($interval + 1);
 
                 for ($i = 0; $i <= $interval; $i++) {
                     $current_date = (clone $start_date)->modify("+$i day")->format('Y-m-d');

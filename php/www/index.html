@@ -99,8 +99,9 @@
                             </div>
                             <div class="couple">
                                 <div class="label-couple">
-                                    <label for="user-part">Номер части</label>
-                                    <input type="text" id="user-part" name="user-part">
+                                    <label>Номер части</label>
+                                    <select class="user-part" name="user-part">
+                                    </select>
                                 </div>
                             </div>
                             <input class="submit" type="submit" value="Добавить">
@@ -192,7 +193,8 @@
                             <div class="couple">
                                 <div class="label-couple">
                                     <label>Номер части</label>
-                                    <input id="number" name="number" type="text" placeholder="0001">
+                                    <select id="number" name="number">
+                                    </select>
                                 </div>
                                 <div class="label-couple">
                                     <label>Площадь, кв. м.</label>
@@ -202,7 +204,7 @@
                             <div class="couple">
                                 <div class="label-couple">
                                     <label>Владелец</label>
-                                    <input id="owner" name="owner" type="text" placeholder="ВС РФ">
+                                    <input id="owner" name="owner" type="text" placeholder="Алексеев Алексей Алексеевич">
                                 </div>
                                 <div class="label-couple">
                                     <label>Рабочий телефон</label>
@@ -279,9 +281,6 @@
                 <div class="info">
                 </div>
                 <div class="table-tabs">
-                    <button id="calculate-garage-ei" class="table-butts">Рассчитать</button>
-                    <button id="edit-garage-ei" class="table-butts">Изменить</button>
-                    <button id="del-garage-ei" class="table-butts">Удалить</button>
                 </div>
                 <div class="modal" id="garage-ei-add-modal">
                     <div class="modal-window">
@@ -335,11 +334,8 @@
                 <thead>
                 <tr>
                     <th><input type="checkbox" name="select-all-garage-eis" id="select-all-garage-eis" />&nbsp;</th>
-                    <th>Показатель эффективности</th>
-                    <th>Единица измерения</th>
+                    <th>Показатель эффективности гаража</th>
                     <th>Значение</th>
-                    <th>Дата начала</th>
-                    <th>Дата конца</th>
                 </tr>
                 </thead>
                 <tbody class="eiBody" id="garage-ei-data">
@@ -367,11 +363,6 @@
                         <form class="l-form" id="vehicle-adding-form">
                             <div class="couple">
                                 <div class="label-couple">
-                                    <label>Название транспорта</label>
-                                    <select id="vehicle-name" name="vehicle-name">
-                                    </select>
-                                </div>
-                                <div class="label-couple">
                                     <label>Тип транспорта</label>
                                     <select id="vehicle-type" name="vehicle-type">
                                         <option value="Наземный">Наземный</option>
@@ -379,12 +370,17 @@
                                         <option value="Воздушный">Воздушный</option>
                                     </select>
                                 </div>
-                            </div>  
-                            <div class="couple">
                                 <div class="label-couple">
                                     <label>Подтип</label>
                                     <select id="vehicle-subtype" name="vehicle-subtype">
                                         <option value="Грузовик">Грузовик</option>
+                                    </select>
+                                </div>
+                            </div>  
+                            <div class="couple">
+                                <div class="label-couple">
+                                    <label>Название транспорта</label>
+                                    <select id="vehicle-name" name="vehicle-name">
                                     </select>
                                 </div>
                                 <div class="label-couple">

@@ -1,64 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="auth.css">
-    <link rel="preload" href="/fonts/SourceSansPro-SemiBold.ttf" as="font">
-    <title>Authorization</title>
-</head>
-<body>
-    <div class="l-wrapper">
-        <div class="text-section">Вход</div>
-        <form class="l-form" id="loginForm">
-            <span>Login</span>
-            <input id="login" name="login" type="text" placeholder="Login">
-            <span>Пароль</span>
-            <input id="password" name="password" type="text" placeholder="Пароль">
-            <div class="l-check"></div>
-            <input class="submit" type="submit" value="Войти">
-        </form>
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+// header("Access-Control-Allow-Origin: *");
+// header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+// header("Access-Control-Allow-Headers: Content-Type, Authorization");
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    // Обработка preflight-запросов
+    exit(0);
+}
+session_start();
+include_once 'conf.php';
 
-        <script>
-            document.getElementById('loginForm').addEventListener('submit', function(event) {
-                event.preventDefault(); // Предотвращаем отправку формы по умолчанию
+$database = new Database();
+$pdo = $database->getConnection();
 
-                // Получаем значения логина и пароля из формы
-                let login = document.getElementById('login').value;
-                let password = document.getElementById('password').value;
+$data = json_decode(file_get_contents('php://input'), true);
 
-                // Отправляем данные на сервер для аутентификации
-                fetch('http://localhost:81/credits.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: 'login=' + encodeURIComponent(login) + '&password=' + encodeURIComponent(password)
-                })
-                    .then(response => {
-                        if (response.ok) {
-                            return response.text();
-                        }
-                        throw new Error('Network response was not ok.');
-                    })
-                    .then(data => {
-                        if (data.trim() === 'success') {
-                            // Если аутентификация успешна, перенаправляем на index.html
-                            window.location.href = 'index.php';
-                        } else {
-                            // Выводим сообщение об ошибке
-                            document.getElementById('message').textContent = 'Неверное имя пользователя или пароль';
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Fetch error:', error);
-                    });
-            });
-        </script>
+$username = $data['username'];
+$password = $data['password'];
 
-        <div class="l-links"></div>
-        <div class="l-line"><a href="/registration.html">У вас нет аккаунта? Регестрируйтесь</a></div>
-        <div class="l-reg-link"></div>
-    </div>
-</body>
-</html>
+try {
+    $stmt = $pdo->prepare("SELECT u.user_id, u.user_login, u.user_password, u.user_role, u.user_name, (SELECT pn.part_number_value FROM part_number pn WHERE pn.part_number_id = u.part_number_id) AS user_pn FROM users u WHERE user_login = :username");
+    $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+    $stmt->execute();
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if ($user && ($password == $user['user_password'])) {
+        $_SESSION['user_id'] = $user['user_id'];
+        $_SESSION['user_login'] = $user['user_login'];
+        $_SESSION['user_role'] = $user['user_role'];
+        echo json_encode([
+            'success' => true,
+            'user_role' => $user['user_role'],
+            'part_number' => $user['user_pn']
+        ]);
+    } else {
+        echo json_encode([
+            'success' => false,
+            'error' => 'Неправильный логин или пароль.'
+        ]);
+    }
+} catch (PDOException $e) {
+    echo json_encode([
+        'success' => false,
+        'error' => 'Ошибка базы данных: ' . $e->getMessage()
+    ]);
+}
+
+$pdo = null;

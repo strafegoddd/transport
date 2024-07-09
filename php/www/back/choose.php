@@ -1,12 +1,5 @@
 <?php
-// if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-//     header("Access-Control-Allow-Origin: *");
-//     header("Access-Control-Allow-Headers: Content-Type");
-//    exit();
-// }
-// header("Access-Control-Allow-Origin: *");
-// header('Access-Control-Allow-Methods: POST');
-// header('Access-Control-Allow-Headers: Content-Type');
+
 include_once 'conf.php';
 
 $database = new Database();
@@ -19,13 +12,14 @@ if (isset($data['id'])) {
     $garageId = $data['id'][0];
     $query = "SELECT 
         v.vehicle_id, 
-        v.vehicle_name, 
-        v.vehicle_subtype,
+        v.vehicle_name,
         v.vehicle_serial_number,
-        vt.type_name
+        vt.type_name,
+        vst.subtype_name
     FROM vehicle v
     JOIN vehicle_in_garage vig ON v.vehicle_id = vig.vig_vehicle_id
     JOIN vehicle_type vt ON v.vehicle_type = vt.type_id
+    JOIN vehicle_subtype vst ON v.vehicle_subtype = vst.subtype_id
     WHERE vig.vig_garage_id = ?";
 
     $stmt = $pdo->prepare($query);

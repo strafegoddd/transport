@@ -20,15 +20,10 @@ include 'functionsGarage.php';
 
 if (!empty($data)) {
     try {
-        foreach ($data as $entry) {
-            $test = calculateEfficiencyGarageIndicator(
-                $pdo, 
-                $entry['garageId'], 
-                $entry['name'], 
-                $entry['startDate'], 
-                $entry['endDate']
-            );
-        }
+        $test = calculateEfficiencyGarageIndicator(
+            $pdo, 
+            $data[0]
+        );
     } catch (Exception $e) {
         $test['error'] = $e->getMessage();
     }

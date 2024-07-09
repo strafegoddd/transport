@@ -20,7 +20,7 @@ try{
     $square = $_POST['square'];
     $owner = $_POST['owner'];
     $phone = $_POST['phone'];
-    $stmt = $pdo->prepare("INSERT INTO garage (garage_name, garage_address, garage_part_number, garage_square, garage_owner, garage_phone) VALUES (:garage_name, :address, :garage_part_number, :garage_square, :garage_owner, :garage_phone)");
+    $stmt = $pdo->prepare("INSERT INTO garage (garage_name, garage_address, garage_part_number, garage_square, garage_owner, garage_phone) VALUES (:garage_name, :address, (SELECT part_number_id FROM part_number WHERE part_number_value = :garage_part_number), :garage_square, :garage_owner, :garage_phone)");
     $stmt->bindParam(':garage_name', $garage_name);
     $stmt->bindParam(':address', $address);
     $stmt->bindParam(':garage_part_number', $number);
@@ -28,8 +28,11 @@ try{
     $stmt->bindParam(':garage_owner', $owner);
     $stmt->bindParam(':garage_phone', $phone);
     $stmt->execute();
+
+    $new_garage_id = $pdo->lastInsertId();
+
     echo json_encode([
-        'success' => true
+        'success' => true, 'garageID' => $new_garage_id
     ]);
 }
 catch(PDOException $e) {

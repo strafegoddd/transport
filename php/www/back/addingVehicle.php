@@ -14,28 +14,29 @@ $pdo = $database->getConnection();
 
 $data = json_decode(file_get_contents('php://input'), true);
 
-if (isset($data['vehicleName']) && isset($data['vehicleType']) && isset($data['garageId'])){
-    $vehicleName = $data['vehicleName'];
+if (isset($data['vehicleID']) && isset($data['vehicleType']) && isset($data['garageId'])){
+    $vehicleID = $data['vehicleID'];
     $vehicleType = $data['vehicleType'];
+    $vehicleSubType = $data['vehicleSubType'];
+    $vehicleSerial = $data['vehicleSerial'];
     $garageId = (int)$data['garageId'];
 
-    $query = "SELECT type_id FROM vehicle_type WHERE type_name = ?";
+    $query = "SELECT vehicle_name FROM vehicle WHERE vehicle_id = ?";
     $stmt = $pdo->prepare($query);
-    $stmt->execute([$vehicleType]);
-    $type = $stmt->fetch(PDO::FETCH_ASSOC);
-    $typeId = $type['type_id'];
+    $stmt->execute([$vehicleID]);
+    $res = $stmt->fetch(PDO::FETCH_ASSOC);
+    $vehicleName = $res['vehicle_name'];
 
-    $query = "INSERT INTO vehicle (vehicle_name, vehicle_type) VALUES (?, ?)";
+    $query = "INSERT INTO vehicle (vehicle_name, vehicle_type, vehicle_subtype, vehicle_serial_number) VALUES (?, ?, ?, ?)";
     $stmt = $pdo->prepare($query);
-    $stmt->execute([$vehicleName, $typeId]);
-    $vehicleId = $pdo->lastInsertId();
+    $stmt->execute([$vehicleName, $vehicleType, $vehicleSubType, $vehicleSerial]);
+    $vehicleId = $pdo->lastInsertId();  
 
     $query = "INSERT INTO vehicle_in_garage (vig_garage_id, vig_vehicle_id, vig_reg_time) VALUES (?, ?, NOW())";
     $stmt = $pdo->prepare($query);
     $stmt->execute([$garageId, $vehicleId]);
 
     echo json_encode(['success' => true, 'vehicle_id' => $vehicleId]);
-    //echo json_encode($garageId);
 }
 else{
     echo json_encode(['success' => false, 'error' => 'Invalid input']);
